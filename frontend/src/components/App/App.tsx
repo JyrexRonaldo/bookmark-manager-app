@@ -7,7 +7,7 @@ function App() {
     <>
       <div className="flex h-screen">
         <SideBar />
-        <div className="flex flex-col grow">
+        <div className="flex flex-col grow ">
           <NavBar />
           <Main />
         </div>
