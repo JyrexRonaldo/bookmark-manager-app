@@ -3,14 +3,18 @@ import BookmarkCard from "../BookmarkCard/BookmarkCard";
 function Main() {
   return (
     <>
-      <main className="bg-yellow-600 h-full">
-        <div>
-          <p>All bookmarks</p>
-          <button>
-            <img src="" alt="" /> <p>Sort by</p>
+      <main className="flex h-full flex-col gap-[20px] bg-[#E8F0EF] px-[16px] py-[24px]">
+        <div className="flex h-[42px] items-center justify-between">
+          <p className="text-[20px]/[120%] font-bold text-[#051513]">
+            All bookmarks
+          </p>
+          <button className="flex w-[107px] gap-[4px] rounded-[8px] border border-[#C0CFCC] bg-white px-[12px] py-[10px] text-[#051513]">
+            <img src="/img/icon-sort.svg" alt="" /> <p>Sort by</p>
           </button>
         </div>
-        <div>
+        <div className="flex flex-col gap-[32px] bg-[#E8F0EF]">
+          <BookmarkCard />
+          <BookmarkCard />
           <BookmarkCard />
         </div>
       </main>
