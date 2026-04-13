@@ -2,10 +2,10 @@ function NavBar() {
   return (
     <>
       <nav className="flex w-auto items-center gap-[10px] px-[16px] py-[12px]">
-        <button className="flex size-[40px] items-center justify-center rounded-[8px] border border-[#C0CFCC]">
+        <button className="flex size-[40px] items-center justify-center rounded-[8px] border border-[#C0CFCC] lg:hidden">
           <img src="/img/icon-menu-hamburger.svg" alt="" />
         </button>
-        <div className="mr-auto flex w-[60px] max-w-[60%] h-[41px]  flex-auto gap-[8px] rounded-[8px] border border-[#DDE9E7] px-[12px] py-[10px]">
+        <div className="mr-auto flex h-[41px] w-[60px] max-w-[60%] flex-auto gap-[8px] rounded-[8px] border border-[#DDE9E7] px-[12px] py-[10px] sm:max-w-[40%]">
           <img
             className="min-w-[20px]"
             src="/img/icon-search.svg"
@@ -18,13 +18,13 @@ function NavBar() {
           />
         </div>
         <div className="flex gap-[10px]">
-          <button className="flex min-w-[40px] justify-center rounded-[8px] bg-[#014745]">
+          <button className="flex min-w-[40px] items-center justify-center gap-[4px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] text-white">
             <img
-              className="size-[11.67px] self-center"
+              className="size-[20px] self-center"
               src="/img/icon-add.svg"
               alt=""
             />
-            <p className="hidden">Add Bookmark</p>
+            <p className="hidden sm:block">Add Bookmark</p>
           </button>
           <img className="size-[40px]" src="/img/image-avatar.webp" alt="" />
         </div>
