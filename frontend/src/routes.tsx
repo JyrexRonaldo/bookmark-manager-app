@@ -1,3 +1,4 @@
+import AddBookmark from "./components/AddBookmark/AddBookmark";
 import App from "./components/App/App";
 import ErrorPage from "./components/ErrorPage/ErrorPage";
 import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
@@ -27,6 +28,10 @@ const routes = [
   {
     path: "/forget",
     element: <ForgetPassword />,
+  },
+   {
+    path: "/test",
+    element: <AddBookmark />,
   },
 ];
 
