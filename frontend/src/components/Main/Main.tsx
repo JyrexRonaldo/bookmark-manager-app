@@ -12,7 +12,7 @@ function Main() {
             <img src="/img/icon-sort.svg" alt="" /> <p>Sort by</p>
           </button>
         </div>
-        <div className="grid grid-cols-[repeat(auto-fill,_minmax(338px,_1fr))] gap-[32px]  bg-[#E8F0EF] overflow-y-scroll">
+        <div className="h-[200px] grow grid grid-cols-[repeat(auto-fill,_minmax(338px,_1fr))] gap-[32px]  bg-[#E8F0EF] overflow-y-scroll">
           <BookmarkCard />
           <BookmarkCard />
           <BookmarkCard />
