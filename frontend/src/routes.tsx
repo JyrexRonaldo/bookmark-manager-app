@@ -1,5 +1,6 @@
-import AddBookmark from "./components/AddBookmark/AddBookmark";
+// import AddBookmark from "./components/AddBookmark/AddBookmark";
 import App from "./components/App/App";
+import Dialog from "./components/Dialog/Dialog";
 import ErrorPage from "./components/ErrorPage/ErrorPage";
 import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
@@ -31,7 +32,7 @@ const routes = [
   },
    {
     path: "/test",
-    element: <AddBookmark />,
+    element: <Dialog />,
   },
 ];
 
