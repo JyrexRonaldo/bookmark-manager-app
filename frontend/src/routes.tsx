@@ -3,10 +3,11 @@ import App from "./components/App/App";
 // import Dialog from "./components/Dialog/Dialog";
 import ErrorPage from "./components/ErrorPage/ErrorPage";
 import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
-import ProfileMenu from "./components/ProfileMenu/ProfileMenu";
+// import ProfileMenu from "./components/ProfileMenu/ProfileMenu";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import Signin from "./components/Signin/Signin";
 import Signup from "./components/Signup/Signup";
+import SortByDropdown from "./components/SortByDropdown/SortByDropdown";
 
 
 const routes = [
@@ -33,7 +34,7 @@ const routes = [
   },
    {
     path: "/test",
-    element: <ProfileMenu />,
+    element: <SortByDropdown />,
   },
 ];
 
