@@ -1,4 +1,4 @@
-{
+const data = {
   "bookmarks": [
     {
       "id": "bm-001",
@@ -236,3 +236,5 @@
     }
   ]
 }
+
+export default data

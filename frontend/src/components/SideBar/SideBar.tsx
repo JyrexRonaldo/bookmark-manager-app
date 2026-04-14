@@ -11,11 +11,11 @@ function SideBar() {
           <div className="h-[84px] w-[264px]">
             <button className="flex h-[38px] w-full items-center gap-[12px] rounded-[6px] border-[#E8F0EF] bg-[#E8F0EF] px-[8px] px-[12px]">
               <img src="/img/icon-home.svg" alt="" />
-              <p>Home</p>
+              <p className="font-manrope">Home</p>
             </button>
             <button className="flex h-[38px] w-full items-center gap-[12px] rounded-[6px] px-[8px] px-[12px]">
               <img src="/img/icon-archive.svg" alt="" />
-              <p>Archived</p>
+              <p className="font-manrope">Archived</p>
             </button>
           </div>
           <div>

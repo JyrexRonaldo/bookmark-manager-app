@@ -13,31 +13,31 @@ function ResetPassword() {
             </p>
           </div>
           <div className="flex flex-col gap-[16px]">
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-[6px]">
               <label htmlFor="">New Password *</label>
               <input
                 type="password"
                 name="password"
                 id="password"
-                className="h-[45px] w-[384px]"
+                className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-[6px]">
               <label htmlFor="">Confirm password *</label>
               <input
                 type="password"
                 name="password"
                 id="password"
-                className="h-[45px] w-[384px]"
+                className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
             </div>
-            <button className="bg-[#014745] px-[16px] py-[12px] text-[16px]/[140%] text-white">
+            <button className="h-[46px] w-[384px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] text-[16px]/[140%] text-white">
               Reset password
             </button>
           </div>
           <div className="flex flex-col justify-center gap-[12px]">
             <div className="flex justify-center">
-              <p className="text-[14px]/[150%]">Back to login</p>{" "}
+              <p className="text-[14px]/[140%]">Back to login</p>
             </div>
           </div>
         </div>

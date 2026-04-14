@@ -12,7 +12,7 @@ function NavBar() {
             alt="magnifying glass"
           />
           <input
-            className="h-[21px] w-full truncate text-[14px]/[150%] outline-none"
+            className="h-[21px] w-full truncate font-manrope text-[14px]/[150%] font-medium tracking-[1%] outline-none"
             type="text"
             placeholder="Search by title..."
           />
@@ -24,7 +24,9 @@ function NavBar() {
               src="/img/icon-add.svg"
               alt=""
             />
-            <p className="hidden sm:block">Add Bookmark</p>
+            <p className="hidden font-[semibold] font-manrope text-[16px]/[140%] sm:block">
+              Add Bookmark
+            </p>
           </button>
           <img className="size-[40px]" src="/img/image-avatar.webp" alt="" />
         </div>

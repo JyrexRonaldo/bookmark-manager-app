@@ -9,8 +9,8 @@ function BookmarkCard() {
             alt=""
           />
           <div className="flex grow flex-col gap-[4px]">
-            <p className="text-[20px]/[120%] font-bold">Frontend Mentor</p>
-            <p className="text-[12px]/[140%]">frontendmentor.io</p>
+            <p className="text-[20px]/[120%] font-bold font-manrope">Frontend Mentor</p>
+            <p className="text-[12px]/[140%] font-manrope">frontendmentor.io</p>
           </div>
 
           <button className="flex size-[32px] items-center justify-center rounded-[8px] border border-[#C0CFCC]">
@@ -19,26 +19,26 @@ function BookmarkCard() {
         </div>
         <hr className="text-[#DDE9E7]" />
 
-        <p className="text-[14px]/[150%] text-[#4C5C59]">
+        <p className="text-[14px]/[150%] font-manrope text-[#4C5C59]">
           Improve your front-end coding skills by building real projects. Solve
           real-world HTML, CSS and JavaScript challenges whilst working to
           professional designs.
         </p>
         <div className="flex gap-[8px]">
-          <p className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%] text-[#131313]">
+          <p className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%] font-manrope text-[#131313]">
             Practice
           </p>
-          <p className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%] text-[#131313]">
+          <p className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%] font-manrope text-[#131313]">
             Learning
           </p>
-          <p className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%] text-[#131313]">
+          <p className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%] font-manrope text-[#131313]">
             Community
           </p>
         </div>
       </div>
       <hr className="text-[#DDE9E7]" />
       <div className="flex justify-between gap-[8px] p-[12px]">
-        <div className="flex gap-[16px] *:flex *:items-center *:gap-2 *:text-[12px]/[140%]">
+        <div className="flex gap-[16px] *:flex *:items-center *:font-manrope *:gap-2 *:text-[12px]/[140%]">
           <div>
             <img
               className="size-[12px]"

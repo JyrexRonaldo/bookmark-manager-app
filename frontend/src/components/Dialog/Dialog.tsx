@@ -5,10 +5,12 @@ function Dialog() {
         <div className="flex h-[181px] w-[450px] flex-col gap-[24px] rounded-[12px] bg-white p-[24px]">
           <div>
             <div className="flex justify-between text-[24px]/[140%]">
-              <p>Archive bookmark</p>
+              <p className="font-manrope text-[24px]/[140%] font-bold">
+                Archive bookmark
+              </p>
               <img src="/img/icon-close.svg" alt="" />
             </div>
-            <p className="text-[14px]/[150%] font-medium tracking-[1%] text-[#4C5C59]">
+            <p className="font-manrope text-[14px]/[150%] font-medium tracking-[1%] text-[#4C5C59]">
               Are you sure you want to archive this bookmark?
             </p>
           </div>
