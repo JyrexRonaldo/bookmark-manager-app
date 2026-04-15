@@ -1,16 +1,21 @@
-function BookmarkCard() {
+function BookmarkCard({title, url, description, tags, visitCount, createdAt, lastVisited, favicon }) {
+
+  const tagElements = tags.map((tag, index) => <p key={index} className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%] font-manrope text-[#131313]">
+            {tag}
+          </p> )
+
   return (
     <div className="max-h-[272px] min-w-[338px] rounded-[12px] bg-white">
       <div className="flex flex-col gap-[16px] p-[16px]">
         <div className="flex justify-between gap-[12px]">
           <img
             className="size-[44px] rounded-[8px] border border-[#E8F0EF]"
-            src="/img/favicon-frontend-mentor.png"
+            src={favicon}
             alt=""
           />
           <div className="flex grow flex-col gap-[4px]">
-            <p className="text-[20px]/[120%] font-bold font-manrope">Frontend Mentor</p>
-            <p className="text-[12px]/[140%] font-manrope">frontendmentor.io</p>
+            <p className="text-[20px]/[120%] font-bold font-manrope">{title}</p>
+            <p className="text-[12px]/[140%] font-manrope">{url}</p>
           </div>
 
           <button className="flex size-[32px] items-center justify-center rounded-[8px] border border-[#C0CFCC]">
@@ -20,20 +25,10 @@ function BookmarkCard() {
         <hr className="text-[#DDE9E7]" />
 
         <p className="text-[14px]/[150%] font-manrope text-[#4C5C59]">
-          Improve your front-end coding skills by building real projects. Solve
-          real-world HTML, CSS and JavaScript challenges whilst working to
-          professional designs.
+          {description}
         </p>
         <div className="flex gap-[8px]">
-          <p className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%] font-manrope text-[#131313]">
-            Practice
-          </p>
-          <p className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%] font-manrope text-[#131313]">
-            Learning
-          </p>
-          <p className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%] font-manrope text-[#131313]">
-            Community
-          </p>
+          {tagElements}
         </div>
       </div>
       <hr className="text-[#DDE9E7]" />
@@ -45,7 +40,7 @@ function BookmarkCard() {
               src="/img/icon-visit-count.svg"
               alt=""
             />
-            <p>152</p>
+            <p>{visitCount}</p>
           </div>
           <div>
             <img
@@ -53,7 +48,7 @@ function BookmarkCard() {
               src="/img/icon-last-visited.svg"
               alt=""
             />
-            <p>24 Sep</p>
+            <p>{lastVisited}</p>
           </div>
           <div>
             <img
@@ -61,7 +56,7 @@ function BookmarkCard() {
               src="/img/icon-created.svg"
               alt=""
             />
-            <p>10 Jan</p>
+            <p>{createdAt}</p>
           </div>
         </div>
         <img className="size-[16px]" src="/img/icon-pin.svg" alt="" />

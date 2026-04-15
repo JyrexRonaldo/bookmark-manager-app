@@ -1,4 +1,16 @@
 import TagComponent from "../TagComponent/TagComponent";
+import data from "../../../data";
+
+const allTags = data.bookmarks
+  .map((bookmark) => bookmark.tags.join(","))
+  .join(",")
+  .split(",");
+
+const allUniqueTags = allTags.filter(
+  (tag, index) => allTags.indexOf(tag) === index,
+);
+
+const TagElements = allUniqueTags.map((element,index) => <TagComponent key={index} tagName={element} /> ) 
 
 function SideBar() {
   return (
@@ -24,6 +36,9 @@ function SideBar() {
               <p>Reset</p>
             </div>
             <div>
+
+              {TagElements}
+              {/* <TagComponent />
               <TagComponent />
               <TagComponent />
               <TagComponent />
@@ -31,8 +46,7 @@ function SideBar() {
               <TagComponent />
               <TagComponent />
               <TagComponent />
-              <TagComponent />
-              <TagComponent />
+              <TagComponent /> */}
             </div>
           </div>
         </section>
