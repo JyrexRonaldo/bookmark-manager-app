@@ -1,3 +1,5 @@
+import ProfileMenu from "../ProfileMenu/ProfileMenu";
+
 function NavBar({ showAddForm, setShowAddForm }) {
   function handleAddBookmark() {
     setShowAddForm(!showAddForm);
@@ -21,7 +23,7 @@ function NavBar({ showAddForm, setShowAddForm }) {
             placeholder="Search by title..."
           />
         </div>
-        <div className="flex gap-[10px]">
+        <div className="relative flex items-center gap-[10px]">
           <button
             onClick={handleAddBookmark}
             className="flex min-w-[40px] items-center justify-center gap-[4px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] text-white"
@@ -35,7 +37,10 @@ function NavBar({ showAddForm, setShowAddForm }) {
               Add Bookmark
             </p>
           </button>
-          <img className="size-[40px]" src="/img/image-avatar.webp" alt="" />
+          <button popoverTarget="profilemenu">
+            <img className="size-[40px]" src="/img/image-avatar.webp" alt="" />
+          </button>
+          <ProfileMenu />
         </div>
       </nav>
     </>

@@ -37,7 +37,7 @@ const routes = [
   },
    {
     path: "/test",
-    element: <AddBookmark />,
+    element: <ProfileMenu />,
   },
 ];
 
