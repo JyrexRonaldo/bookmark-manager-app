@@ -1,14 +1,27 @@
-function AddBookmark() {
+function AddBookmark({ showAddForm, setShowAddForm }) {
+  function handleAddBookmark(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (e.target === e.currentTarget) {
+      setShowAddForm(!showAddForm);
+    }
+  }
+
   return (
     <>
-      <div className="flex h-screen items-center justify-center bg-[#131313]/70">
-        <div className="flex w-[570px] flex-col gap-[32px] rounded-[16px] bg-white p-[32px]">
+      <div
+        onClick={handleAddBookmark}
+        className="col-start-1 col-end-6 row-start-1 row-end-3 flex h-screen items-center justify-center bg-[#131313]/70"
+      >
+        <div className="m-[16px] flex w-[570px] flex-col gap-[32px] rounded-[16px] bg-white p-[32px]">
           <div className="flex flex-col gap-[8px]">
             <div className="flex justify-between">
               <p className="font-manrope text-[24px]/[140%] font-bold">
                 Add a bookmark
               </p>
-              <img src="/img/icon-close.svg" alt="" />
+              <img
+                onClick={handleAddBookmark}
+                src="/img/icon-close.svg"
+                alt=""
+              />
             </div>
             <p className="font-manrope text-[14px]/[150%] font-medium tracking-[1%] text-[#4C5C59]">
               Save a link with details to keep your collection organized. We
@@ -20,25 +33,29 @@ function AddBookmark() {
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
                 Title *
               </label>
-              <input type="text" className="h-[45px]   p-[12px]  border" />
+              <input type="text" className="h-[45px] border p-[12px]" />
             </div>
             <div className="flex flex-col gap-[6px]">
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
                 Description *
               </label>
-              <textarea name="" id="" className="h-[91px] border  p-[12px]  "></textarea>
+              <textarea
+                name=""
+                id=""
+                className="h-[91px] border p-[12px]"
+              ></textarea>
             </div>
             <div className="flex flex-col gap-[6px]">
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
                 Website URL *
               </label>
-              <input type="text" className="h-[45px]   p-[12px]  border" />
+              <input type="text" className="h-[45px] border p-[12px]" />
             </div>
             <div className="flex flex-col gap-[6px]">
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
                 Tags *
               </label>
-              <input type="text" className="h-[45px]   p-[12px]  border" />
+              <input type="text" className="h-[45px] border p-[12px]" />
             </div>
           </div>
           <div className="flex justify-end gap-[16px] *:px-[16px] *:py-[12px]">
