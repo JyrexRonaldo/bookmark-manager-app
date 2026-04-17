@@ -5,12 +5,12 @@ import NavBar from "../NavBar/NavBar";
 function App() {
   return (
     <>
-      <div className="flex h-screen">
+      <div className="grid h-screen grid-cols-5 grid-cols-[min-content_repeat(4,1fr)] grid-rows-[min-content_1fr]">
         <SideBar />
-        <div className="flex flex-col grow ">
-          <NavBar />
-          <Main />
-        </div>
+        {/* <div className="col-start-2 col-end-6 "> */}
+        <NavBar />
+        <Main />
+        {/* </div> */}
       </div>
     </>
   );

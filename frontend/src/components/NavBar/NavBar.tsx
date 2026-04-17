@@ -1,7 +1,7 @@
 function NavBar() {
   return (
     <>
-      <nav className="flex w-auto items-center gap-[10px] px-[16px] py-[12px]">
+      <nav className="col-start-2 col-end-6 row-start-1 row-end-2 flex w-auto items-center gap-[10px] px-[16px] py-[12px]">
         <button className="flex size-[40px] items-center justify-center rounded-[8px] border border-[#C0CFCC] lg:hidden">
           <img src="/img/icon-menu-hamburger.svg" alt="" />
         </button>

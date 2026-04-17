@@ -5,7 +5,7 @@ function BookmarkCard({title, url, description, tags, visitCount, createdAt, las
           </p> )
 
   return (
-    <div className="max-h-[272px] min-w-[338px] rounded-[12px] bg-white">
+    <div className="max-h-[272px] rounded-[12px] bg-white">
       <div className="flex flex-col gap-[16px] p-[16px]">
         <div className="flex justify-between gap-[12px]">
           <img

@@ -10,12 +10,14 @@ const allUniqueTags = allTags.filter(
   (tag, index) => allTags.indexOf(tag) === index,
 );
 
-const TagElements = allUniqueTags.map((element,index) => <TagComponent key={index} tagName={element} /> ) 
+const TagElements = allUniqueTags.map((element, index) => (
+  <TagComponent key={index} tagName={element} />
+));
 
 function SideBar() {
   return (
     <>
-      <aside className="hidden h-screen min-w-[296px] flex-col gap-[16px] border-r border-[#DDE9E7] lg:flex">
+      <aside className="row-start-1 row-end-3 hidden h-screen flex-col gap-[16px] border-r border-[#DDE9E7] lg:flex">
         <div className="px-[20px] pt-[20px] pb-[10px]">
           <img src="/img/logo-light-theme.svg" alt="" />
         </div>
@@ -36,7 +38,6 @@ function SideBar() {
               <p>Reset</p>
             </div>
             <div>
-
               {TagElements}
               {/* <TagComponent />
               <TagComponent />
