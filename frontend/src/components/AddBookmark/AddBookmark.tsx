@@ -9,7 +9,7 @@ function AddBookmark({ showAddForm, setShowAddForm }) {
     <>
       <div
         onClick={handleAddBookmark}
-        className="col-start-1 col-end-6 row-start-1 row-end-3 flex h-screen items-center justify-center bg-[#131313]/70"
+        className="fixed flex h-screen w-full items-center justify-center bg-[#131313]/70"
       >
         <div className="m-[16px] flex w-[570px] flex-col gap-[32px] rounded-[16px] bg-white p-[32px]">
           <div className="flex flex-col gap-[8px]">
