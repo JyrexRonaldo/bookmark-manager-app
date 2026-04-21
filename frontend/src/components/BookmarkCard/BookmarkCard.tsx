@@ -1,6 +1,6 @@
 import Popup from "reactjs-popup";
-
 import ActionsDropdown from "../ActionsDropdown/ActionsDropdown";
+import { RemoveScroll } from "react-remove-scroll";
 
 function BookmarkCard({
   title,
@@ -43,8 +43,16 @@ function BookmarkCard({
             <p className="font-manrope text-[20px]/[120%] font-bold">{title}</p>
             <p className="font-manrope text-[12px]/[140%]">{url}</p>
           </div>
-          <Popup trigger={popupButton} position={"bottom right"} offsetY={4} offsetX={4} arrow={false} > 
-            <ActionsDropdown />
+          <Popup
+            trigger={popupButton}
+            position={"bottom right"}
+            offsetY={4}
+            offsetX={4}
+            arrow={false}
+          >
+            <RemoveScroll>
+              <ActionsDropdown />
+            </RemoveScroll>
           </Popup>
         </div>
         <hr className="text-[#DDE9E7]" />
