@@ -16,6 +16,7 @@
     "react-dom": "^19.2.4",
     "react-router": "^7.14.0",
     "reactjs-popup": "^2.0.6",
+    "tailwind-scrollbar-hide": "^4.0.0",
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {

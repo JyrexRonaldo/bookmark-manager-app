@@ -36,7 +36,7 @@ function Main() {
             <p className="font-manrope text-[16px]/[140%]">Sort by</p>
           </button>
         </div>
-        <div className="grid h-[200px] grow grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-[32px] overflow-y-scroll bg-[#E8F0EF]">
+        <div className="scrollbar-hide grid h-[200px] grow grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-[32px] overflow-y-scroll bg-[#E8F0EF]">
           {bookmarkElements}
         </div>
       </main>
