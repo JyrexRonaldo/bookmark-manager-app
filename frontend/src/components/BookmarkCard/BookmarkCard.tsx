@@ -15,7 +15,7 @@ function BookmarkCard({
   const popupButton = (
     <button
       popoverTarget="actiondropdown"
-      className="flex size-[32px] shrink-0 items-center justify-center rounded-[8px] border border-[#C0CFCC]"
+      className="flex size-[32px] shrink-0 items-center justify-center rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF] focus:bg-[#E8F0EF]"
     >
       <img src="/img/icon-menu-bookmark.svg" alt="" />
     </button>

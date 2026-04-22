@@ -4,7 +4,7 @@ import NavBar from "../NavBar/NavBar";
 import AddBookmark from "../AddBookmark/AddBookmark";
 import { useState } from "react";
 // import SideBarWrapper from "../SideBarWrapper/SideBarWrapper";
-import SideBar from "../SideBarWrapper/SideBar/SideBar";
+import SideBar from "../SideBar/SideBar";
 import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkContext";
 
 function App() {
@@ -13,7 +13,14 @@ function App() {
   return (
     <>
       <div className="grid h-screen grid-cols-5 grid-cols-[min-content_repeat(4,1fr)] grid-rows-[min-content_1fr]">
-        <AddBookmarkContext value={{ showAddForm, setShowAddForm }}>
+        <AddBookmarkContext
+          value={{
+            showAddForm,
+            setShowAddForm,
+            isSideBarOpen,
+            setIsSideBarOpen,
+          }}
+        >
           {/* <SideBar /> */}
           {/* <SideBarWrapper> */}
           <SideBar isOpem={isSideBarOpen} />

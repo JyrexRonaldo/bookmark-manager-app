@@ -3,18 +3,27 @@ import { useContext } from "react";
 import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkContext";
 
 function NavBar() {
-  const { showAddForm, setShowAddForm } = useContext(AddBookmarkContext);
+  const { showAddForm, setShowAddForm, isSideBarOpen, setIsSideBarOpen } =
+    useContext(AddBookmarkContext);
   function handleAddBookmark() {
     setShowAddForm(!showAddForm);
+  }
+
+  function handleSideBar() {
+    setIsSideBarOpen(!isSideBarOpen);
+    console.log("open sesame");
   }
 
   return (
     <>
       <nav className="col-start-2 col-end-6 row-start-1 row-end-2 flex w-auto items-center gap-[10px] px-[16px] py-[12px]">
-        <button className="flex size-[40px] items-center justify-center rounded-[8px] border border-[#C0CFCC] lg:hidden">
+        <button
+          onClick={handleSideBar}
+          className="flex size-[40px] items-center justify-center rounded-[8px] border border-[#C0CFCC] lg:hidden"
+        >
           <img src="/img/icon-menu-hamburger.svg" alt="" />
         </button>
-        <div className="mr-auto flex h-[41px] w-[60px] max-w-[60%] flex-auto gap-[8px] rounded-[8px] border border-[#DDE9E7] px-[12px] py-[10px] sm:max-w-[40%]">
+        <div className="mr-auto flex h-[41px] w-[60px] max-w-[60%] flex-auto gap-[8px] rounded-[8px] border border-[#DDE9E7] px-[12px] py-[10px] hover:bg-[#E8F0EF] has-focus:bg-[#E8F0EF] has-focus:outline-4 has-focus:outline-[#E8F0EF] sm:max-w-[40%]">
           <img
             className="min-w-[20px]"
             src="/img/icon-search.svg"

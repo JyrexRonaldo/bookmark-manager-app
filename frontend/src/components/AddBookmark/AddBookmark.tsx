@@ -4,7 +4,11 @@ import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkCon
 function AddBookmark() {
   const { showAddForm, setShowAddForm } = useContext(AddBookmarkContext);
 
-  function handleAddBookmark(e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function handleAddBookmark(
+    e:
+      | React.MouseEvent<HTMLDivElement, MouseEvent>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) {
     if (e.target === e.currentTarget) {
       setShowAddForm(!showAddForm);
     }
@@ -14,7 +18,7 @@ function AddBookmark() {
     <>
       <div
         onClick={handleAddBookmark}
-        className="fixed flex h-screen w-full items-center justify-center bg-[#131313]/70"
+        className="fixed z-2 flex h-screen w-full items-center justify-center bg-[#131313]/70"
       >
         <div className="m-[16px] flex w-[570px] flex-col gap-[32px] rounded-[16px] bg-white p-[32px]">
           <div className="flex flex-col gap-[8px]">
@@ -26,6 +30,7 @@ function AddBookmark() {
                 onClick={handleAddBookmark}
                 src="/img/icon-close.svg"
                 alt=""
+                className="size-[32px] rounded-[8px] border p-[5px] border-[#E8F0EF] hover:bg-[#E8F0EF]"
               />
             </div>
             <p className="font-manrope text-[14px]/[150%] font-medium tracking-[1%] text-[#4C5C59]">
@@ -38,7 +43,10 @@ function AddBookmark() {
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
                 Title *
               </label>
-              <input type="text" className="h-[45px] border p-[12px]" />
+              <input
+                type="text"
+                className="h-[45px] border p-[12px] hover:bg-[#E8F0EF]"
+              />
             </div>
             <div className="flex flex-col gap-[6px]">
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
@@ -47,26 +55,32 @@ function AddBookmark() {
               <textarea
                 name=""
                 id=""
-                className="h-[91px] border p-[12px]"
+                className="h-[91px] border p-[12px] hover:bg-[#E8F0EF]"
               ></textarea>
             </div>
             <div className="flex flex-col gap-[6px]">
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
                 Website URL *
               </label>
-              <input type="text" className="h-[45px] border p-[12px]" />
+              <input
+                type="text"
+                className="h-[45px] border p-[12px] hover:bg-[#E8F0EF]"
+              />
             </div>
             <div className="flex flex-col gap-[6px]">
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
                 Tags *
               </label>
-              <input type="text" className="h-[45px] border p-[12px]" />
+              <input
+                type="text"
+                className="h-[45px] border p-[12px] hover:bg-[#E8F0EF]"
+              />
             </div>
           </div>
           <div className="flex justify-end gap-[16px] *:px-[16px] *:py-[12px]">
             <button
-              onClick={(handleAddBookmark)}
-              className="rounded-[8px] border border-[#C0CFCC]"
+              onClick={handleAddBookmark}
+              className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
             >
               Cancel
             </button>
