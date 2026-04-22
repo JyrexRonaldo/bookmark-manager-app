@@ -1,6 +1,6 @@
 import Popup from "reactjs-popup";
-import ActionsDropdown from "../ActionsDropdown/ActionsDropdown";
 import { RemoveScroll } from "react-remove-scroll";
+import ActionsDropdown from "../ActionsDropdown/ActionsDropdown";
 
 function BookmarkCard({
   title,
@@ -15,7 +15,7 @@ function BookmarkCard({
   const popupButton = (
     <button
       popoverTarget="actiondropdown"
-      className="flex size-[32px] shrink-0 items-center justify-center rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF] focus:bg-[#E8F0EF]"
+      className="flex size-[32px] shrink-0 items-center justify-center rounded-[8px] border focus:outline-4 focus:outline-[#E8F0EF] border-[#C0CFCC] hover:bg-[#E8F0EF] focus:bg-[#E8F0EF]"
     >
       <img src="/img/icon-menu-bookmark.svg" alt="" />
     </button>
@@ -49,6 +49,7 @@ function BookmarkCard({
             offsetY={4}
             offsetX={4}
             arrow={false}
+            closeOnDocumentClick
           >
             <RemoveScroll>
               <ActionsDropdown />

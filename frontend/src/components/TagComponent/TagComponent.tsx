@@ -1,7 +1,7 @@
 function TagComponent({ tagName }) {
   return (
     <>
-      <div className="flex h-[38px] items-center justify-between gap-[12px] px-[12px] py-[8px] hover:bg-[#E8F0EF]">
+      <div className="flex h-[38px] items-center justify-between gap-[12px] px-[12px] py-[8px] rounded-[8px] hover:bg-[#E8F0EF]">
         <div className="flex grow items-center gap-[8px]">
           <input
             type="checkbox"

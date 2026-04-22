@@ -1,6 +1,9 @@
+import Popup from "reactjs-popup";
+import { RemoveScroll } from "react-remove-scroll";
 import BookmarkCard from "../BookmarkCard/BookmarkCard";
 import data from "../../../data";
 import { format } from "date-fns";
+import SortByDropdown from "../SortByDropdown/SortByDropdown";
 
 const bookmarkElements = data.bookmarks.map((bookmark) => {
   const favicon = "/img" + bookmark.favicon.substring(15);
@@ -24,6 +27,13 @@ const bookmarkElements = data.bookmarks.map((bookmark) => {
 });
 
 function Main() {
+  const sortByPopup = (
+    <button className="flex w-[107px] gap-[4px] rounded-[8px] border border-[#C0CFCC] bg-white px-[12px] py-[10px] text-[#051513] hover:bg-[#E8F0EF]">
+      <img src="/img/icon-sort.svg" alt="" />{" "}
+      <p className="font-manrope text-[16px]/[140%]">Sort by</p>
+    </button>
+  );
+
   return (
     <>
       <main className="col-start-2 col-end-6 row-start-2 row-end-3 flex h-full flex-col gap-[20px] bg-[#E8F0EF] px-[16px] pt-[24px] pb-[32px] sm:px-[32px]">
@@ -31,10 +41,19 @@ function Main() {
           <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
             All bookmarks
           </p>
-          <button className="flex w-[107px] gap-[4px] rounded-[8px] border border-[#C0CFCC] bg-white px-[12px] py-[10px] text-[#051513]">
-            <img src="/img/icon-sort.svg" alt="" />{" "}
-            <p className="font-manrope text-[16px]/[140%]">Sort by</p>
-          </button>
+
+          <Popup
+            trigger={sortByPopup}
+            position={"bottom right"}
+            offsetY={4}
+            offsetX={14}
+            arrow={false}
+            closeOnDocumentClick
+          >
+            <RemoveScroll>
+              <SortByDropdown />
+            </RemoveScroll>
+          </Popup>
         </div>
         <div className="scrollbar-hide grid h-[200px] grow grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-[32px] overflow-y-scroll bg-[#E8F0EF]">
           {bookmarkElements}
