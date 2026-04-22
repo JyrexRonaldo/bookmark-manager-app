@@ -1,5 +1,10 @@
-function AddBookmark({ showAddForm, setShowAddForm }) {
-  function handleAddBookmark(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+import { useContext } from "react";
+import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkContext";
+
+function AddBookmark() {
+  const { showAddForm, setShowAddForm } = useContext(AddBookmarkContext);
+
+  function handleAddBookmark(e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     if (e.target === e.currentTarget) {
       setShowAddForm(!showAddForm);
     }
@@ -59,7 +64,10 @@ function AddBookmark({ showAddForm, setShowAddForm }) {
             </div>
           </div>
           <div className="flex justify-end gap-[16px] *:px-[16px] *:py-[12px]">
-            <button className="rounded-[8px] border border-[#C0CFCC]">
+            <button
+              onClick={(handleAddBookmark)}
+              className="rounded-[8px] border border-[#C0CFCC]"
+            >
               Cancel
             </button>
             <button className="rounded-[8px] bg-[#014745] text-white">

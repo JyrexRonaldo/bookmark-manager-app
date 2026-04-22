@@ -1,6 +1,9 @@
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
+import { useContext } from "react";
+import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkContext";
 
-function NavBar({ showAddForm, setShowAddForm }) {
+function NavBar() {
+  const { showAddForm, setShowAddForm } = useContext(AddBookmarkContext);
   function handleAddBookmark() {
     setShowAddForm(!showAddForm);
   }
