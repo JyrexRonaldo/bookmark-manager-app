@@ -1,5 +1,6 @@
 import 'dotenv/config' ;
 import express from "express";
+import bookmarkRouter from './routes/bookmarkRouter.ts';
 // const cors = require("cors");
 // import cors from "cors";
 const app = express();
@@ -41,6 +42,8 @@ app.get('/', (_req, res) => {
   console.log('someone pinged here');
   res.send('pong');
 });
+
+app.use('/bookmark', bookmarkRouter);
 
 app.listen(PORT, (error: unknown) => {
     const errorMessage = 'Something went wrong, ';

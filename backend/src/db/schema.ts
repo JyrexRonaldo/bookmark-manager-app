@@ -3,7 +3,7 @@ import {
   pgTable,
   varchar,
   boolean,
-  text,
+//   text,
   timestamp,
   primaryKey,
 } from "drizzle-orm/pg-core";
@@ -21,7 +21,6 @@ export const bookmarksTable = pgTable("bookmarks", {
   url: varchar({ length: 255 }).notNull(),
   favicon: varchar({ length: 255 }).notNull(),
   description: varchar({ length: 255 }).notNull(),
-  tags: text().notNull(),
   pinned: boolean(),
   isArchived: boolean(),
   visitCount: integer().notNull(),
