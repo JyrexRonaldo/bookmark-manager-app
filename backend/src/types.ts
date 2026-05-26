@@ -8,6 +8,6 @@ export const NewBookmarkEntrySchema = z.object({
   pinned: z.boolean(),
   isArchived: z.boolean(),
   visitCount: z.number(),
-  createdAt: z.boolean(),
-  lastVisited: z.iso.datetime(),
+  createdAt: z.date(),
+  lastVisited: z.date(),
 });
