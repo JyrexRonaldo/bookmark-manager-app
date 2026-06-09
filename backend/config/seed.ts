@@ -37,6 +37,7 @@ function populateTagArray() {
   for (const element of data.bookmarks) {
     tags = tags.concat(element.tags);
   }
+  // new Set used here is for removing duplicates items from arrays
   const result = [...new Set(tags)];
   return result.map((item) => {
     return { title: item };
@@ -60,4 +61,4 @@ export async function populateDb() {
   await db.insert(bookmarksTags).values(populatebookmarkTagArray());
 }
 
-// await populateDb();
+await populateDb();

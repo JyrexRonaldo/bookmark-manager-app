@@ -21,8 +21,8 @@ const PORT = process.env.PORT || 3000;
 
 // app.use(cors());
 // app.use(limiter);
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // app.use("/auth", authRouter);
 // app.use(passport.authenticate("jwt", { session: false }));

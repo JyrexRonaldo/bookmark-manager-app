@@ -13,9 +13,9 @@ export const bookmarks = pgTable("bookmarks", {
   url: varchar({ length: 255 }).notNull(),
   favicon: varchar({ length: 255 }).notNull(),
   description: varchar({ length: 255 }).notNull(),
-  pinned: boolean(),
-  isArchived: boolean(),
-  visitCount: integer().notNull(),
+  pinned: boolean().default(false),
+  isArchived: boolean().default(false),
+  visitCount: integer().default(0),
   createdAt: timestamp({ mode: "string" }).defaultNow(),
   lastVisited: timestamp({ mode: "string" }),
 });

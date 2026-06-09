@@ -17,10 +17,11 @@ import {
 // const router = express.Router();
 
 // import { z } from "zod"
-// import { NewBookmarkEntrySchema } from "../types.ts";
-import db from '../../config/drizzle.ts';
+import { NewBookmarkEntrySchema } from "../types.ts";
+import db from "../../config/drizzle.ts";
 import { bookmarks, bookmarksTags, tags } from "../db/schema.ts";
-import { eq,sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
+import { ZodError } from "zod";
 
 // const getTodosByUserId = async (req: Request, res: Response) => {
 //   const { userId } = req.body;
@@ -33,10 +34,57 @@ import { eq,sql } from "drizzle-orm";
 
 const getAllBookmarks = async (_req: Request, res: Response) => {
   //   const data = NewBookmarkEntrySchema.parse(req.body);
-//   const data = NewBookmarkEntrySchema.parse(req.body);
-const allBookmarks = await db.select({bookmarks, tags: sql<string[]>`COALESCE(json_agg(${tags.title}), '[]')`.as('tags')}).from(bookmarksTags).innerJoin(bookmarks, eq(bookmarks.id, bookmarksTags.bookmarkId)).innerJoin(tags, eq(tags.title, bookmarksTags.tagId)).groupBy(bookmarks.id).orderBy(bookmarks.id);
-  console.log(allBookmarks);
-  res.end();
+  //   const data = NewBookmarkEntrySchema.parse(req.body);
+  const allBookmarks = await db
+    .select({
+      bookmarks,
+      tags: sql<string[]>`json_agg(${tags.title})`.as("tags"),
+    })
+    .from(bookmarksTags)
+    .innerJoin(bookmarks, eq(bookmarks.id, bookmarksTags.bookmarkId))
+    .innerJoin(tags, eq(tags.title, bookmarksTags.tagId))
+    .groupBy(bookmarks.id)
+    .orderBy(bookmarks.id);
+  // console.log(allBookmarks);
+  res.json(allBookmarks);
 };
 
-export default { getAllBookmarks };
+const addBookmark = (req: Request, res: Response) => {
+  //   const data = NewBookmarkEntrySchema.parse(req.body);
+  //   const data = NewBookmarkEntrySchema.parse(req.body);
+
+  try {
+    const { id, title, description, url, tags } = NewBookmarkEntrySchema.parse(
+      req.body,
+    );
+    console.log({ id, title, description, url, tags });
+    res.end();
+  } catch (error: unknown) {
+    if (error instanceof ZodError) {
+      console.log(error);
+      res.status(400).send({ error: error.issues });
+    } else {
+      res.status(400).send({ error: "unknown error" });
+    }
+  }
+
+  // const { title, description, url, tags } = NewBookmarkEntrySchema.parse(
+  //   req.body,
+  // );
+  // console.log({ title, description, url, tags });
+  // const allBookmarks = await db
+  //   .select({
+  //     bookmarks,
+  //     tags: sql<string[]>`json_agg(${tags.title})`.as("tags"),
+  //   })
+  //   .from(bookmarksTags)
+  //   .innerJoin(bookmarks, eq(bookmarks.id, bookmarksTags.bookmarkId))
+  //   .innerJoin(tags, eq(tags.title, bookmarksTags.tagId))
+  //   .groupBy(bookmarks.id)
+  //   .orderBy(bookmarks.id);
+  // // console.log(allBookmarks);
+  // res.json(allBookmarks);
+  // res.end();
+};
+
+export default { getAllBookmarks, addBookmark };
