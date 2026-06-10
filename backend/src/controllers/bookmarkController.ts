@@ -49,7 +49,7 @@ const getAllBookmarks = async (_req: Request, res: Response) => {
   res.json(allBookmarks);
 };
 
-const addBookmark = (req: Request, res: Response) => {
+const addBookmark = async (req: Request, res: Response) => {
   //   const data = NewBookmarkEntrySchema.parse(req.body);
   //   const data = NewBookmarkEntrySchema.parse(req.body);
 
@@ -57,7 +57,11 @@ const addBookmark = (req: Request, res: Response) => {
     const { id, title, description, url, tags } = NewBookmarkEntrySchema.parse(
       req.body,
     );
-    console.log({ id, title, description, url, tags });
+    const faviconUrl = new URL(url).hostname;
+    console.log({ id, title, description, url, tags, faviconUrl });
+    await db
+      .insert(bookmarks)
+      .values({ id, title, description, url, favicon: faviconUrl });
     res.end();
   } catch (error: unknown) {
     if (error instanceof ZodError) {
