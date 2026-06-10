@@ -29,6 +29,7 @@ interface BookmarkTag {
 
 const bookmarksResult = bookmarkData.bookmarks.map((bookmark: Bookmark) => {
   delete bookmark.tags;
+  bookmark.favicon = new URL(bookmark.url).hostname;
   return bookmark;
 });
 

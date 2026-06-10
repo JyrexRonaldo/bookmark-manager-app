@@ -33,8 +33,6 @@ import { ZodError } from "zod";
 // };
 
 const getAllBookmarks = async (_req: Request, res: Response) => {
-  //   const data = NewBookmarkEntrySchema.parse(req.body);
-  //   const data = NewBookmarkEntrySchema.parse(req.body);
   const allBookmarks = await db
     .select({
       bookmarks,
@@ -45,31 +43,32 @@ const getAllBookmarks = async (_req: Request, res: Response) => {
     .innerJoin(tags, eq(tags.title, bookmarksTags.tagId))
     .groupBy(bookmarks.id)
     .orderBy(bookmarks.id);
-  // console.log(allBookmarks);
   res.json(allBookmarks);
 };
 
 const addBookmark = async (req: Request, res: Response) => {
-  //   const data = NewBookmarkEntrySchema.parse(req.body);
-  //   const data = NewBookmarkEntrySchema.parse(req.body);
-
   try {
     const { id, title, description, url, tagTitles } =
       NewBookmarkEntrySchema.parse(req.body);
     const faviconUrl = new URL(url).hostname;
-    console.log({ id, title, description, url, tagTitles, faviconUrl });
-    await db
-      .insert(bookmarks)
-      .values({ id, title, description, url, favicon: faviconUrl });
-    console.log();
-    const tagTitlesArray = tagTitles.split(",").map((tag) => {
-      return { title: tag };
+    // allows multiple backend requests to be completed in one interaction
+    await db.transaction(async (tx) => {
+      await tx.insert(bookmarks).values({
+        id,
+        title,
+        description,
+        url,
+        favicon: faviconUrl,
+      });
+      const tagTitlesArray = tagTitles.split(",").map((tag) => {
+        return { title: tag };
+      });
+      await tx.insert(tags).values(tagTitlesArray);
+      const bookmarkTagsData = tagTitles.split(",").map((tag) => {
+        return { bookmarkId: id, tagId: tag };
+      });
+      await tx.insert(bookmarksTags).values(bookmarkTagsData);
     });
-    await db.insert(tags).values(tagTitlesArray);
-    const bookmarkTagsData = tagTitles.split(",").map((tag) => {
-      return { bookmarkId: id, tagId: tag };
-    });
-    await db.insert(bookmarksTags).values(bookmarkTagsData);
     res.end();
   } catch (error: unknown) {
     if (error instanceof ZodError) {
@@ -79,24 +78,6 @@ const addBookmark = async (req: Request, res: Response) => {
       res.status(400).send({ error: "unknown error" });
     }
   }
-
-  // const { title, description, url, tags } = NewBookmarkEntrySchema.parse(
-  //   req.body,
-  // );
-  // console.log({ title, description, url, tags });
-  // const allBookmarks = await db
-  //   .select({
-  //     bookmarks,
-  //     tags: sql<string[]>`json_agg(${tags.title})`.as("tags"),
-  //   })
-  //   .from(bookmarksTags)
-  //   .innerJoin(bookmarks, eq(bookmarks.id, bookmarksTags.bookmarkId))
-  //   .innerJoin(tags, eq(tags.title, bookmarksTags.tagId))
-  //   .groupBy(bookmarks.id)
-  //   .orderBy(bookmarks.id);
-  // // console.log(allBookmarks);
-  // res.json(allBookmarks);
-  // res.end();
 };
 
 export default { getAllBookmarks, addBookmark };
