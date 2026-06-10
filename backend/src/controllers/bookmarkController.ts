@@ -54,14 +54,22 @@ const addBookmark = async (req: Request, res: Response) => {
   //   const data = NewBookmarkEntrySchema.parse(req.body);
 
   try {
-    const { id, title, description, url, tags } = NewBookmarkEntrySchema.parse(
-      req.body,
-    );
+    const { id, title, description, url, tagTitles } =
+      NewBookmarkEntrySchema.parse(req.body);
     const faviconUrl = new URL(url).hostname;
-    console.log({ id, title, description, url, tags, faviconUrl });
+    console.log({ id, title, description, url, tagTitles, faviconUrl });
     await db
       .insert(bookmarks)
       .values({ id, title, description, url, favicon: faviconUrl });
+    console.log();
+    const tagTitlesArray = tagTitles.split(",").map((tag) => {
+      return { title: tag };
+    });
+    await db.insert(tags).values(tagTitlesArray);
+    const bookmarkTagsData = tagTitles.split(",").map((tag) => {
+      return { bookmarkId: id, tagId: tag };
+    });
+    await db.insert(bookmarksTags).values(bookmarkTagsData);
     res.end();
   } catch (error: unknown) {
     if (error instanceof ZodError) {
