@@ -9,13 +9,13 @@ import {
 
 export const bookmarks = pgTable("bookmarks", {
   id: varchar().primaryKey(),
-  title: varchar({ length: 255 }).notNull(),
-  url: varchar({ length: 255 }).notNull(),
+  title: varchar({ length: 255 }).notNull().unique(),
+  url: varchar({ length: 255 }).notNull().unique(),
   favicon: varchar({ length: 255 }).notNull(),
   description: varchar({ length: 255 }).notNull(),
   pinned: boolean().default(false),
   isArchived: boolean().default(false),
-  visitCount: integer(),
+  visitCount: integer().default(0),
   createdAt: timestamp({ mode: "string" }).defaultNow(),
   lastVisited: timestamp({ mode: "string" }),
 });

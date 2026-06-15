@@ -50,6 +50,7 @@ const addBookmark = async (req: Request, res: Response) => {
   try {
     const { id, title, description, url, tagTitles } =
       NewBookmarkEntrySchema.parse(req.body);
+    // gets hostname from supplied url
     const faviconUrl = new URL(url).hostname;
     // allows multiple backend requests to be completed in one interaction
     await db.transaction(async (tx) => {
@@ -61,11 +62,11 @@ const addBookmark = async (req: Request, res: Response) => {
         favicon: faviconUrl,
       });
       const tagTitlesArray = tagTitles.split(",").map((tag) => {
-        return { title: tag };
+        return { title: tag.trim() };
       });
-      await tx.insert(tags).values(tagTitlesArray);
+      await tx.insert(tags).values(tagTitlesArray).onConflictDoNothing();
       const bookmarkTagsData = tagTitles.split(",").map((tag) => {
-        return { bookmarkId: id, tagId: tag };
+        return { bookmarkId: id, tagId: tag.trim() };
       });
       await tx.insert(bookmarksTags).values(bookmarkTagsData);
     });
@@ -75,6 +76,7 @@ const addBookmark = async (req: Request, res: Response) => {
       console.log(error);
       res.status(400).send({ error: error.issues });
     } else {
+      console.log(error);
       res.status(400).send({ error: "unknown error" });
     }
   }

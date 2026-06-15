@@ -1,24 +1,61 @@
 import Popup from "reactjs-popup";
 import { RemoveScroll } from "react-remove-scroll";
 import BookmarkCard from "../BookmarkCard/BookmarkCard";
-import data from "../../../data";
 import { format } from "date-fns";
 import SortByDropdown from "../SortByDropdown/SortByDropdown";
+import { useState, useEffect } from "react";
 
-const bookmarkElements = data.bookmarks.map((bookmark) => {
-  const favicon = "/img" + bookmark.favicon.substring(15);
 
-  const createdAt = format(bookmark.createdAt, "d LLL");
-  const lastVisited = format(bookmark.lastVisited, "d LLL");
+
+function Main() {
+  const [bookmarkData, setBookmarkData] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_HOME_DOMAIN}/bookmark`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `${localStorage.getItem("userToken")}`,
+            },
+          },
+        );
+
+        // if (response.status === 401) {
+        //   navigate("/login");
+        // }
+        const data = await response.json();
+        setBookmarkData(data);
+      } catch (error) {
+        console.log(error);
+        // setError(true);
+      } finally {
+        // setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  // console.log(bookmarkData)
+  const bookmarkElements = bookmarkData.map((bookmark) => {
+    const currentBookmark = bookmark.bookmarks
+    const currentTag = bookmark.tags
+    console.log(currentBookmark)
+  const favicon =  `https://www.google.com/s2/favicons?domain=${currentBookmark.favicon}&sz=${64}`
+
+  const createdAt = format("2025-08-30 13:40:00", "d LLL");
+  const lastVisited = format("2025-08-30 13:40:00", "d LLL");
 
   return (
     <BookmarkCard
-      key={bookmark.id}
-      title={bookmark.title}
-      url={bookmark.url}
-      description={bookmark.description}
-      tags={bookmark.tags}
-      visitCount={bookmark.visitCount}
+      key={currentBookmark.id}
+      title={currentBookmark.title}
+      url={currentBookmark.url}
+      description={currentBookmark.description}
+      tags={currentTag}
+      visitCount={currentBookmark.visitCount}
       createdAt={createdAt}
       lastVisited={lastVisited}
       favicon={favicon}
@@ -26,7 +63,6 @@ const bookmarkElements = data.bookmarks.map((bookmark) => {
   );
 });
 
-function Main() {
   const sortByPopup = (
     <button className="flex w-[107px] gap-[4px] rounded-[8px] border border-[#C0CFCC] bg-white px-[12px] py-[10px] text-[#051513] hover:bg-[#E8F0EF]">
       <img src="/img/icon-sort.svg" alt="" />{" "}

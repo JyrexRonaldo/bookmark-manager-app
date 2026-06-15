@@ -1,6 +1,7 @@
-import 'dotenv/config' ;
+import "dotenv/config";
 import express from "express";
-import bookmarkRouter from './routes/bookmarkRouter.ts';
+import bookmarkRouter from "./routes/bookmarkRouter.ts";
+import cors from "cors";
 // const cors = require("cors");
 // import cors from "cors";
 const app = express();
@@ -19,7 +20,7 @@ const PORT = process.env.PORT || 3000;
 //   // store: ... , // Redis, Memcached, etc. See below.
 // });
 
-// app.use(cors());
+app.use(cors());
 // app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -38,16 +39,16 @@ app.use(express.urlencoded({ extended: true }));
 //   // res.status(err.statusCode || 500).send(err.message);
 // });
 
-app.get('/', (_req, res) => {
-  console.log('someone pinged here');
-  res.send('pong');
+app.get("/", (_req, res) => {
+  console.log("someone pinged here");
+  res.send("pong");
 });
 
-app.use('/bookmark', bookmarkRouter);
+app.use("/bookmark", bookmarkRouter);
 
 app.listen(PORT, (error: unknown) => {
-    const errorMessage = 'Something went wrong, ';
-    if (error instanceof Error) {
+  const errorMessage = "Something went wrong, ";
+  if (error instanceof Error) {
     console.log(errorMessage + error.message);
   }
   console.log(`My Express app - listening on port ${PORT}!`);

@@ -15,7 +15,7 @@ function BookmarkCard({
   const popupButton = (
     <button
       popoverTarget="actiondropdown"
-      className="flex size-[32px] shrink-0 items-center justify-center rounded-[8px] border focus:outline-4 focus:outline-[#E8F0EF] border-[#C0CFCC] hover:bg-[#E8F0EF] focus:bg-[#E8F0EF]"
+      className="flex size-[32px] shrink-0 items-center justify-center rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF] focus:bg-[#E8F0EF] focus:outline-4 focus:outline-[#E8F0EF]"
     >
       <img src="/img/icon-menu-bookmark.svg" alt="" />
     </button>
@@ -31,7 +31,7 @@ function BookmarkCard({
   ));
 
   return (
-    <div className="max-h-[272px] rounded-[12px] bg-white">
+    <div className="max-h-[272px] rounded-[12px] bg-white flex flex-col justify-between">
       <div className="flex flex-col gap-[16px] p-[16px]">
         <div className="relative flex justify-between gap-[12px]">
           <img
@@ -63,8 +63,8 @@ function BookmarkCard({
         </p>
         <div className="flex gap-[8px]">{tagElements}</div>
       </div>
-      <hr className="text-[#DDE9E7]" />
-      <div className="flex justify-between gap-[8px] p-[12px]">
+      {/* <hr className="text-[#DDE9E7]" /> */}
+      <div className="flex justify-between gap-[8px] p-[12px] border-t-1 border-t-[#DDE9E7]">
         <div className="flex gap-[16px] *:flex *:items-center *:gap-2 *:font-manrope *:text-[12px]/[140%]">
           <div>
             <img

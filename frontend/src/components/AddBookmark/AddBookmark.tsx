@@ -4,7 +4,7 @@ import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkCon
 function AddBookmark() {
   const { showAddForm, setShowAddForm } = useContext(AddBookmarkContext);
 
-  function handleAddBookmark(
+  function handleAddBookmarkFormDisplay(
     e:
       | React.MouseEvent<HTMLDivElement, MouseEvent>
       | React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -17,7 +17,7 @@ function AddBookmark() {
   return (
     <>
       <div
-        onClick={handleAddBookmark}
+        onClick={handleAddBookmarkFormDisplay}
         className="fixed z-2 flex h-screen w-full items-center justify-center bg-[#131313]/70"
       >
         <div className="m-[16px] flex w-[570px] flex-col gap-[32px] rounded-[16px] bg-white p-[32px]">
@@ -27,10 +27,10 @@ function AddBookmark() {
                 Add a bookmark
               </p>
               <img
-                onClick={handleAddBookmark}
+                onClick={handleAddBookmarkFormDisplay}
                 src="/img/icon-close.svg"
                 alt=""
-                className="size-[32px] rounded-[8px] border p-[5px] border-[#E8F0EF] hover:bg-[#E8F0EF]"
+                className="size-[32px] rounded-[8px] border border-[#E8F0EF] p-[5px] hover:bg-[#E8F0EF]"
               />
             </div>
             <p className="font-manrope text-[14px]/[150%] font-medium tracking-[1%] text-[#4C5C59]">
@@ -79,7 +79,7 @@ function AddBookmark() {
           </div>
           <div className="flex justify-end gap-[16px] *:px-[16px] *:py-[12px]">
             <button
-              onClick={handleAddBookmark}
+              onClick={handleAddBookmarkFormDisplay}
               className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
             >
               Cancel
