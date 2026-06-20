@@ -7,7 +7,7 @@ import {
   primaryKey,
 } from "drizzle-orm/pg-core";
 
-export const bookmarks = pgTable("bookmarks", {
+export const bookmarksTable = pgTable("bookmarks", {
   id: varchar().primaryKey(),
   title: varchar({ length: 255 }).notNull().unique(),
   url: varchar({ length: 255 }).notNull().unique(),
@@ -20,19 +20,19 @@ export const bookmarks = pgTable("bookmarks", {
   lastVisited: timestamp({ mode: "string" }),
 });
 
-export const tags = pgTable("tags", {
+export const tagsTable = pgTable("tags", {
   title: varchar({ length: 255 }).notNull().primaryKey(),
 });
 
-export const bookmarksTags = pgTable(
+export const bookmarksTagsTable = pgTable(
   "bookmarks_Tags",
   {
     bookmarkId: varchar("bookmark_id")
       .notNull()
-      .references(() => bookmarks.id),
+      .references(() => bookmarksTable.id),
     tagId: varchar("tag_id")
       .notNull()
-      .references(() => tags.title),
+      .references(() => tagsTable.title),
   },
   (table) => [primaryKey({ columns: [table.bookmarkId, table.tagId] })],
 );

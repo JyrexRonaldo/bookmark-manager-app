@@ -1,6 +1,6 @@
 import data from "../../frontend/data.ts";
 import db from "./drizzle.ts";
-import { bookmarks, tags, bookmarksTags } from "../src/db/schema.ts";
+import { bookmarksTable, tagsTable, bookmarksTagsTable } from "../src/db/schema.ts";
 
 const bookmarkData = structuredClone(data);
 
@@ -53,9 +53,9 @@ function populatebookmarkTagArray() {
 
 export async function populateDb() {
   await db.transaction(async (tx) => {
-    await tx.insert(bookmarks).values(bookmarksResult);
-    await tx.insert(tags).values(populateTagArray());
-    await tx.insert(bookmarksTags).values(populatebookmarkTagArray());
+    await tx.insert(bookmarksTable).values(bookmarksResult);
+    await tx.insert(tagsTable).values(populateTagArray());
+    await tx.insert(bookmarksTagsTable).values(populatebookmarkTagArray());
   });
 }
 

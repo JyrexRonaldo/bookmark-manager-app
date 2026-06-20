@@ -19,7 +19,7 @@ import {
 // import { z } from "zod"
 import { NewBookmarkEntrySchema } from "../types.ts";
 import db from "../../config/drizzle.ts";
-import { bookmarks, bookmarksTags, tags } from "../db/schema.ts";
+import { bookmarksTable, bookmarksTagsTable, tagsTable } from "../db/schema.ts";
 import { eq, sql } from "drizzle-orm";
 import { ZodError } from "zod";
 
@@ -35,41 +35,58 @@ import { ZodError } from "zod";
 const getAllBookmarks = async (_req: Request, res: Response) => {
   const allBookmarks = await db
     .select({
-      bookmarks,
-      tags: sql<string[]>`json_agg(${tags.title})`.as("tags"),
+      bookmarksTable,
+      tags: sql<string[]>`json_agg(${tagsTable.title})`.as("tags"),
     })
-    .from(bookmarksTags)
-    .innerJoin(bookmarks, eq(bookmarks.id, bookmarksTags.bookmarkId))
-    .innerJoin(tags, eq(tags.title, bookmarksTags.tagId))
-    .groupBy(bookmarks.id)
-    .orderBy(bookmarks.id);
+    .from(bookmarksTagsTable)
+    .innerJoin(
+      bookmarksTable,
+      eq(bookmarksTable.id, bookmarksTagsTable.bookmarkId),
+    )
+    .innerJoin(tagsTable, eq(tagsTable.title, bookmarksTagsTable.tagId))
+    .groupBy(bookmarksTable.id)
+    .orderBy(bookmarksTable.id);
   res.json(allBookmarks);
 };
 
 const addBookmark = async (req: Request, res: Response) => {
   try {
-    const { id, title, description, url, tagTitles } =
-      NewBookmarkEntrySchema.parse(req.body);
+    const { id, title, description, url, tags } = NewBookmarkEntrySchema.parse(
+      req.body,
+    );
     // gets hostname from supplied url
     const faviconUrl = new URL(url).hostname;
+    console.log({ id, title, description, url, tags });
     // allows multiple backend requests to be completed in one interaction
-    await db.transaction(async (tx) => {
-      await tx.insert(bookmarks).values({
-        id,
-        title,
-        description,
-        url,
-        favicon: faviconUrl,
-      });
-      const tagTitlesArray = tagTitles.split(",").map((tag) => {
+    const newBookmark = await db.transaction(async (tx) => {
+      const newBookmarks = await tx
+        .insert(bookmarksTable)
+        .values({
+          id,
+          title,
+          description,
+          url,
+          favicon: faviconUrl,
+        })
+        .returning();
+      const tagTitlesArray = tags.split(",").map((tag) => {
         return { title: tag.trim() };
       });
-      await tx.insert(tags).values(tagTitlesArray).onConflictDoNothing();
-      const bookmarkTagsData = tagTitles.split(",").map((tag) => {
+      const newTags = await tx
+        .insert(tagsTable)
+        .values(tagTitlesArray)
+        .onConflictDoNothing()
+        .returning();
+      const bookmarkTagsData = tags.split(",").map((tag) => {
         return { bookmarkId: id, tagId: tag.trim() };
       });
-      await tx.insert(bookmarksTags).values(bookmarkTagsData);
+      const newBookmarksTags = await tx
+        .insert(bookmarksTagsTable)
+        .values(bookmarkTagsData)
+        .returning();
+      return { newBookmarks, newTags, newBookmarksTags };
     });
+    console.log(newBookmark);
     res.end();
   } catch (error: unknown) {
     if (error instanceof ZodError) {
