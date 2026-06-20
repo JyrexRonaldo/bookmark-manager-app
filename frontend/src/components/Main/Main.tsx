@@ -3,12 +3,11 @@ import { RemoveScroll } from "react-remove-scroll";
 import BookmarkCard from "../BookmarkCard/BookmarkCard";
 import { format } from "date-fns";
 import SortByDropdown from "../SortByDropdown/SortByDropdown";
-import { useState, useEffect } from "react";
-
-
+import { useEffect, useContext } from "react";
+import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContact";
 
 function Main() {
-  const [bookmarkData, setBookmarkData] = useState([]);
+  const [allBookmarkData, setAllBookmarkData] = useContext(BookmarkDataContext);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -27,7 +26,8 @@ function Main() {
         //   navigate("/login");
         // }
         const data = await response.json();
-        setBookmarkData(data);
+        // console.log(data)
+        setAllBookmarkData(data);
       } catch (error) {
         console.log(error);
         // setError(true);
@@ -39,29 +39,29 @@ function Main() {
   }, []);
 
   // console.log(bookmarkData)
-  const bookmarkElements = bookmarkData.map((bookmark) => {
-    const currentBookmark = bookmark.bookmarks
-    const currentTag = bookmark.tags
-    console.log(currentBookmark)
-  const favicon =  `https://www.google.com/s2/favicons?domain=${currentBookmark.favicon}&sz=${64}`
+  const bookmarkElements = allBookmarkData.map((bookmark) => {
+    const currentBookmark = bookmark.bookmarksTable;
+    const currentTag = bookmark.tags;
+    // console.log(currentBookmark);
+    const favicon = `https://www.google.com/s2/favicons?domain=${currentBookmark.favicon}&sz=${64}`;
 
-  const createdAt = format("2025-08-30 13:40:00", "d LLL");
-  const lastVisited = format("2025-08-30 13:40:00", "d LLL");
+    const createdAt = format(currentBookmark.createdAt, "d LLL");
+    const lastVisited = format(currentBookmark.lastVisited, "d LLL");
 
-  return (
-    <BookmarkCard
-      key={currentBookmark.id}
-      title={currentBookmark.title}
-      url={currentBookmark.url}
-      description={currentBookmark.description}
-      tags={currentTag}
-      visitCount={currentBookmark.visitCount}
-      createdAt={createdAt}
-      lastVisited={lastVisited}
-      favicon={favicon}
-    />
-  );
-});
+    return (
+      <BookmarkCard
+        key={currentBookmark.id}
+        title={currentBookmark.title}
+        url={currentBookmark.url}
+        description={currentBookmark.description}
+        tags={currentTag}
+        visitCount={currentBookmark.visitCount}
+        createdAt={createdAt}
+        lastVisited={lastVisited}
+        favicon={favicon}
+      />
+    );
+  });
 
   const sortByPopup = (
     <button className="flex w-[107px] gap-[4px] rounded-[8px] border border-[#C0CFCC] bg-white px-[12px] py-[10px] text-[#051513] hover:bg-[#E8F0EF]">

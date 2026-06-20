@@ -1,8 +1,33 @@
 import { useContext } from "react";
 import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkContext";
+import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
+import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContact";
+
+interface BookmarkData {
+  title: string;
+  description: string;
+  url: string;
+  tagTitles: string;
+}
 
 function AddBookmark() {
   const { showAddForm, setShowAddForm } = useContext(AddBookmarkContext);
+  const [allBookmarkData] = useContext(BookmarkDataContext);
+
+  // console.log(bookmarkData)
+
+  const {
+    register,
+    handleSubmit,
+    // formState: { errors },
+  } = useForm<BookmarkData>({
+    defaultValues: {
+      title: "",
+      description: "",
+      url: "",
+      tagTitles: "",
+    },
+  });
 
   function handleAddBookmarkFormDisplay(
     e:
@@ -14,13 +39,48 @@ function AddBookmark() {
     }
   }
 
+  async function uploadBookmark(bookmarkData: BookmarkData) {
+    const lastBookmarkIdNumber =
+      +allBookmarkData[allBookmarkData.length - 1].bookmarks.id.slice(4);
+    const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
+    console.log({ ...bookmarkData, id });
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_HOME_DOMAIN}/bookmark`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...bookmarkData, id }),
+        },
+      );
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const onSubmit: SubmitHandler<BookmarkData> = (formData) => {
+    console.log(formData);
+    uploadBookmark(formData);
+  };
+
+  const onError = (error: FieldErrors) => {
+    console.log(error);
+  };
+
   return (
     <>
       <div
         onClick={handleAddBookmarkFormDisplay}
         className="fixed z-2 flex h-screen w-full items-center justify-center bg-[#131313]/70"
       >
-        <div className="m-[16px] flex w-[570px] flex-col gap-[32px] rounded-[16px] bg-white p-[32px]">
+        <form
+          className="m-[16px] flex w-[570px] flex-col gap-[32px] rounded-[16px] bg-white p-[32px]"
+          onSubmit={handleSubmit(onSubmit, onError)}
+        >
           <div className="flex flex-col gap-[8px]">
             <div className="flex justify-between">
               <p className="font-manrope text-[24px]/[140%] font-bold">
@@ -45,6 +105,9 @@ function AddBookmark() {
               </label>
               <input
                 type="text"
+                {...register("title", {
+                  required: "title field can't be emptty",
+                })}
                 className="h-[45px] border p-[12px] hover:bg-[#E8F0EF]"
               />
             </div>
@@ -53,8 +116,9 @@ function AddBookmark() {
                 Description *
               </label>
               <textarea
-                name=""
-                id=""
+                {...register("description", {
+                  required: "description field can't be emptty",
+                })}
                 className="h-[91px] border p-[12px] hover:bg-[#E8F0EF]"
               ></textarea>
             </div>
@@ -64,6 +128,9 @@ function AddBookmark() {
               </label>
               <input
                 type="text"
+                {...register("url", {
+                  required: "url field can't be emptty",
+                })}
                 className="h-[45px] border p-[12px] hover:bg-[#E8F0EF]"
               />
             </div>
@@ -73,6 +140,9 @@ function AddBookmark() {
               </label>
               <input
                 type="text"
+                {...register("tagTitles", {
+                  required: "tags field can't be emptty",
+                })}
                 className="h-[45px] border p-[12px] hover:bg-[#E8F0EF]"
               />
             </div>
@@ -84,11 +154,14 @@ function AddBookmark() {
             >
               Cancel
             </button>
-            <button className="rounded-[8px] bg-[#014745] text-white">
+            <button
+              type="submit"
+              className="rounded-[8px] bg-[#014745] text-white"
+            >
               Add Bookmark
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

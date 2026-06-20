@@ -31,7 +31,7 @@ function BookmarkCard({
   ));
 
   return (
-    <div className="max-h-[272px] rounded-[12px] bg-white flex flex-col justify-between">
+    <div className="flex max-h-[272px] flex-col justify-between rounded-[12px] bg-white">
       <div className="flex flex-col gap-[16px] p-[16px]">
         <div className="relative flex justify-between gap-[12px]">
           <img
@@ -61,10 +61,10 @@ function BookmarkCard({
         <p className="font-manrope text-[14px]/[150%] text-[#4C5C59]">
           {description}
         </p>
-        <div className="flex gap-[8px]">{tagElements}</div>
+        <div className="flex flex-wrap gap-[8px]">{tagElements}</div>
       </div>
       {/* <hr className="text-[#DDE9E7]" /> */}
-      <div className="flex justify-between gap-[8px] p-[12px] border-t-1 border-t-[#DDE9E7]">
+      <div className="flex justify-between gap-[8px] border-t-1 border-t-[#DDE9E7] p-[12px]">
         <div className="flex gap-[16px] *:flex *:items-center *:gap-2 *:font-manrope *:text-[12px]/[140%]">
           <div>
             <img
