@@ -45,7 +45,8 @@ function Main() {
     const favicon = `https://www.google.com/s2/favicons?domain=${currentBookmark.favicon}&sz=${64}`;
 
     const createdAt = format(currentBookmark.createdAt, "d LLL");
-    const lastVisited = format(currentBookmark.lastVisited, "d LLL");
+    console.log()
+    const lastVisited = currentBookmark.lastVisited ?  format(currentBookmark.lastVisited, "d LLL") : null;
 
     return (
       <BookmarkCard

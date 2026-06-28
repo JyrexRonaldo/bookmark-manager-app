@@ -74,14 +74,14 @@ function BookmarkCard({
             />
             <p>{visitCount}</p>
           </div>
-          <div>
+          {lastVisited && <div>
             <img
               className="size-[12px]"
               src="/img/icon-last-visited.svg"
               alt=""
             />
             <p>{lastVisited}</p>
-          </div>
+          </div>}
           <div>
             <img className="size-[12px]" src="/img/icon-created.svg" alt="" />
             <p>{createdAt}</p>
