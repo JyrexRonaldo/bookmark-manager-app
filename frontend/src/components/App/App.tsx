@@ -6,10 +6,13 @@ import { useState } from "react";
 // import SideBarWrapper from "../SideBarWrapper/SideBarWrapper";
 import SideBar from "../SideBar/SideBar";
 import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkContext";
+import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContaxt";
+import { type AllBookmarksData } from "../../types";
 
 function App() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  const [allBookmarkData, setAllBookmarkData] = useState<AllBookmarksData[]>([]);
   return (
     <>
       <div className="grid h-screen grid-cols-5 grid-cols-[min-content_repeat(4,1fr)] grid-rows-[min-content_1fr]">
@@ -26,8 +29,10 @@ function App() {
           <SideBar isOpem={isSideBarOpen} />
           {/* </SideBarWrapper> */}
           <NavBar />
-          <Main />
-          {showAddForm && <AddBookmark />}
+          <BookmarkDataContext value={[allBookmarkData, setAllBookmarkData]}>
+            <Main />
+            {showAddForm && <AddBookmark />}
+          </BookmarkDataContext>
         </AddBookmarkContext>
       </div>
     </>

@@ -56,7 +56,7 @@ const addBookmark = async (req: Request, res: Response) => {
     );
     // gets hostname from supplied url
     const faviconUrl = new URL(url).hostname;
-    console.log({ id, title, description, url, tags });
+    // console.log({ id, title, description, url, tags });
     // allows multiple backend requests to be completed in one interaction
     const newBookmark = await db.transaction(async (tx) => {
       const newBookmarks = await tx
@@ -86,8 +86,13 @@ const addBookmark = async (req: Request, res: Response) => {
         .returning();
       return { newBookmarks, newTags, newBookmarksTags };
     });
+
+    const uploadedTags = newBookmark.newBookmarksTags.map((item) => item.tagId);
+    // newBookmark.newBookmarksTags = newBookmark.newBookmarksTags.map((item) => item.tagId);
     console.log(newBookmark);
-    res.end();
+    //  = newBookmark.newBookmarksTags.map((item) => item.tagId);
+    // console.log(newBookmark.newBookmarksTags.map((item) => item.tagId));
+    res.json({ ...newBookmark, uploadedTags });
   } catch (error: unknown) {
     if (error instanceof ZodError) {
       console.log(error);
@@ -100,3 +105,40 @@ const addBookmark = async (req: Request, res: Response) => {
 };
 
 export default { getAllBookmarks, addBookmark };
+
+// 0]
+// [1] My Express app - listening on port 3000!
+// [1] {
+// [1]   id: 'bm-028',
+// [1]   title: 'odin project',
+// [1]   description: 'learning, site , database',
+// [1]   url: 'https://www.theodinproject.com/',
+// [1]   tags: 'site, mdn, documentation'
+// [1] }
+// [1] {
+// [1]   newBookmarks: [
+// [1]     {
+// [1]       id: 'bm-028',
+// [1]       title: 'odin project',
+// [1]       url: 'https://www.theodinproject.com/',
+// [1]       favicon: 'www.theodinproject.com',
+// [1]       description: 'learning, site , database',
+// [1]       pinned: false,
+// [1]       isArchived: false,
+// [1]       visitCount: 0,
+// [1]       createdAt: '2026-06-21 16:50:00.660136',
+// [1]       lastVisited: null
+// [1]     }
+// [1]   ],
+// [1]   newTags: [ { title: 'mdn' }, { title: 'documentation' } ],
+// [1]   newBookmarksTags: [
+// [1]     { bookmarkId: 'bm-028', tagId: 'site' },
+// [1]     { bookmarkId: 'bm-028', tagId: 'mdn' },
+// [1]     { bookmarkId: 'bm-028', tagId: 'documentation' }
+// [1]   ]
+// [1] }
+// [1] [
+// [1]   { bookmarkId: 'bm-028', tagId: 'site' },
+// [1]   { bookmarkId: 'bm-028', tagId: 'mdn' },
+// [1]   { bookmarkId: 'bm-028', tagId: 'documentation' }
+// [1] ]

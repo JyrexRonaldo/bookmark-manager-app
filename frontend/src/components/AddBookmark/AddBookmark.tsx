@@ -1,20 +1,14 @@
 import { useContext } from "react";
 import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkContext";
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
-import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContact";
-
-interface BookmarkData {
-  title: string;
-  description: string;
-  url: string;
-  tagTitles: string;
-}
+import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContaxt";
+import { type BookmarkData } from "../../types";
 
 function AddBookmark() {
   const { showAddForm, setShowAddForm } = useContext(AddBookmarkContext);
-  const [allBookmarkData] = useContext(BookmarkDataContext);
+  const allBookmarkData = useContext(BookmarkDataContext)[0];
 
-  // console.log(bookmarkData)
+  console.log(allBookmarkData);
 
   const {
     register,
@@ -25,7 +19,7 @@ function AddBookmark() {
       title: "",
       description: "",
       url: "",
-      tagTitles: "",
+      tags: "",
     },
   });
 
@@ -40,10 +34,12 @@ function AddBookmark() {
   }
 
   async function uploadBookmark(bookmarkData: BookmarkData) {
+    // console.log(bookmarkData);
     const lastBookmarkIdNumber =
-      +allBookmarkData[allBookmarkData.length - 1].bookmarks.id.slice(4);
+      +allBookmarkData[allBookmarkData.length - 1].bookmarksTable.id.slice(4);
     const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
-    console.log({ ...bookmarkData, id });
+    console.log({ id, ...bookmarkData });
+    // console.log(lastBookmarkIdNumber, 'Oh nothing');
 
     try {
       const response = await fetch(
@@ -54,7 +50,8 @@ function AddBookmark() {
           body: JSON.stringify({ ...bookmarkData, id }),
         },
       );
-
+      
+      // console.log(response)
       const data = await response.json();
       console.log(data);
     } catch (error) {
@@ -63,7 +60,7 @@ function AddBookmark() {
   }
 
   const onSubmit: SubmitHandler<BookmarkData> = (formData) => {
-    console.log(formData);
+    console.log(formData)
     uploadBookmark(formData);
   };
 
@@ -140,7 +137,7 @@ function AddBookmark() {
               </label>
               <input
                 type="text"
-                {...register("tagTitles", {
+                {...register("tags", {
                   required: "tags field can't be emptty",
                 })}
                 className="h-[45px] border p-[12px] hover:bg-[#E8F0EF]"

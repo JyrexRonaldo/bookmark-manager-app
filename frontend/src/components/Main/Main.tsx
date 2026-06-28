@@ -4,7 +4,7 @@ import BookmarkCard from "../BookmarkCard/BookmarkCard";
 import { format } from "date-fns";
 import SortByDropdown from "../SortByDropdown/SortByDropdown";
 import { useEffect, useContext } from "react";
-import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContact";
+import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContaxt";
 
 function Main() {
   const [allBookmarkData, setAllBookmarkData] = useContext(BookmarkDataContext);
@@ -26,7 +26,7 @@ function Main() {
         //   navigate("/login");
         // }
         const data = await response.json();
-        // console.log(data)
+        console.log(data)
         setAllBookmarkData(data);
       } catch (error) {
         console.log(error);
@@ -38,7 +38,6 @@ function Main() {
     fetchData();
   }, []);
 
-  // console.log(bookmarkData)
   const bookmarkElements = allBookmarkData.map((bookmark) => {
     const currentBookmark = bookmark.bookmarksTable;
     const currentTag = bookmark.tags;
