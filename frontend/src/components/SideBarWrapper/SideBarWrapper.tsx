@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkContext";
+import SideBarContext from "../../contexts/SideBarContext/SideBarContext";
 
 // const ConditionalWrapper = ({ condition, wrapper, children }) =>
 //   condition ? wrapper(children) : children;
@@ -13,7 +13,7 @@ import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkCon
 // </ConditionalWrapper>
 
 function SideBarWrapper({ children }) {
-  const { isSideBarOpen, setIsSideBarOpen } = useContext(AddBookmarkContext);
+  const { isSideBarOpen, setIsSideBarOpen } = useContext(SideBarContext);
 
   function handleSideBar(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     if (e.target === e.currentTarget) {

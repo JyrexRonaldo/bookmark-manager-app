@@ -1,10 +1,14 @@
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
 import { useContext } from "react";
-import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkContext";
+import BookmarkFormContext from "../../contexts/BookmarkFormContext/BookmarkFormContext";
+import SideBarContext from "../../contexts/SideBarContext/SideBarContext";
 
 function NavBar() {
-  const { showAddForm, setShowAddForm, isSideBarOpen, setIsSideBarOpen } =
-    useContext(AddBookmarkContext);
+  const { showAddForm, setShowAddForm } =
+    useContext(BookmarkFormContext);
+
+    const {  isSideBarOpen, setIsSideBarOpen } =
+    useContext(SideBarContext);
   function handleAddBookmark() {
     setShowAddForm(!showAddForm);
   }

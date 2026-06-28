@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import AddBookmarkContext from "../../contexts/AddBookmarkContext/AddBookmarkContext";
+import BookmarkFormContext from "../../contexts/BookmarkFormContext/BookmarkFormContext";
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
 import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContaxt";
 import { type BookmarkData } from "../../types";
 
 function AddBookmark() {
-  const { showAddForm, setShowAddForm } = useContext(AddBookmarkContext);
+  const [ showAddForm, setShowAddForm ] = useContext(BookmarkFormContext);
   const allBookmarkData = useContext(BookmarkDataContext)[0];
 
   console.log(allBookmarkData);
@@ -50,7 +50,7 @@ function AddBookmark() {
           body: JSON.stringify({ ...bookmarkData, id }),
         },
       );
-      
+
       // console.log(response)
       const data = await response.json();
       console.log(data);
@@ -60,7 +60,7 @@ function AddBookmark() {
   }
 
   const onSubmit: SubmitHandler<BookmarkData> = (formData) => {
-    console.log(formData)
+    console.log(formData);
     uploadBookmark(formData);
   };
 
