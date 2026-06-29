@@ -5,7 +5,7 @@ import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkData
 import { type BookmarkData } from "../../types";
 
 function AddBookmark() {
-  const [ showAddForm, setShowAddForm ] = useContext(BookmarkFormContext);
+  const [showAddForm, setShowAddForm] = useContext(BookmarkFormContext);
   const allBookmarkData = useContext(BookmarkDataContext)[0];
 
   console.log(allBookmarkData);
@@ -13,6 +13,7 @@ function AddBookmark() {
   const {
     register,
     handleSubmit,
+    setValue,
     // formState: { errors },
   } = useForm<BookmarkData>({
     defaultValues: {
@@ -33,12 +34,49 @@ function AddBookmark() {
     }
   }
 
+  function handleDevButton(e) {
+    console.log(e.target.textContent);
+    switch (e.target.textContent) {
+      case "Y":
+        setValue("title", "youtube");
+        setValue("description", "video hosting service");
+        setValue("url", "https://www.youtube.com/");
+        setValue("tags", "videos, doom scrolling, shows");
+        break;
+      case "O":
+        setValue("title", "OVO");
+        setValue("description", "Drakes site");
+        setValue("url", "https://octobersveryown.com/");
+        setValue("tags", "Drake, 6 God, champagne papi");
+        break;
+      case "F":
+        setValue("title", "Fullstackopen");
+        setValue("description", "learn web development make a ton of cash");
+        setValue("url", "https://fullstackopen.com/");
+        setValue("tags", "web, html, javascript");
+        break;
+      case "G":
+        setValue("title", "Get cracked");
+        setValue("description", "coding interview prep");
+        setValue("url", "https://getcracked.io");
+        setValue("tags", "learn, code, job");
+        break;
+      case "T":
+        setValue("title", "The real world");
+        setValue("description", "financial education");
+        setValue("url", "https://www.university.com/");
+        setValue("tags", "money, cash, more cash");
+        break;
+    }
+  }
+
+
   async function uploadBookmark(bookmarkData: BookmarkData) {
     // console.log(bookmarkData);
-    const lastBookmarkIdNumber =
-      +allBookmarkData[allBookmarkData.length - 1].bookmarksTable.id.slice(4);
-    const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
-    console.log({ id, ...bookmarkData });
+    // const lastBookmarkIdNumber =
+    //   +allBookmarkData[allBookmarkData.length - 1].bookmarksTable.id.slice(4);
+    // const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
+    // console.log({ id, ...bookmarkData });
     // console.log(lastBookmarkIdNumber, 'Oh nothing');
 
     try {
@@ -47,7 +85,7 @@ function AddBookmark() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...bookmarkData, id }),
+          body: JSON.stringify(bookmarkData),
         },
       );
 
@@ -60,8 +98,14 @@ function AddBookmark() {
   }
 
   const onSubmit: SubmitHandler<BookmarkData> = (formData) => {
-    console.log(formData);
-    uploadBookmark(formData);
+    const lastBookmarkIdNumber =
+      +allBookmarkData[allBookmarkData.length - 1].bookmarksTable.id.slice(4);
+    const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
+    const favicon = new URL(formData.url).hostname;
+    console.log({ favicon });
+    const bookmarkData = { ...formData, id };
+    console.log(bookmarkData);
+    uploadBookmark(bookmarkData);
   };
 
   const onError = (error: FieldErrors) => {
@@ -145,6 +189,38 @@ function AddBookmark() {
             </div>
           </div>
           <div className="flex justify-end gap-[16px] *:px-[16px] *:py-[12px]">
+            {/* temporal text buttons */}
+            <button
+              onClick={handleDevButton}
+              className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
+            >
+              Y
+            </button>
+            <button
+              onClick={handleDevButton}
+              className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
+            >
+              F
+            </button>
+            <button
+              onClick={handleDevButton}
+              className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
+            >
+              O
+            </button>
+            <button
+              onClick={handleDevButton}
+              className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
+            >
+              G
+            </button>
+            <button
+              onClick={handleDevButton}
+              className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
+            >
+              T
+            </button>
+            {/* temporal text buttons */}
             <button
               onClick={handleAddBookmarkFormDisplay}
               className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"

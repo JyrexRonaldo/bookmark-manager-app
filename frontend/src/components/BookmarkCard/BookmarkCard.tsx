@@ -21,7 +21,9 @@ function BookmarkCard({
     </button>
   );
 
-  const tagElements = tags.map((tag, index) => (
+  console.log(tags)
+
+  const tagElements = tags.map((tag, index: number) => (
     <p
       key={index}
       className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] font-manrope text-[12px]/[140%] text-[#131313]"

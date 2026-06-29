@@ -4,11 +4,8 @@ import BookmarkFormContext from "../../contexts/BookmarkFormContext/BookmarkForm
 import SideBarContext from "../../contexts/SideBarContext/SideBarContext";
 
 function NavBar() {
-  const { showAddForm, setShowAddForm } =
-    useContext(BookmarkFormContext);
-
-    const {  isSideBarOpen, setIsSideBarOpen } =
-    useContext(SideBarContext);
+  const [showAddForm, setShowAddForm] = useContext(BookmarkFormContext);
+  const { isSideBarOpen, setIsSideBarOpen } = useContext(SideBarContext);
   function handleAddBookmark() {
     setShowAddForm(!showAddForm);
   }
