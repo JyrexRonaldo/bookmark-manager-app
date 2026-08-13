@@ -3,11 +3,16 @@ import { RemoveScroll } from "react-remove-scroll";
 import BookmarkCard from "../BookmarkCard/BookmarkCard";
 import { format } from "date-fns";
 import SortByDropdown from "../SortByDropdown/SortByDropdown";
-import { useEffect, useContext } from "react";
-import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContaxt";
+import { useEffect } from "react";
+// import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContaxt";
+import { useAllBookmarkData, useAllBookmarkDataControls } from "../../store";
 
 function Main() {
-  const [allBookmarkData, setAllBookmarkData] = useContext(BookmarkDataContext);
+  // const [allBookmarkData, setAllBookmarkData] = useContext(BookmarkDataContext);
+
+  const allBookmarkData = useAllBookmarkData();
+  const { setAllBookmarkData } = useAllBookmarkDataControls();
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -26,7 +31,6 @@ function Main() {
         //   navigate("/login");
         // }
         const data = await response.json();
-        console.log(data)
         setAllBookmarkData(data);
       } catch (error) {
         console.log(error);
@@ -41,12 +45,12 @@ function Main() {
   const bookmarkElements = allBookmarkData.map((bookmark) => {
     const currentBookmark = bookmark.bookmarksTable;
     const currentTag = bookmark.tags;
-    // console.log(currentBookmark);
     const favicon = `https://www.google.com/s2/favicons?domain=${currentBookmark.favicon}&sz=${64}`;
 
     const createdAt = format(currentBookmark.createdAt, "d LLL");
-    console.log()
-    const lastVisited = currentBookmark.lastVisited ?  format(currentBookmark.lastVisited, "d LLL") : null;
+    const lastVisited = currentBookmark.lastVisited
+      ? format(currentBookmark.lastVisited, "d LLL")
+      : null;
 
     return (
       <BookmarkCard
@@ -54,6 +58,7 @@ function Main() {
         title={currentBookmark.title}
         url={currentBookmark.url}
         description={currentBookmark.description}
+        pinned={false}
         tags={currentTag}
         visitCount={currentBookmark.visitCount}
         createdAt={createdAt}

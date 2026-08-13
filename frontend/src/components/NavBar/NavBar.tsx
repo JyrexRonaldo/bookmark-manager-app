@@ -1,17 +1,18 @@
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
-import { useContext } from "react";
-import BookmarkFormContext from "../../contexts/BookmarkFormContext/BookmarkFormContext";
-import SideBarContext from "../../contexts/SideBarContext/SideBarContext";
+import { useSideBarStatusControls } from "../../store";
+import { useBookmarkFormStatusControls } from "../../store";
 
 function NavBar() {
-  const [showAddForm, setShowAddForm] = useContext(BookmarkFormContext);
-  const { isSideBarOpen, setIsSideBarOpen } = useContext(SideBarContext);
+  const { toggleSidebar } = useSideBarStatusControls();
+
+  const { toggleBookmarkForm } = useBookmarkFormStatusControls();
+
   function handleAddBookmark() {
-    setShowAddForm(!showAddForm);
+    toggleBookmarkForm();
   }
 
   function handleSideBar() {
-    setIsSideBarOpen(!isSideBarOpen);
+    toggleSidebar();
     console.log("open sesame");
   }
 

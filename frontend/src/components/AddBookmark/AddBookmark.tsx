@@ -1,26 +1,20 @@
-import { useContext } from "react";
-import BookmarkFormContext from "../../contexts/BookmarkFormContext/BookmarkFormContext";
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
-import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContaxt";
 import { type BookmarkData } from "../../types";
+import { faker } from "@faker-js/faker";
+import { useAllBookmarkData } from "../../store";
+import { useBookmarkFormStatusControls } from "../../store";
 
 function AddBookmark() {
-  const [showAddForm, setShowAddForm] = useContext(BookmarkFormContext);
-  const allBookmarkData = useContext(BookmarkDataContext)[0];
+  const allBookmarkData = useAllBookmarkData();
 
-  console.log(allBookmarkData);
+  const { toggleBookmarkForm } = useBookmarkFormStatusControls();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    // formState: { errors },
-  } = useForm<BookmarkData>({
+  const { register, handleSubmit, setValue } = useForm<BookmarkData>({
     defaultValues: {
       title: "",
       description: "",
       url: "",
-      tags: "",
+      tags: [],
     },
   });
 
@@ -30,55 +24,23 @@ function AddBookmark() {
       | React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
     if (e.target === e.currentTarget) {
-      setShowAddForm(!showAddForm);
+      toggleBookmarkForm();
     }
   }
 
-  function handleDevButton(e) {
-    console.log(e.target.textContent);
-    switch (e.target.textContent) {
-      case "Y":
-        setValue("title", "youtube");
-        setValue("description", "video hosting service");
-        setValue("url", "https://www.youtube.com/");
-        setValue("tags", "videos, doom scrolling, shows");
-        break;
-      case "O":
-        setValue("title", "OVO");
-        setValue("description", "Drakes site");
-        setValue("url", "https://octobersveryown.com/");
-        setValue("tags", "Drake, 6 God, champagne papi");
-        break;
-      case "F":
-        setValue("title", "Fullstackopen");
-        setValue("description", "learn web development make a ton of cash");
-        setValue("url", "https://fullstackopen.com/");
-        setValue("tags", "web, html, javascript");
-        break;
-      case "G":
-        setValue("title", "Get cracked");
-        setValue("description", "coding interview prep");
-        setValue("url", "https://getcracked.io");
-        setValue("tags", "learn, code, job");
-        break;
-      case "T":
-        setValue("title", "The real world");
-        setValue("description", "financial education");
-        setValue("url", "https://www.university.com/");
-        setValue("tags", "money, cash, more cash");
-        break;
-    }
-  }
+  function handleDevButton() {
+    const title = faker.internet.domainWord();
+    const description = faker.lorem.lines(3);
+    const url = `https://www.${title}.com/`;
+    const tags = faker.word.words(4).split(" ").join(", ");
 
+    setValue("title", `${title}`);
+    setValue("description", `${description}`);
+    setValue("url", `${url}`);
+    setValue("tags", [`${tags}`]);
+  }
 
   async function uploadBookmark(bookmarkData: BookmarkData) {
-    // console.log(bookmarkData);
-    // const lastBookmarkIdNumber =
-    //   +allBookmarkData[allBookmarkData.length - 1].bookmarksTable.id.slice(4);
-    // const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
-    // console.log({ id, ...bookmarkData });
-    // console.log(lastBookmarkIdNumber, 'Oh nothing');
-
     try {
       const response = await fetch(
         `${import.meta.env.VITE_HOME_DOMAIN}/bookmark`,
@@ -89,7 +51,6 @@ function AddBookmark() {
         },
       );
 
-      // console.log(response)
       const data = await response.json();
       console.log(data);
     } catch (error) {
@@ -119,7 +80,7 @@ function AddBookmark() {
         className="fixed z-2 flex h-screen w-full items-center justify-center bg-[#131313]/70"
       >
         <form
-          className="m-[16px] flex w-[570px] flex-col gap-[32px] rounded-[16px] bg-white p-[32px]"
+          className="m-4 flex w-142.5 flex-col gap-8 rounded-2xl bg-white p-[32px]"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <div className="flex flex-col gap-[8px]">
@@ -191,34 +152,11 @@ function AddBookmark() {
           <div className="flex justify-end gap-[16px] *:px-[16px] *:py-[12px]">
             {/* temporal text buttons */}
             <button
+              type="button"
               onClick={handleDevButton}
               className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
             >
-              Y
-            </button>
-            <button
-              onClick={handleDevButton}
-              className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
-            >
-              F
-            </button>
-            <button
-              onClick={handleDevButton}
-              className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
-            >
-              O
-            </button>
-            <button
-              onClick={handleDevButton}
-              className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
-            >
-              G
-            </button>
-            <button
-              onClick={handleDevButton}
-              className="rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF]"
-            >
-              T
+              Sample data
             </button>
             {/* temporal text buttons */}
             <button

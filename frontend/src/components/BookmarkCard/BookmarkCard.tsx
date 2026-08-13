@@ -5,12 +5,13 @@ import ActionsDropdown from "../ActionsDropdown/ActionsDropdown";
 function BookmarkCard({
   title,
   url,
+  favicon,
   description,
+  pinned,
   tags,
   visitCount,
   createdAt,
   lastVisited,
-  favicon,
 }) {
   const popupButton = (
     <button
@@ -20,8 +21,6 @@ function BookmarkCard({
       <img src="/img/icon-menu-bookmark.svg" alt="" />
     </button>
   );
-
-  console.log(tags)
 
   const tagElements = tags.map((tag, index: number) => (
     <p
@@ -89,7 +88,7 @@ function BookmarkCard({
             <p>{createdAt}</p>
           </div>
         </div>
-        <img className="size-[16px]" src="/img/icon-pin.svg" alt="" />
+        {pinned && <img className="size-[16px]" src="/img/icon-pin.svg" alt="" />}
       </div>
     </div>
   );

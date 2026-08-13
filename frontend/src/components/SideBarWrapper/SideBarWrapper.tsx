@@ -1,23 +1,12 @@
-import { useContext } from "react";
-import SideBarContext from "../../contexts/SideBarContext/SideBarContext";
+import { useSideBarStatusControls } from "../../store";
 
-// const ConditionalWrapper = ({ condition, wrapper, children }) =>
-//   condition ? wrapper(children) : children;
-
-// // Usage:
-// <ConditionalWrapper
-//   condition={isLoggedIn}
-//   wrapper={children => <div className="profile-container">{children}</div>}
-// >
-//   <UserProfile />
-// </ConditionalWrapper>
 
 function SideBarWrapper({ children }) {
-  const { isSideBarOpen, setIsSideBarOpen } = useContext(SideBarContext);
+  const { toggleSidebar } = useSideBarStatusControls();
 
   function handleSideBar(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     if (e.target === e.currentTarget) {
-      setIsSideBarOpen(!isSideBarOpen);
+      toggleSidebar()
     }
   }
   return (
