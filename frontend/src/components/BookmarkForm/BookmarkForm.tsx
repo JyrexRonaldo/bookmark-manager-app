@@ -4,7 +4,7 @@ import { faker } from "@faker-js/faker";
 import { useAllBookmarkData } from "../../store";
 import { useBookmarkFormStatusControls } from "../../store";
 
-function AddBookmark() {
+function BookmarkForm() {
   const allBookmarkData = useAllBookmarkData();
 
   const { toggleBookmarkForm } = useBookmarkFormStatusControls();
@@ -41,6 +41,7 @@ function AddBookmark() {
   }
 
   async function uploadBookmark(bookmarkData: BookmarkData) {
+    console.log(bookmarkData)
     try {
       const response = await fetch(
         `${import.meta.env.VITE_HOME_DOMAIN}/bookmark`,
@@ -65,7 +66,7 @@ function AddBookmark() {
     const favicon = new URL(formData.url).hostname;
     console.log({ favicon });
     const bookmarkData = { ...formData, id };
-    console.log(bookmarkData);
+    console.log('bookmarkData:',bookmarkData);
     uploadBookmark(bookmarkData);
   };
 
@@ -178,4 +179,4 @@ function AddBookmark() {
   );
 }
 
-export default AddBookmark;
+export default BookmarkForm;

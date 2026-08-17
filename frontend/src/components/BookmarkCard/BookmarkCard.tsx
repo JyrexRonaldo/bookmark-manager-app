@@ -1,6 +1,7 @@
 import Popup from "reactjs-popup";
 import { RemoveScroll } from "react-remove-scroll";
 import ActionsDropdown from "../ActionsDropdown/ActionsDropdown";
+import { type BookmarkData } from "../../types";
 
 function BookmarkCard({
   title,
@@ -12,7 +13,7 @@ function BookmarkCard({
   visitCount,
   createdAt,
   lastVisited,
-}) {
+}: Omit<BookmarkData, "id" | "isArchived">) {
   const popupButton = (
     <button
       popoverTarget="actiondropdown"
@@ -22,7 +23,7 @@ function BookmarkCard({
     </button>
   );
 
-  const tagElements = tags.map((tag, index: number) => (
+  const tagElements = tags.map((tag: string, index: number) => (
     <p
       key={index}
       className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] font-manrope text-[12px]/[140%] text-[#131313]"
@@ -75,20 +76,24 @@ function BookmarkCard({
             />
             <p>{visitCount}</p>
           </div>
-          {lastVisited && <div>
-            <img
-              className="size-[12px]"
-              src="/img/icon-last-visited.svg"
-              alt=""
-            />
-            <p>{lastVisited}</p>
-          </div>}
+          {lastVisited && (
+            <div>
+              <img
+                className="size-[12px]"
+                src="/img/icon-last-visited.svg"
+                alt=""
+              />
+              <p>{lastVisited}</p>
+            </div>
+          )}
           <div>
             <img className="size-[12px]" src="/img/icon-created.svg" alt="" />
             <p>{createdAt}</p>
           </div>
         </div>
-        {pinned && <img className="size-[16px]" src="/img/icon-pin.svg" alt="" />}
+        {pinned && (
+          <img className="size-[16px]" src="/img/icon-pin.svg" alt="" />
+        )}
       </div>
     </div>
   );

@@ -36,7 +36,7 @@ const getAllBookmarks = async (_req: Request, res: Response) => {
   const allBookmarks = await db
     .select({
       bookmarksTable,
-      tags: sql<string[]>`json_agg(${tagsTable.title})`.as("tags"),
+      tags: sql<string>`json_agg(${tagsTable.title})`.as("tags"),
     })
     .from(bookmarksTagsTable)
     .innerJoin(
@@ -69,7 +69,7 @@ const addBookmark = async (req: Request, res: Response) => {
           favicon: faviconUrl,
         })
         .returning();
-      const tagTitlesArray = tags.split(",").map((tag) => {
+      const tagTitlesArray = tags[0].split(",").map((tag) => {
         return { title: tag.trim() };
       });
       const newTags = await tx
@@ -77,7 +77,7 @@ const addBookmark = async (req: Request, res: Response) => {
         .values(tagTitlesArray)
         .onConflictDoNothing()
         .returning();
-      const bookmarkTagsData = tags.split(",").map((tag) => {
+      const bookmarkTagsData = tags[0].split(",").map((tag) => {
         return { bookmarkId: id, tagId: tag.trim() };
       });
       const newBookmarksTags = await tx
@@ -89,7 +89,6 @@ const addBookmark = async (req: Request, res: Response) => {
 
     const uploadedTags = newBookmark.newBookmarksTags.map((item) => item.tagId);
     // newBookmark.newBookmarksTags = newBookmark.newBookmarksTags.map((item) => item.tagId);
-    console.log(newBookmark);
     //  = newBookmark.newBookmarksTags.map((item) => item.tagId);
     // console.log(newBookmark.newBookmarksTags.map((item) => item.tagId));
     res.json({ ...newBookmark, uploadedTags });

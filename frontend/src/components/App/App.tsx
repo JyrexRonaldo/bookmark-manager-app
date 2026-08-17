@@ -1,6 +1,6 @@
 import Main from "../Main/Main";
 import NavBar from "../NavBar/NavBar";
-import AddBookmark from "../AddBookmark/AddBookmark";
+import BookmarkForm from "../BookmarkForm/BookmarkForm";
 import SideBar from "../SideBar/SideBar";
 import { useBookmarkFormStatus } from "../../store";
 
@@ -13,7 +13,7 @@ function App() {
         <SideBar />
         <NavBar />
         <Main />
-        {bookmarkFormStatus && <AddBookmark />}
+        {bookmarkFormStatus && <BookmarkForm />}
       </div>
     </>
   );

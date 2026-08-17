@@ -31,6 +31,7 @@ function Main() {
         //   navigate("/login");
         // }
         const data = await response.json();
+        console.log(data)
         setAllBookmarkData(data);
       } catch (error) {
         console.log(error);
