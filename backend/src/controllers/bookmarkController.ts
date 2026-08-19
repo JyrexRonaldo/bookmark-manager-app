@@ -51,9 +51,8 @@ const getAllBookmarks = async (_req: Request, res: Response) => {
 
 const addBookmark = async (req: Request, res: Response) => {
   try {
-    const { id, title, description, url, tags } = NewBookmarkEntrySchema.parse(
-      req.body,
-    );
+    const { id, title, description, url, tags, createdAt } =
+      NewBookmarkEntrySchema.parse(req.body);
     // gets hostname from supplied url
     const faviconUrl = new URL(url).hostname;
     // console.log({ id, title, description, url, tags });
@@ -67,6 +66,7 @@ const addBookmark = async (req: Request, res: Response) => {
           description,
           url,
           favicon: faviconUrl,
+          createdAt,
         })
         .returning();
       const tagTitlesArray = tags[0].split(",").map((tag) => {

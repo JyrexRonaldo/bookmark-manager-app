@@ -1,13 +1,17 @@
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
-import { type BookmarkData } from "../../types";
+import { type AllBookmarksData, type BookmarkData } from "../../types";
 import { faker } from "@faker-js/faker";
-import { useAllBookmarkData } from "../../store";
-import { useBookmarkFormStatusControls } from "../../store";
+import {
+  useAllBookmarkData,
+  useBookmarkFormStatusControls,
+  useAllBookmarkDataControls,
+} from "../../store";
 
 function BookmarkForm() {
   const allBookmarkData = useAllBookmarkData();
 
   const { toggleBookmarkForm } = useBookmarkFormStatusControls();
+  const { setAllBookmarkData } = useAllBookmarkDataControls();
 
   const { register, handleSubmit, setValue } = useForm<BookmarkData>({
     defaultValues: {
@@ -41,7 +45,6 @@ function BookmarkForm() {
   }
 
   async function uploadBookmark(bookmarkData: BookmarkData) {
-    console.log(bookmarkData)
     try {
       const response = await fetch(
         `${import.meta.env.VITE_HOME_DOMAIN}/bookmark`,
@@ -61,13 +64,31 @@ function BookmarkForm() {
 
   const onSubmit: SubmitHandler<BookmarkData> = (formData) => {
     const lastBookmarkIdNumber =
-      +allBookmarkData[allBookmarkData.length - 1].bookmarksTable.id.slice(4);
+      allBookmarkData.length !== 0
+        ? +allBookmarkData[allBookmarkData.length - 1].bookmarksTable.id.slice(
+            4,
+          )
+        : 0;
     const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
     const favicon = new URL(formData.url).hostname;
-    console.log({ favicon });
     const bookmarkData = { ...formData, id };
-    console.log('bookmarkData:',bookmarkData);
-    uploadBookmark(bookmarkData);
+
+    const { tags, ...data } = bookmarkData;
+    const newBookmark: AllBookmarksData = {
+      bookmarksTable: {
+        ...data,
+        favicon,
+        pinned: false,
+        isArchived: false,
+        visitCount: 0,
+        createdAt: new Date(),
+        lastVisited: null,
+      },
+      tags: tags[0].split(","),
+    };
+
+    setAllBookmarkData([...allBookmarkData, newBookmark]);
+    uploadBookmark({ ...bookmarkData, createdAt: new Date() });
   };
 
   const onError = (error: FieldErrors) => {

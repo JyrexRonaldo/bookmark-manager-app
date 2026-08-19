@@ -8,7 +8,7 @@ export interface AllBookmarksData {
     pinned: boolean | null;
     isArchived: boolean | null;
     visitCount: number | null;
-    createdAt: string | null;
+    createdAt: Date | null;
     lastVisited: string | null;
   };
   tags: string[];

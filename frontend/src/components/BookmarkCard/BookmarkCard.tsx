@@ -13,7 +13,9 @@ function BookmarkCard({
   visitCount,
   createdAt,
   lastVisited,
-}: Omit<BookmarkData, "id" | "isArchived">) {
+}: Omit<BookmarkData, "id" | "isArchived" | "createdAt"> & {
+  createdAt: string;
+}) {
   const popupButton = (
     <button
       popoverTarget="actiondropdown"

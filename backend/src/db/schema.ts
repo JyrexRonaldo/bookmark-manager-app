@@ -16,8 +16,8 @@ export const bookmarksTable = pgTable("bookmarks", {
   pinned: boolean().default(false),
   isArchived: boolean().default(false),
   visitCount: integer().default(0),
-  createdAt: timestamp({ mode: "string" }).defaultNow(),
-  lastVisited: timestamp({ mode: "string" }),
+  createdAt: timestamp({ mode: "date" }).defaultNow(),
+  lastVisited: timestamp({ mode: "date" }),
 });
 
 export const tagsTable = pgTable("tags", {

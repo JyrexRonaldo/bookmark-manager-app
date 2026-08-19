@@ -6,6 +6,7 @@ import SortByDropdown from "../SortByDropdown/SortByDropdown";
 import { useEffect } from "react";
 // import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContaxt";
 import { useAllBookmarkData, useAllBookmarkDataControls } from "../../store";
+import type { AllBookmarksData } from "../../types";
 
 function Main() {
   // const [allBookmarkData, setAllBookmarkData] = useContext(BookmarkDataContext);
@@ -30,8 +31,7 @@ function Main() {
         // if (response.status === 401) {
         //   navigate("/login");
         // }
-        const data = await response.json();
-        console.log(data)
+        const data: AllBookmarksData[] = await response.json();
         setAllBookmarkData(data);
       } catch (error) {
         console.log(error);

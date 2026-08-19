@@ -1,30 +1,38 @@
 import data from "../../frontend/data.ts";
 import db from "./drizzle.ts";
-import { bookmarksTable, tagsTable, bookmarksTagsTable } from "../src/db/schema.ts";
+import {
+  bookmarksTable,
+  tagsTable,
+  bookmarksTagsTable,
+} from "../src/db/schema.ts";
+import { z } from "zod";
 
-const bookmarkData = structuredClone(data);
 
-interface Bookmark {
-  id: string;
-  title: string;
-  url: string;
-  favicon: string;
-  description: string;
-  tags?: string[] | null;
-  pinned: boolean;
-  isArchived: boolean;
-  visitCount: number;
-  createdAt: string;
-  lastVisited: string | null;
-}
+const BookmarkSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  url: z.string(),
+  favicon: z.string(),
+  description: z.string(),
+  pinned: z.boolean(),
+  isArchived: z.boolean(),
+  visitCount: z.number(),
+  createdAt: z.coerce.date(),
+  lastVisited: z.coerce.date(),
+});
+
+const SampleBookmarkDataSchema = z.array(BookmarkSchema);
+
+const bookmarkData = SampleBookmarkDataSchema.parse(data.bookmarks);
+
+type Bookmark = z.infer<typeof BookmarkSchema>;
 
 interface BookmarkTag {
   bookmarkId: string;
   tagId: string;
 }
 
-const bookmarksResult = bookmarkData.bookmarks.map((bookmark: Bookmark) => {
-  delete bookmark.tags;
+const bookmarksResult = bookmarkData.map((bookmark: Bookmark) => {
   bookmark.favicon = new URL(bookmark.url).hostname;
   return bookmark;
 });
