@@ -6,7 +6,7 @@ export const NewBookmarkEntrySchema = z.object({
   url: z.string(),
   // favicon: z.string(),
   description: z.string(),
-  tags: z.array(z.string()),
+  tags: z.string(),
   // pinned: z.boolean(),
   // isArchived: z.boolean(),
   // visitCount: z.number(),

@@ -18,7 +18,7 @@ function BookmarkForm() {
       title: "",
       description: "",
       url: "",
-      tags: [],
+      tags: "",
     },
   });
 
@@ -41,7 +41,7 @@ function BookmarkForm() {
     setValue("title", `${title}`);
     setValue("description", `${description}`);
     setValue("url", `${url}`);
-    setValue("tags", [`${tags}`]);
+    setValue("tags", tags);
   }
 
   async function uploadBookmark(bookmarkData: BookmarkData) {
@@ -84,7 +84,7 @@ function BookmarkForm() {
         createdAt: new Date(),
         lastVisited: null,
       },
-      tags: tags[0].split(","),
+      tags: tags,
     };
 
     setAllBookmarkData([...allBookmarkData, newBookmark]);

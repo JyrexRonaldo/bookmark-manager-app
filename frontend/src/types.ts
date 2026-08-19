@@ -11,11 +11,11 @@ export interface AllBookmarksData {
     createdAt: Date | null;
     lastVisited: string | null;
   };
-  tags: string[];
+  tags: string;
 }
 
 type BookmarkTableData = AllBookmarksData["bookmarksTable"] 
 
 export interface BookmarkData extends BookmarkTableData {
-  tags: string[];
+  tags: string;
 }
