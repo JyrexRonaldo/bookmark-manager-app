@@ -40,7 +40,7 @@ function Main() {
           await response.json();
         console.log(data);
         setAllBookmarkData(data.allBookmarks);
-        setAllTagsData(data.allTags.map((tag) => tag.title).sort());
+        setAllTagsData(data.allTags.sort((tagA, tagB) => tagA.title > tagB.title ? 1 : -1 ));
       } catch (error) {
         console.log(error);
         // setError(true);

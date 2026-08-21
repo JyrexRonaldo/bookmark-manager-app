@@ -1,6 +1,6 @@
 // store.ts
 import { create } from "zustand";
-import type { Bookmark } from "./types";
+import type { Bookmark, Tag } from "./types";
 
 interface useBookmarkDataStoreType {
   allBookmarkData: Bookmark[];
@@ -22,14 +22,14 @@ export const useAllBookmarkDataControls = () =>
   useBookmarkDataStore((state) => state.actions);
 
 interface useTagsDataStoreType {
-  allTagsData: string[];
-  actions: { setAllTagsData: (allTags: string[]) => void };
+  allTagsData: Tag[];
+  actions: { setAllTagsData: (allTags: Tag[]) => void };
 }
 
 const useTagsDataStore = create<useTagsDataStoreType>()((set) => ({
   allTagsData: [],
   actions: {
-    setAllTagsData: (allTags: string[]) =>
+    setAllTagsData: (allTags: Tag[]) =>
       set(() => ({ allTagsData: allTags })),
   },
 }));

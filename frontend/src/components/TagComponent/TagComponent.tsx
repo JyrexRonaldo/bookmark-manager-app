@@ -1,4 +1,6 @@
-function TagComponent({ tagName }) {
+
+
+function TagComponent({ tagName, tagCount = 0 }) {
   return (
     <>
       <div className="flex h-[38px] items-center justify-between gap-[12px] px-[12px] py-[8px] rounded-[8px] hover:bg-[#E8F0EF]">
@@ -10,7 +12,7 @@ function TagComponent({ tagName }) {
           <p className="font-manrope text-[16px]/[140%]">{tagName}</p>
         </div>
         <p className="flex h-[21px] w-[24px] items-center justify-center rounded-[9999px] border border-[#DDE9E7] bg-[#E8F0EF] px-[8px] py-[2px] text-[12px]/[140%]">
-          50
+          {tagCount}
         </p>
       </div>
     </>

@@ -10,7 +10,7 @@ export const NewBookmarkEntrySchema = z.object({
     val
       .replace(/\s/g, "")
       .split(",")
-      .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase())
+      .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1))
       .join(),
   ),
   // pinned: z.boolean(),

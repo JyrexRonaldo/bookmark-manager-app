@@ -6,7 +6,7 @@ function SideBarComponent({ isSmall }) {
   const allTagsData = useAllTagsData();
 
   const TagElements = allTagsData.map((element, index) => (
-    <TagComponent key={index} tagName={element} />
+    <TagComponent key={index} tagName={element.title} tagCount={element.count} />
   ));
 
   return (

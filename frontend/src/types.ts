@@ -16,6 +16,7 @@ export interface Bookmark {
 
 export interface Tag {
   title: string;
+  count: number;
 }
 
 type BookmarkTable = Bookmark["bookmarksTable"];

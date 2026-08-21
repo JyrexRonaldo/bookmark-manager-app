@@ -78,11 +78,9 @@ function BookmarkForm() {
     const trimmedCapitalizedTags = formData.tags
       .replace(/\s/g, "")
       .split(",")
-      .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase())
+      .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1))
       .join();
     const bookmarkData = { ...formData, id, tags: trimmedCapitalizedTags };
-    console.log(bookmarkData);
-
     const { tags, ...data } = bookmarkData;
 
     const newBookmark: Bookmark = {
@@ -98,8 +96,26 @@ function BookmarkForm() {
       tags: tags,
     };
 
+    const currentTags = tags.split(",");
+    const addedTags = [];
+
+    allTagsData.forEach((tag) => {
+      if (currentTags.includes(tag.title)) {
+        tag.count += 1;
+        addedTags.push(tag.title);
+      }
+    });
+
+    const newTags = currentTags
+      .filter((tag) => !addedTags.includes(tag))
+      .map((newTag) => ({ title: newTag, count: 1 }));
+
+    const newTagData = [...allTagsData, ...newTags].sort((tagA, tagB) =>
+      tagA.title > tagB.title ? 1 : -1,
+    );
+
     setAllBookmarkData([...allBookmarkData, newBookmark]);
-    setAllTagsData([...allTagsData, ...tags.split(",")].sort());
+    setAllTagsData(newTagData);
     uploadBookmark({ ...bookmarkData, createdAt: new Date() });
   };
 

@@ -34,7 +34,13 @@ import { ZodError } from "zod";
 
 const getAllBookmarks = async (_req: Request, res: Response) => {
   const allData = await db.transaction(async (tx) => {
-    const allTags = await tx.select().from(tagsTable);
+    const allTags = await tx
+      .select({
+        title: bookmarksTagsTable.tagId,
+        count: sql<number>`cast(count(${bookmarksTagsTable.tagId}) as int)`,
+      })
+      .from(bookmarksTagsTable)
+      .groupBy(bookmarksTagsTable.tagId);
 
     const allBookmarks = await tx
       .select({
