@@ -1,21 +1,14 @@
 import TagComponent from "../TagComponent/TagComponent";
 import clsx from "clsx";
-import data from "../../../data";
-
-const allTags = data.bookmarks
-  .map((bookmark) => bookmark.tags.join(","))
-  .join(",")
-  .split(",");
-
-const allUniqueTags = allTags.filter(
-  (tag, index) => allTags.indexOf(tag) === index,
-);
-
-const TagElements = allUniqueTags.map((element, index) => (
-  <TagComponent key={index} tagName={element} />
-));
+import { useAllTagsData } from "../../store";
 
 function SideBarComponent({ isSmall }) {
+  const allTagsData = useAllTagsData();
+
+  const TagElements = allTagsData.map((element, index) => (
+    <TagComponent key={index} tagName={element} />
+  ));
+
   return (
     <>
       <aside
@@ -29,7 +22,7 @@ function SideBarComponent({ isSmall }) {
           <img src="/img/logo-light-theme.svg" alt="" />
         </div>
         <section className="flex min-h-[0px] grow flex-col gap-[16px] px-[16px] pt-[0px] pb-[20px]">
-          <div className="h-[84px] w-[264px] flex flex-col gap-1">
+          <div className="flex h-[84px] w-[264px] flex-col gap-1">
             <button className="flex h-[38px] w-full items-center gap-[12px] rounded-[6px] border-[#E8F0EF] bg-[#E8F0EF] px-[8px] px-[12px] hover:bg-[#E8F0EF]">
               <img src="/img/icon-home.svg" alt="" />
               <p className="font-manrope">Home</p>

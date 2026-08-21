@@ -1,10 +1,12 @@
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
-import { type AllBookmarksData, type BookmarkData } from "../../types";
+import type { Bookmark, BookmarkData } from "../../types";
 import { faker } from "@faker-js/faker";
 import {
   useAllBookmarkData,
   useBookmarkFormStatusControls,
   useAllBookmarkDataControls,
+  useAllTagsData,
+  useAllTagsControls,
 } from "../../store";
 
 function BookmarkForm() {
@@ -12,6 +14,8 @@ function BookmarkForm() {
 
   const { toggleBookmarkForm } = useBookmarkFormStatusControls();
   const { setAllBookmarkData } = useAllBookmarkDataControls();
+  const allTagsData = useAllTagsData();
+  const { setAllTagsData } = useAllTagsControls();
 
   const { register, handleSubmit, setValue } = useForm<BookmarkData>({
     defaultValues: {
@@ -71,10 +75,17 @@ function BookmarkForm() {
         : 0;
     const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
     const favicon = new URL(formData.url).hostname;
-    const bookmarkData = { ...formData, id };
+    const trimmedCapitalizedTags = formData.tags
+      .replace(/\s/g, "")
+      .split(",")
+      .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase())
+      .join();
+    const bookmarkData = { ...formData, id, tags: trimmedCapitalizedTags };
+    console.log(bookmarkData);
 
     const { tags, ...data } = bookmarkData;
-    const newBookmark: AllBookmarksData = {
+
+    const newBookmark: Bookmark = {
       bookmarksTable: {
         ...data,
         favicon,
@@ -88,6 +99,7 @@ function BookmarkForm() {
     };
 
     setAllBookmarkData([...allBookmarkData, newBookmark]);
+    setAllTagsData([...allTagsData, ...tags.split(",")].sort());
     uploadBookmark({ ...bookmarkData, createdAt: new Date() });
   };
 

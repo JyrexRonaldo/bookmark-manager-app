@@ -6,7 +6,13 @@ export const NewBookmarkEntrySchema = z.object({
   url: z.string(),
   // favicon: z.string(),
   description: z.string(),
-  tags: z.string(),
+  tags: z.string().transform((val) =>
+    val
+      .replace(/\s/g, "")
+      .split(",")
+      .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase())
+      .join(),
+  ),
   // pinned: z.boolean(),
   // isArchived: z.boolean(),
   // visitCount: z.number(),
@@ -15,4 +21,3 @@ export const NewBookmarkEntrySchema = z.object({
 });
 
 export type NewBookmarkEntry = z.infer<typeof NewBookmarkEntrySchema>;
-

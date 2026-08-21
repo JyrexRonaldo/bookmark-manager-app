@@ -33,20 +33,26 @@ import { ZodError } from "zod";
 // };
 
 const getAllBookmarks = async (_req: Request, res: Response) => {
-  const allBookmarks = await db
-    .select({
-      bookmarksTable,
-      tags: sql<string>`string_agg(${tagsTable.title}, ',')`.as("tags"),
-    })
-    .from(bookmarksTagsTable)
-    .innerJoin(
-      bookmarksTable,
-      eq(bookmarksTable.id, bookmarksTagsTable.bookmarkId),
-    )
-    .innerJoin(tagsTable, eq(tagsTable.title, bookmarksTagsTable.tagId))
-    .groupBy(bookmarksTable.id)
-    .orderBy(bookmarksTable.id);
-  res.json(allBookmarks);
+  const allData = await db.transaction(async (tx) => {
+    const allTags = await tx.select().from(tagsTable);
+
+    const allBookmarks = await tx
+      .select({
+        bookmarksTable,
+        tags: sql<string>`string_agg(${tagsTable.title}, ',')`.as("tags"),
+      })
+      .from(bookmarksTagsTable)
+      .innerJoin(
+        bookmarksTable,
+        eq(bookmarksTable.id, bookmarksTagsTable.bookmarkId),
+      )
+      .innerJoin(tagsTable, eq(tagsTable.title, bookmarksTagsTable.tagId))
+      .groupBy(bookmarksTable.id)
+      .orderBy(bookmarksTable.id);
+
+    return { allBookmarks, allTags };
+  });
+  res.json(allData);
 };
 
 const addBookmark = async (req: Request, res: Response) => {

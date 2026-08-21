@@ -5,14 +5,19 @@ import { format } from "date-fns";
 import SortByDropdown from "../SortByDropdown/SortByDropdown";
 import { useEffect } from "react";
 // import BookmarkDataContext from "../../contexts/BookmarkDataContext/BookmarkDataContaxt";
-import { useAllBookmarkData, useAllBookmarkDataControls } from "../../store";
-import type { AllBookmarksData } from "../../types";
+import {
+  useAllBookmarkData,
+  useAllBookmarkDataControls,
+  useAllTagsControls,
+} from "../../store";
+import type { Bookmark, Tag } from "../../types";
 
 function Main() {
   // const [allBookmarkData, setAllBookmarkData] = useContext(BookmarkDataContext);
 
   const allBookmarkData = useAllBookmarkData();
   const { setAllBookmarkData } = useAllBookmarkDataControls();
+  const { setAllTagsData } = useAllTagsControls();
 
   useEffect(() => {
     async function fetchData() {
@@ -31,8 +36,11 @@ function Main() {
         // if (response.status === 401) {
         //   navigate("/login");
         // }
-        const data: AllBookmarksData[] = await response.json();
-        setAllBookmarkData(data);
+        const data: { allBookmarks: Bookmark[]; allTags: Tag[] } =
+          await response.json();
+        console.log(data);
+        setAllBookmarkData(data.allBookmarks);
+        setAllTagsData(data.allTags.map((tag) => tag.title).sort());
       } catch (error) {
         console.log(error);
         // setError(true);

@@ -1,4 +1,4 @@
-export interface AllBookmarksData {
+export interface Bookmark {
   bookmarksTable: {
     id: string;
     title: string;
@@ -14,8 +14,12 @@ export interface AllBookmarksData {
   tags: string;
 }
 
-type BookmarkTableData = AllBookmarksData["bookmarksTable"] 
+export interface Tag {
+  title: string;
+}
 
-export interface BookmarkData extends BookmarkTableData {
+type BookmarkTable = Bookmark["bookmarksTable"];
+
+export interface BookmarkData extends BookmarkTable {
   tags: string;
 }
