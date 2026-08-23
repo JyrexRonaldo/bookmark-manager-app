@@ -2,7 +2,7 @@ import TagComponent from "../TagComponent/TagComponent";
 import clsx from "clsx";
 import { useAllTagsData } from "../../store";
 
-function SideBarComponent({ isSmall }) {
+function SidebarComponent({ isSmall }: {isSmall: boolean}) {
   const allTagsData = useAllTagsData();
 
   const TagElements = allTagsData.map((element, index) => (
@@ -56,4 +56,4 @@ function SideBarComponent({ isSmall }) {
   );
 }
 
-export default SideBarComponent;
+export default SidebarComponent;

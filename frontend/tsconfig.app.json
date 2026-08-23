@@ -15,6 +15,17 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* Strict Type-Checking Options */
+    "strict": true,                         // Turns on 8 core strict safety checks
+    "noImplicitAny": true,                 // Error on inferred 'any' types
+    "strictNullChecks": true,              // Null and undefined are distinct types
+    "strictFunctionTypes": true,           // Ensures stricter function parameter checks
+    "strictBindCallApply": true,           // Makes .bind(), .call(), and .apply() type-safe
+    "strictPropertyInitialization": true,  // Checks class properties are set in constructor
+    "noImplicitThis": true,                // Error on 'this' expressions with an implied 'any' type
+    "alwaysStrict": true,                  // Parses files in ECMAScript strict mode
+
+
     /* Linting */
     "noUnusedLocals": true,
     "noUnusedParameters": true,

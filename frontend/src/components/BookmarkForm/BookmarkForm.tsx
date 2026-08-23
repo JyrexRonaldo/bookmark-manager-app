@@ -97,7 +97,7 @@ function BookmarkForm() {
     };
 
     const currentTags = tags.split(",");
-    const addedTags = [];
+    const addedTags: string[] = [];
 
     allTagsData.forEach((tag) => {
       if (currentTags.includes(tag.title)) {
@@ -110,9 +110,7 @@ function BookmarkForm() {
       .filter((tag) => !addedTags.includes(tag))
       .map((newTag) => ({ title: newTag, count: 1 }));
 
-    const newTagData = [...allTagsData, ...newTags].sort((tagA, tagB) =>
-      tagA.title > tagB.title ? 1 : -1,
-    );
+    const newTagData = [...allTagsData, ...newTags];
 
     setAllBookmarkData([...allBookmarkData, newBookmark]);
     setAllTagsData(newTagData);

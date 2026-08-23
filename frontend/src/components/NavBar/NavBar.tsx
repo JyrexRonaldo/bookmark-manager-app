@@ -1,12 +1,12 @@
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
 import {
-  useSideBarStatusControls,
+  useSidebarStatusControls,
   useBookmarkFormStatusControls,
   useSearchStatusControls,
 } from "../../store";
 
 function NavBar() {
-  const { toggleSidebar } = useSideBarStatusControls();
+  const { toggleSidebar } = useSidebarStatusControls();
   const { toggleBookmarkForm } = useBookmarkFormStatusControls();
   const { populateSearchContent } = useSearchStatusControls();
 
@@ -18,7 +18,7 @@ function NavBar() {
     toggleSidebar();
   }
 
-  function handleSearchBar(e) {
+  function handleSearchBar(e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) {
     populateSearchContent(e.target.value);
   }
 
@@ -41,7 +41,7 @@ function NavBar() {
             className="h-[21px] w-full truncate font-manrope text-[14px]/[150%] font-medium tracking-[1%] outline-none"
             type="text"
             placeholder="Search by title..."
-            onChange={handleSearchBar}
+            onChange={(handleSearchBar)}
           />
         </div>
         <div className="relative flex items-center gap-[10px]">

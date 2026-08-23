@@ -29,7 +29,12 @@ interface useTagsDataStoreType {
 const useTagsDataStore = create<useTagsDataStoreType>()((set) => ({
   allTagsData: [],
   actions: {
-    setAllTagsData: (allTags: Tag[]) => set(() => ({ allTagsData: allTags })),
+    setAllTagsData: (allTags: Tag[]) => {
+      const sortedTags = allTags.toSorted((tagA, tagB) =>
+        tagA.title > tagB.title ? 1 : -1,
+      );
+      return set(() => ({ allTagsData: sortedTags }));
+    },
   },
 }));
 
@@ -39,22 +44,22 @@ export const useAllTagsControls = () =>
   useTagsDataStore((state) => state.actions);
 
 interface useSidebarStatusStoreType {
-  sideBarStatus: boolean;
+  sidebarStatus: boolean;
   actions: { toggleSidebar: () => void };
 }
 
 // Create store using the curried form of `create`
 const useSidebarStatusStore = create<useSidebarStatusStoreType>()((set) => ({
-  sideBarStatus: false,
+  sidebarStatus: false,
   actions: {
     toggleSidebar: () =>
-      set((state) => ({ sideBarStatus: !state.sideBarStatus })),
+      set((state) => ({ sidebarStatus: !state.sidebarStatus })),
   },
 }));
 
-export const useSideBarStatus = () =>
-  useSidebarStatusStore((state) => state.sideBarStatus);
-export const useSideBarStatusControls = () =>
+export const useSidebarStatus = () =>
+  useSidebarStatusStore((state) => state.sidebarStatus);
+export const useSidebarStatusControls = () =>
   useSidebarStatusStore((state) => state.actions);
 
 interface useBookmarkFormStoreType {
@@ -78,9 +83,7 @@ export const useBookmarkFormStatusControls = () =>
 
 interface useSearchStateStoreType {
   searchContent: string;
-  searchStatus: boolean;
   actions: {
-    toggleSearchStatus: () => void;
     populateSearchContent: (value: string) => void;
   };
 }
@@ -88,16 +91,11 @@ interface useSearchStateStoreType {
 // Create store using the curried form of `create`
 const useSearchStateStore = create<useSearchStateStoreType>()((set) => ({
   searchContent: "",
-  searchStatus: false,
   actions: {
-    toggleSearchStatus: () =>
-      set((state) => ({ searchStatus: !state.searchStatus })),
     populateSearchContent: (value) => set(() => ({ searchContent: value })),
   },
 }));
 
-export const useSearchStatus = () =>
-  useSearchStateStore((state) => state.searchStatus);
 export const useSearchContent = () =>
   useSearchStateStore((state) => state.searchContent);
 export const useSearchStatusControls = () =>

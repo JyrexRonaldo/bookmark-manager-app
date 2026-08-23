@@ -42,9 +42,7 @@ function Main() {
           await response.json();
         console.log(data);
         setAllBookmarkData(data.allBookmarks);
-        setAllTagsData(
-          data.allTags.sort((tagA, tagB) => (tagA.title > tagB.title ? 1 : -1)),
-        );
+        setAllTagsData(data.allTags);
       } catch (error) {
         console.log(error);
         // setError(true);
@@ -81,12 +79,10 @@ function Main() {
     );
   });
 
-
-  
-const searchItemsElements = bookmarkElements.filter((item) => {
-  const targetTitle = item.props.title;
-  return targetTitle.toLowerCase().includes(searchContent.toLowerCase());
-});
+  const searchItemsElements = bookmarkElements.filter((item) => {
+    const targetTitle = item.props.title;
+    return targetTitle.toLowerCase().includes(searchContent.toLowerCase());
+  });
 
   const sortByPopup = (
     <button className="flex w-[107px] gap-[4px] rounded-[8px] border border-[#C0CFCC] bg-white px-[12px] py-[10px] text-[#051513] hover:bg-[#E8F0EF]">

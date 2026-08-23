@@ -1,7 +1,7 @@
 import Main from "../Main/Main";
 import NavBar from "../NavBar/NavBar";
 import BookmarkForm from "../BookmarkForm/BookmarkForm";
-import SideBar from "../SideBar/SideBar";
+import Sidebar from "../Sidebar/Sidebar";
 import { useBookmarkFormStatus } from "../../store";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <div className="grid h-screen grid-cols-5 grid-cols-[min-content_repeat(4,1fr)] grid-rows-[min-content_1fr]">
-        <SideBar />
+        <Sidebar />
         <NavBar />
         <Main />
         {bookmarkFormStatus && <BookmarkForm />}

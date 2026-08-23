@@ -8,7 +8,7 @@ export interface Bookmark {
     pinned: boolean | null;
     isArchived: boolean | null;
     visitCount: number | null;
-    createdAt: Date | null;
+    createdAt: Date | string;
     lastVisited: string | null;
   };
   tags: string;

@@ -1,19 +1,19 @@
-import SideBarComponent from "../SideBarComponent/SideBarComponent";
-import SideBarWrapper from "../SideBarWrapper/SideBarWrapper";
+import SidebarComponent from "../SidebarComponent/SidebarComponent";
+import SidebarWrapper from "../SidebarWrapper/SidebarWrapper";
 import { useMedia } from "react-use";
-import { useSideBarStatus } from "../../store";
+import { useSidebarStatus } from "../../store";
 
-function SideBar() {
+function Sidebar() {
   const isWide = useMedia("(min-width: 1024px)");
-  const isOpen = useSideBarStatus()
+  const isOpen = useSidebarStatus()
 
   return isOpen && !isWide ? (
-    <SideBarWrapper>
-      <SideBarComponent isSmall={isWide} />
-    </SideBarWrapper>
+    <SidebarWrapper>
+      <SidebarComponent isSmall={isWide} />
+    </SidebarWrapper>
   ) : (
-    <SideBarComponent isSmall={!isWide} />
+    <SidebarComponent isSmall={!isWide} />
   );
 }
 
-export default SideBar;
+export default Sidebar;
