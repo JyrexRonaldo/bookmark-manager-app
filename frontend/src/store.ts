@@ -29,8 +29,7 @@ interface useTagsDataStoreType {
 const useTagsDataStore = create<useTagsDataStoreType>()((set) => ({
   allTagsData: [],
   actions: {
-    setAllTagsData: (allTags: Tag[]) =>
-      set(() => ({ allTagsData: allTags })),
+    setAllTagsData: (allTags: Tag[]) => set(() => ({ allTagsData: allTags })),
   },
 }));
 
@@ -76,3 +75,33 @@ export const useBookmarkFormStatus = () =>
   useBookmarkFormStore((state) => state.bookmarkFormStatus);
 export const useBookmarkFormStatusControls = () =>
   useBookmarkFormStore((state) => state.actions);
+
+interface useSearchStateStoreType {
+  searchContent: string;
+  searchStatus: boolean;
+  actions: {
+    toggleSearchStatus: () => void;
+    populateSearchContent: (value: string) => void;
+  };
+}
+
+// Create store using the curried form of `create`
+const useSearchStateStore = create<useSearchStateStoreType>()((set) => ({
+  searchContent: "",
+  searchStatus: false,
+  actions: {
+    toggleSearchStatus: () =>
+      set((state) => ({ searchStatus: !state.searchStatus })),
+    populateSearchContent: (value) => set(() => ({ searchContent: value })),
+  },
+}));
+
+export const useSearchStatus = () =>
+  useSearchStateStore((state) => state.searchStatus);
+export const useSearchContent = () =>
+  useSearchStateStore((state) => state.searchContent);
+export const useSearchStatusControls = () =>
+  useSearchStateStore((state) => state.actions);
+// populateSearchContent: (value) =>
+//       set((state) => ({ searchStatus: value })),
+//   },

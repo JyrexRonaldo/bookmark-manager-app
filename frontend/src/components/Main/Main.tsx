@@ -9,6 +9,7 @@ import {
   useAllBookmarkData,
   useAllBookmarkDataControls,
   useAllTagsControls,
+  useSearchContent,
 } from "../../store";
 import type { Bookmark, Tag } from "../../types";
 
@@ -18,6 +19,7 @@ function Main() {
   const allBookmarkData = useAllBookmarkData();
   const { setAllBookmarkData } = useAllBookmarkDataControls();
   const { setAllTagsData } = useAllTagsControls();
+  const searchContent = useSearchContent();
 
   useEffect(() => {
     async function fetchData() {
@@ -40,7 +42,9 @@ function Main() {
           await response.json();
         console.log(data);
         setAllBookmarkData(data.allBookmarks);
-        setAllTagsData(data.allTags.sort((tagA, tagB) => tagA.title > tagB.title ? 1 : -1 ));
+        setAllTagsData(
+          data.allTags.sort((tagA, tagB) => (tagA.title > tagB.title ? 1 : -1)),
+        );
       } catch (error) {
         console.log(error);
         // setError(true);
@@ -77,6 +81,13 @@ function Main() {
     );
   });
 
+
+  
+const searchItemsElements = bookmarkElements.filter((item) => {
+  const targetTitle = item.props.title;
+  return targetTitle.toLowerCase().includes(searchContent.toLowerCase());
+});
+
   const sortByPopup = (
     <button className="flex w-[107px] gap-[4px] rounded-[8px] border border-[#C0CFCC] bg-white px-[12px] py-[10px] text-[#051513] hover:bg-[#E8F0EF]">
       <img src="/img/icon-sort.svg" alt="" />{" "}
@@ -88,9 +99,15 @@ function Main() {
     <>
       <main className="col-start-2 col-end-6 row-start-2 row-end-3 flex h-full flex-col gap-[20px] bg-[#E8F0EF] px-[16px] pt-[24px] pb-[32px] sm:px-[32px]">
         <div className="flex h-[42px] items-center justify-between">
-          <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
-            All bookmarks
-          </p>
+          {searchContent ? (
+            <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
+              Results for: "{searchContent}"
+            </p>
+          ) : (
+            <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
+              All bookmarks
+            </p>
+          )}
 
           <Popup
             trigger={sortByPopup}
@@ -106,7 +123,7 @@ function Main() {
           </Popup>
         </div>
         <div className="scrollbar-hide grid h-[200px] grow grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-[32px] overflow-y-scroll bg-[#E8F0EF]">
-          {bookmarkElements}
+          {searchContent ? searchItemsElements : bookmarkElements}
         </div>
       </main>
     </>

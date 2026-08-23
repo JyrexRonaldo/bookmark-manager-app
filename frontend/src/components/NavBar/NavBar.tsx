@@ -1,11 +1,14 @@
 import ProfileMenu from "../ProfileMenu/ProfileMenu";
-import { useSideBarStatusControls } from "../../store";
-import { useBookmarkFormStatusControls } from "../../store";
+import {
+  useSideBarStatusControls,
+  useBookmarkFormStatusControls,
+  useSearchStatusControls,
+} from "../../store";
 
 function NavBar() {
   const { toggleSidebar } = useSideBarStatusControls();
-
   const { toggleBookmarkForm } = useBookmarkFormStatusControls();
+  const { populateSearchContent } = useSearchStatusControls();
 
   function handleAddBookmark() {
     toggleBookmarkForm();
@@ -13,7 +16,10 @@ function NavBar() {
 
   function handleSideBar() {
     toggleSidebar();
-    console.log("open sesame");
+  }
+
+  function handleSearchBar(e) {
+    populateSearchContent(e.target.value);
   }
 
   return (
@@ -35,6 +41,7 @@ function NavBar() {
             className="h-[21px] w-full truncate font-manrope text-[14px]/[150%] font-medium tracking-[1%] outline-none"
             type="text"
             placeholder="Search by title..."
+            onChange={handleSearchBar}
           />
         </div>
         <div className="relative flex items-center gap-[10px]">
