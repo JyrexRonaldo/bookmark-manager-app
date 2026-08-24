@@ -1,13 +1,22 @@
 import TagComponent from "../TagComponent/TagComponent";
 import clsx from "clsx";
-import { useAllTagsData } from "../../store";
+import { useAllTagsData, useSeletedTags } from "../../store";
 
-function SidebarComponent({ isSmall }: {isSmall: boolean}) {
+function SidebarComponent({ isSmall }: { isSmall: boolean }) {
   const allTagsData = useAllTagsData();
+  const selectedTags = useSeletedTags();
 
-  const TagElements = allTagsData.map((element, index) => (
-    <TagComponent key={index} tagName={element.title} tagCount={element.count} />
-  ));
+  const TagElements = allTagsData.map((element, index) => {
+    const checkboxState = selectedTags.includes(element.title) ;
+    return (
+      <TagComponent
+        key={index}
+        tagName={element.title}
+        tagCount={element.count}
+        checkboxState={checkboxState}
+      />
+    );
+  });
 
   return (
     <>

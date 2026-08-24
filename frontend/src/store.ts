@@ -23,11 +23,16 @@ export const useAllBookmarkDataControls = () =>
 
 interface useTagsDataStoreType {
   allTagsData: Tag[];
-  actions: { setAllTagsData: (allTags: Tag[]) => void };
+  selectedTags: string[];
+  actions: {
+    setAllTagsData: (allTags: Tag[]) => void;
+    toggleSelectedTags: (toggledTag: string) => void;
+  };
 }
 
 const useTagsDataStore = create<useTagsDataStoreType>()((set) => ({
   allTagsData: [],
+  selectedTags: [],
   actions: {
     setAllTagsData: (allTags: Tag[]) => {
       const sortedTags = allTags.toSorted((tagA, tagB) =>
@@ -35,11 +40,25 @@ const useTagsDataStore = create<useTagsDataStoreType>()((set) => ({
       );
       return set(() => ({ allTagsData: sortedTags }));
     },
+    toggleSelectedTags: (toggledTag: string) => {
+      return set((state) => {
+        if (state.selectedTags.includes(toggledTag)) {
+          const filteredTag = state.selectedTags.filter(
+            (currentTag) => toggledTag !== currentTag,
+          );
+          return { selectedTags: filteredTag };
+        } else {
+          return { selectedTags: [...state.selectedTags, toggledTag] };
+        }
+      });
+    },
   },
 }));
 
 export const useAllTagsData = () =>
   useTagsDataStore((state) => state.allTagsData);
+export const useSeletedTags = () =>
+  useTagsDataStore((state) => state.selectedTags);
 export const useAllTagsControls = () =>
   useTagsDataStore((state) => state.actions);
 
