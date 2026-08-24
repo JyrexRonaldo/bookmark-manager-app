@@ -1,13 +1,18 @@
 import TagComponent from "../TagComponent/TagComponent";
 import clsx from "clsx";
-import { useAllTagsData, useSeletedTags } from "../../store";
+import {
+  useAllTagsData,
+  useSeletedTags,
+  useAllTagsControls,
+} from "../../store";
 
 function SidebarComponent({ isSmall }: { isSmall: boolean }) {
   const allTagsData = useAllTagsData();
   const selectedTags = useSeletedTags();
+  const { clearSelectedTags } = useAllTagsControls();
 
   const TagElements = allTagsData.map((element, index) => {
-    const checkboxState = selectedTags.includes(element.title) ;
+    const checkboxState = selectedTags.includes(element.title);
     return (
       <TagComponent
         key={index}
@@ -17,6 +22,10 @@ function SidebarComponent({ isSmall }: { isSmall: boolean }) {
       />
     );
   });
+
+  function handleSelectedTagReset() {
+    clearSelectedTags();
+  }
 
   return (
     <>
@@ -44,7 +53,13 @@ function SidebarComponent({ isSmall }: { isSmall: boolean }) {
           <div className="flex grow flex-col">
             <div className="flex justify-between px-[12px] text-[12px]/[140%]">
               <p>TAGS</p>
-              <p>Reset</p>
+              <button
+                type="button"
+                className="cursor-pointer"
+                onClick={handleSelectedTagReset}
+              >
+                Reset
+              </button>
             </div>
             <div className="h-[200px] grow overflow-auto">
               {TagElements}

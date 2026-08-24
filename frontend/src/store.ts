@@ -27,6 +27,7 @@ interface useTagsDataStoreType {
   actions: {
     setAllTagsData: (allTags: Tag[]) => void;
     toggleSelectedTags: (toggledTag: string) => void;
+    clearSelectedTags: () => void,
   };
 }
 
@@ -52,6 +53,7 @@ const useTagsDataStore = create<useTagsDataStoreType>()((set) => ({
         }
       });
     },
+    clearSelectedTags: () => set(() => ({ selectedTags: [] })),
   },
 }));
 
