@@ -4,7 +4,10 @@ import type { Bookmark, Tag } from "./types";
 
 interface useBookmarkDataStoreType {
   allBookmarkData: Bookmark[];
-  actions: { setAllBookmarkData: (allBookMarks: Bookmark[]) => void };
+  actions: {
+    setAllBookmarkData: (allBookMarks: Bookmark[]) => void;
+    archiveBookmark: (bookmarkId: string) => void;
+  };
 }
 
 // Create store using the curried form of `create`
@@ -13,6 +16,27 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
   actions: {
     setAllBookmarkData: (allBookMarks: Bookmark[]) =>
       set(() => ({ allBookmarkData: allBookMarks })),
+    archiveBookmark: (bookmarkId: string) => {
+      return set((state) => {
+        const oldBookmark = state.allBookmarkData.find(
+          (bookmark) => bookmark.bookmarksTable.id === bookmarkId,
+        );
+        const newBookmarkList = state.allBookmarkData.filter(
+          (bookmark) => bookmark.bookmarksTable.id !== bookmarkId,
+        );
+
+        if (oldBookmark) {
+          const newBookmark = {
+            ...oldBookmark,
+            bookmarksTable: { ...oldBookmark.bookmarksTable, isArchived: true },
+          };
+          console.log({ oldBookmark, newBookmark, newBookmarkList });
+          return { allBookmarkData: [...newBookmarkList, newBookmark] };
+        } else {
+          return { allBookmarkData: state.allBookmarkData };
+        }
+      });
+    },
   },
 }));
 
@@ -27,7 +51,7 @@ interface useTagsDataStoreType {
   actions: {
     setAllTagsData: (allTags: Tag[]) => void;
     toggleSelectedTags: (toggledTag: string) => void;
-    clearSelectedTags: () => void,
+    clearSelectedTags: () => void;
   };
 }
 
@@ -121,6 +145,20 @@ export const useSearchContent = () =>
   useSearchStateStore((state) => state.searchContent);
 export const useSearchStatusControls = () =>
   useSearchStateStore((state) => state.actions);
-// populateSearchContent: (value) =>
-//       set((state) => ({ searchStatus: value })),
-//   },
+
+interface MainViewType {
+  currrentView: boolean;
+  actions: { setCurrentView: (value: boolean) => void };
+}
+
+const useMainViewStore = create<MainViewType>()((set) => ({
+  currrentView: true,
+  actions: {
+    setCurrentView: (value) => set(() => ({ currrentView: value })),
+  },
+}));
+
+export const useCurrentView = () =>
+  useMainViewStore((state) => state.currrentView);
+export const useMainViewControls = () =>
+  useMainViewStore((state) => state.actions);

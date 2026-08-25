@@ -12,10 +12,10 @@ function BookmarkCard({
   visitCount,
   createdAt,
   lastVisited,
-}: Omit<BookmarkData, "isArchived" | "createdAt"> & {
+  isArchived,
+}: Omit<BookmarkData,  | "createdAt"> & {
   createdAt: string;
 }) {
-
   const tagElements = tags.split(",").map((tag: string, index: number) => (
     <p
       key={index}
@@ -38,7 +38,7 @@ function BookmarkCard({
             <p className="font-manrope text-[20px]/[120%] font-bold">{title}</p>
             <p className="font-manrope text-[12px]/[140%]">{url}</p>
           </div>
-            <ActionsDropdown id={id} />
+          <ActionsDropdown id={id} />
         </div>
         <hr className="text-[#DDE9E7]" />
 
@@ -73,9 +73,14 @@ function BookmarkCard({
             <p>{createdAt}</p>
           </div>
         </div>
-        {pinned && (
-          <img className="size-[16px]" src="/img/icon-pin.svg" alt="" />
-        )}
+        <div className="flex items-center gap-1">
+          {isArchived && <p className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] font-manrope text-[12px]/[140%] text-[#131313]">
+            Archived
+          </p>}
+          {pinned && (
+            <img className="size-[16px]" src="/img/icon-pin.svg" alt="" />
+           )}
+        </div>
       </div>
     </div>
   );

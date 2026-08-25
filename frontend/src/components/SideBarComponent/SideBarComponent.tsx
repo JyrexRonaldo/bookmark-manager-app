@@ -4,12 +4,16 @@ import {
   useAllTagsData,
   useSeletedTags,
   useAllTagsControls,
+  useMainViewControls,
+  useCurrentView,
 } from "../../store";
 
 function SidebarComponent({ isSmall }: { isSmall: boolean }) {
   const allTagsData = useAllTagsData();
   const selectedTags = useSeletedTags();
   const { clearSelectedTags } = useAllTagsControls();
+  const { setCurrentView } = useMainViewControls();
+  const currentView = useCurrentView();
 
   const TagElements = allTagsData.map((element, index) => {
     const checkboxState = selectedTags.includes(element.title);
@@ -27,6 +31,14 @@ function SidebarComponent({ isSmall }: { isSmall: boolean }) {
     clearSelectedTags();
   }
 
+  function handleHomeView() {
+    setCurrentView(true);
+  }
+
+  function handleArchivedView() {
+    setCurrentView(false);
+  }
+
   return (
     <>
       <aside
@@ -41,11 +53,25 @@ function SidebarComponent({ isSmall }: { isSmall: boolean }) {
         </div>
         <section className="flex min-h-[0px] grow flex-col gap-[16px] px-[16px] pt-[0px] pb-[20px]">
           <div className="flex h-[84px] w-[264px] flex-col gap-1">
-            <button className="flex h-[38px] w-full items-center gap-[12px] rounded-[6px] border-[#E8F0EF] bg-[#E8F0EF] px-[8px] px-[12px] hover:bg-[#E8F0EF]">
+            <button
+              className={clsx(
+                "flex h-[38px] w-full items-center gap-[12px] rounded-[6px] border-[#E8F0EF]",
+                { "bg-[#E8F0EF]": currentView },
+                "px-[8px] px-[12px] hover:bg-[#E8F0EF]",
+              )}
+              onClick={handleHomeView}
+            >
               <img src="/img/icon-home.svg" alt="" />
               <p className="font-manrope">Home</p>
             </button>
-            <button className="flex h-[38px] w-full items-center gap-[12px] rounded-[6px] px-[8px] px-[12px] hover:bg-[#E8F0EF]">
+            <button
+              className={clsx(
+                "flex h-[38px] w-full items-center gap-[12px] rounded-[6px]",
+                { "bg-[#E8F0EF]": !currentView },
+                "px-[8px] px-[12px] hover:bg-[#E8F0EF]",
+              )}
+              onClick={handleArchivedView}
+            >
               <img src="/img/icon-archive.svg" alt="" />
               <p className="font-manrope">Archived</p>
             </button>
@@ -61,18 +87,7 @@ function SidebarComponent({ isSmall }: { isSmall: boolean }) {
                 Reset
               </button>
             </div>
-            <div className="h-[200px] grow overflow-auto">
-              {TagElements}
-              {/* <TagComponent />
-                <TagComponent />
-                <TagComponent />
-                <TagComponent />
-                <TagComponent />
-                <TagComponent />
-                <TagComponent />
-                <TagComponent />
-                <TagComponent /> */}
-            </div>
+            <div className="h-[200px] grow overflow-auto">{TagElements}</div>
           </div>
         </section>
       </aside>

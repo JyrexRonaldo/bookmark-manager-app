@@ -1,5 +1,3 @@
-import Popup from "reactjs-popup";
-import { RemoveScroll } from "react-remove-scroll";
 import BookmarkCard from "../BookmarkCard/BookmarkCard";
 import { format } from "date-fns";
 import SortByDropdown from "../SortByDropdown/SortByDropdown";
@@ -10,6 +8,7 @@ import {
   useAllTagsControls,
   useSearchContent,
   useSeletedTags,
+  useCurrentView,
 } from "../../store";
 import type { Bookmark, Tag } from "../../types";
 
@@ -21,6 +20,7 @@ function Main() {
   const selectedTags = useSeletedTags();
   let displayedElements: React.JSX.Element[] = [];
   let selectedTagsText = "";
+  const currentView = useCurrentView();
 
   useEffect(() => {
     async function fetchData() {
@@ -52,7 +52,7 @@ function Main() {
       }
     }
     fetchData();
-  }, []);
+  }, [setAllBookmarkData, setAllTagsData]);
 
   displayedElements = allBookmarkData.map((bookmark) => {
     const currentBookmark = bookmark.bookmarksTable;
@@ -66,6 +66,7 @@ function Main() {
 
     return (
       <BookmarkCard
+        id={currentBookmark.id}
         key={currentBookmark.id}
         title={currentBookmark.title}
         url={currentBookmark.url}
@@ -76,9 +77,20 @@ function Main() {
         createdAt={createdAt}
         lastVisited={lastVisited}
         favicon={favicon}
+        isArchived={currentBookmark.isArchived}
       />
     );
   });
+
+  if (currentView) {
+    displayedElements = displayedElements.filter((item) => {
+      return !item.props.isArchived;
+    });
+  } else {
+    displayedElements = displayedElements.filter((item) => {
+      return item.props.isArchived;
+    });
+  }
 
   if (searchContent) {
     displayedElements = displayedElements.filter((item) => {
@@ -98,13 +110,6 @@ function Main() {
     selectedTagsText = selectedTagsText.slice(0, selectedTagsText.length - 2);
   }
 
-  const sortByPopup = (
-    <button className="flex w-[107px] gap-[4px] rounded-[8px] border border-[#C0CFCC] bg-white px-[12px] py-[10px] text-[#051513] hover:bg-[#E8F0EF]">
-      <img src="/img/icon-sort.svg" alt="" />{" "}
-      <p className="font-manrope text-[16px]/[140%]">Sort by</p>
-    </button>
-  );
-
   return (
     <>
       <main className="col-start-2 col-end-6 row-start-2 row-end-3 flex h-full flex-col gap-[20px] bg-[#E8F0EF] px-[16px] pt-[24px] pb-[32px] sm:px-[32px]">
@@ -122,9 +127,15 @@ function Main() {
             </div>
           ) : (
             <div className="flex gap-3">
-              <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
-                All bookmarks
-              </p>
+              {currentView ? (
+                <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
+                  All bookmarks
+                </p>
+              ) : (
+                <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
+                  Archived bookmarks
+                </p>
+              )}
               {selectedTags.length !== 0 && (
                 <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
                   Bookmarks tagged: {selectedTagsText}
@@ -133,20 +144,9 @@ function Main() {
             </div>
           )}
 
-          <Popup
-            trigger={sortByPopup}
-            position={"bottom right"}
-            offsetY={4}
-            offsetX={14}
-            arrow={false}
-            closeOnDocumentClick
-          >
-            <RemoveScroll>
-              <SortByDropdown />
-            </RemoveScroll>
-          </Popup>
+          <SortByDropdown />
         </div>
-        <div className="scrollbar-hide grid h-[200px] grow grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-[32px] overflow-y-scroll bg-[#E8F0EF]">
+        <div className="scrollbar-hide grid h-[200px] grow grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] content-start gap-[32px] overflow-y-scroll bg-[#E8F0EF]">
           {displayedElements}
         </div>
       </main>
