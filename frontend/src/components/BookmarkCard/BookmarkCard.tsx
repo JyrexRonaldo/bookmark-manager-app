@@ -1,9 +1,8 @@
-import Popup from "reactjs-popup";
-import { RemoveScroll } from "react-remove-scroll";
 import ActionsDropdown from "../ActionsDropdown/ActionsDropdown";
 import { type BookmarkData } from "../../types";
 
 function BookmarkCard({
+  id,
   title,
   url,
   favicon,
@@ -13,19 +12,11 @@ function BookmarkCard({
   visitCount,
   createdAt,
   lastVisited,
-}: Omit<BookmarkData, "id" | "isArchived" | "createdAt"> & {
+}: Omit<BookmarkData, "isArchived" | "createdAt"> & {
   createdAt: string;
 }) {
-  const popupButton = (
-    <button
-      popoverTarget="actiondropdown"
-      className="flex size-[32px] shrink-0 items-center justify-center rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF] focus:bg-[#E8F0EF] focus:outline-4 focus:outline-[#E8F0EF]"
-    >
-      <img src="/img/icon-menu-bookmark.svg" alt="" />
-    </button>
-  );
 
-  const tagElements = tags.split(',').map((tag: string, index: number) => (
+  const tagElements = tags.split(",").map((tag: string, index: number) => (
     <p
       key={index}
       className="rounded-[4px] bg-[#E8F0EF] px-[8px] py-[2px] font-manrope text-[12px]/[140%] text-[#131313]"
@@ -47,18 +38,7 @@ function BookmarkCard({
             <p className="font-manrope text-[20px]/[120%] font-bold">{title}</p>
             <p className="font-manrope text-[12px]/[140%]">{url}</p>
           </div>
-          <Popup
-            trigger={popupButton}
-            position={"bottom right"}
-            offsetY={4}
-            offsetX={4}
-            arrow={false}
-            closeOnDocumentClick
-          >
-            <RemoveScroll>
-              <ActionsDropdown />
-            </RemoveScroll>
-          </Popup>
+            <ActionsDropdown id={id} />
         </div>
         <hr className="text-[#DDE9E7]" />
 
