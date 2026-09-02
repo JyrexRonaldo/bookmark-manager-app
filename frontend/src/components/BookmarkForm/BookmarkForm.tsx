@@ -1,6 +1,7 @@
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
 import type { Bookmark, BookmarkData } from "../../types";
 import { faker } from "@faker-js/faker";
+import { uploadBookmark } from "../../services";
 import {
   useAllBookmarkData,
   useBookmarkFormStatusControls,
@@ -48,23 +49,6 @@ function BookmarkForm() {
     setValue("tags", tags);
   }
 
-  async function uploadBookmark(bookmarkData: BookmarkData) {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_HOME_DOMAIN}/bookmark`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(bookmarkData),
-        },
-      );
-
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   const onSubmit: SubmitHandler<BookmarkData> = (formData) => {
     const lastBookmarkIdNumber =

@@ -10,7 +10,7 @@ import {
   useSeletedTags,
   useCurrentView,
 } from "../../store";
-import type { Bookmark, Tag } from "../../types";
+import { getAllBookmarks } from "../../services";
 
 function Main() {
   const allBookmarkData = useAllBookmarkData();
@@ -24,34 +24,15 @@ function Main() {
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_HOME_DOMAIN}/bookmark`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              // Authorization: `${localStorage.getItem("userToken")}`,
-            },
-          },
-        );
-
-        // if (response.status === 401) {
-        //   navigate("/login");
-        // }
-        const data: { allBookmarks: Bookmark[]; allTags: Tag[] } =
-          await response.json();
-        console.log(data);
-        setAllBookmarkData(data.allBookmarks);
-        setAllTagsData(data.allTags);
-      } catch (error) {
-        console.log(error);
-        // setError(true);
-      } finally {
-        // setLoading(false);
-      }
-    }
-    fetchData();
+    try {
+      const data = await getAllBookmarks();
+      setAllBookmarkData(data.allBookmarks);
+      setAllTagsData(data.allTags);
+    } catch (error) {
+      console.log(error);
+    }  
+    } 
+    fetchData()
   }, [setAllBookmarkData, setAllTagsData]);
 
   displayedElements = allBookmarkData.map((bookmark) => {
