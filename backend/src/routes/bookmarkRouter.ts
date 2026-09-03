@@ -8,4 +8,8 @@ bookmarkRouter
   .get(bookmarkController.getAllBookmarks)
   .post(bookmarkController.addBookmark);
 
+  bookmarkRouter
+  .route("/:id")
+  .patch(bookmarkController.editBookmark);
+
 export default bookmarkRouter;

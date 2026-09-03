@@ -5,12 +5,9 @@ function ArchivedActionsDropdown() {
     <>
       <Menu>
         <MenuButton>
-          <button
-            type="button"
-            className="flex size-[32px] shrink-0 items-center justify-center rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF] focus:bg-[#E8F0EF] focus:outline-4 focus:outline-[#E8F0EF]"
-          >
+          <div className="flex size-[32px] shrink-0 items-center justify-center rounded-[8px] border border-[#C0CFCC] hover:bg-[#E8F0EF] focus:bg-[#E8F0EF] focus:outline-4 focus:outline-[#E8F0EF]">
             <img src="/img/icon-menu-bookmark.svg" alt="" />
-          </button>
+          </div>
         </MenuButton>
         <MenuItems
           anchor="bottom end"

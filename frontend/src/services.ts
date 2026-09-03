@@ -39,3 +39,23 @@ export async function uploadBookmark(bookmarkData: BookmarkData) {
       console.log(error);
     }
   }
+
+  export async function updateArchiveStatus(id: string , isArchived: boolean) {
+    console.log(id)
+    console.log(JSON.stringify(isArchived))
+    try {
+      const response = await fetch(
+        `${BACKEND_API_ENDPOINT}/bookmark/${id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({isArchived}),
+        },
+      );
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }

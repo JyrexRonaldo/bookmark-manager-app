@@ -20,4 +20,9 @@ export const NewBookmarkEntrySchema = z.object({
   // lastVisited: z.date(),
 });
 
+export const EditBookmarkSchema = z.object({
+  id: z.string().optional(),
+  isArchived: z.coerce.boolean().optional(),
+});
+
 export type NewBookmarkEntry = z.infer<typeof NewBookmarkEntrySchema>;

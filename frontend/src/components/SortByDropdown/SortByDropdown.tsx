@@ -5,10 +5,10 @@ function SortByDropdown() {
     <>
       <Menu>
         <MenuButton className="border-none outline-none focus:outline-none active:border-none active:outline-none">
-          <button className="flex w-[107px] gap-[4px] rounded-[8px] border border-[#C0CFCC] bg-white px-[12px] py-[10px] text-[#051513] hover:bg-[#E8F0EF]">
+          <div className="flex w-[107px] gap-[4px] rounded-[8px] border border-[#C0CFCC] bg-white px-[12px] py-[10px] text-[#051513] hover:bg-[#E8F0EF]">
             <img src="/img/icon-sort.svg" alt="" />{" "}
             <p className="font-manrope text-[16px]/[140%]">Sort by</p>
-          </button>
+          </div>
         </MenuButton>
         <MenuItems
           anchor="bottom end"
