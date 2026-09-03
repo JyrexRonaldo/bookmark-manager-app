@@ -27,6 +27,10 @@ function ActionsDropdown({
     }
   }
 
+  async function handleVisitButton() {
+    window.location.href = `${url}`;
+  }
+
   return (
     <>
       <Menu>
@@ -41,7 +45,7 @@ function ActionsDropdown({
         >
           <div className="flex h-53 w-50 flex-col gap-1 rounded-lg border border-[#E8F0EF] bg-white p-2 font-manrope drop-shadow-[0px_6px_14px_#2226271A] *:flex *:h-9 *:items-center *:gap-2.5 *:rounded-lg *:p-2 *:text-[14px]/[140%] *:hover:bg-[#E8F0EF]">
             <MenuItem>
-              <button type="button">
+              <button onClick={handleVisitButton} type="button">
                 <img src="/img/icon-visit.svg" alt="" />
                 <p>Visit</p>
               </button>
