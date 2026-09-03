@@ -2,13 +2,29 @@ import { useAllBookmarkDataControls } from "../../store";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { updateArchiveStatus } from "../../services";
 
-function ActionsDropdown({ id, isArchived }: { id: string, isArchived: boolean }) {
+function ActionsDropdown({
+  id,
+  isArchived,
+  url,
+}: {
+  id: string;
+  isArchived: boolean;
+  url: string;
+}) {
   const { archiveBookmark } = useAllBookmarkDataControls();
 
   function handleArchiveButton() {
     console.log("archive");
     archiveBookmark(id);
     updateArchiveStatus(id, !isArchived);
+  }
+
+  async function handleCopyUrlButton() {
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch (error) {
+      console.error("Failed to copy: ", error);
+    }
   }
 
   return (
@@ -31,7 +47,7 @@ function ActionsDropdown({ id, isArchived }: { id: string, isArchived: boolean }
               </button>
             </MenuItem>
             <MenuItem>
-              <button type="button">
+              <button onClick={handleCopyUrlButton} type="button">
                 <img src="/img/icon-copy.svg" alt="" />
                 <p>Copy URL</p>
               </button>

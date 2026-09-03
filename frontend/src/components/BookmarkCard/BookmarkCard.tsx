@@ -42,7 +42,7 @@ function BookmarkCard({
             <p className="font-manrope text-[12px]/[140%]">{url}</p>
           </div>
           {currentView ? (
-            <ActionsDropdown id={id} isArchived={isArchived} />
+            <ActionsDropdown id={id} isArchived={isArchived} url={url} />
           ) : (
             <ArchivedActionsDropdown />
           )}
