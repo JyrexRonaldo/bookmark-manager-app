@@ -44,7 +44,7 @@ function BookmarkCard({
           {currentView ? (
             <ActionsDropdown id={id} isArchived={isArchived} url={url} />
           ) : (
-            <ArchivedActionsDropdown />
+            <ArchivedActionsDropdown id={id} isArchived={isArchived} url={url}/>
           )}
         </div>
         <hr className="text-[#DDE9E7]" />
