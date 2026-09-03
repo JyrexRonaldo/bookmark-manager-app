@@ -14,11 +14,17 @@ function ActionsDropdown({
   isArchived: boolean;
   url: string;
 }) {
-  const { archiveBookmark } = useAllBookmarkDataControls();
+  const { archiveBookmark, unarchiveBookmark } = useAllBookmarkDataControls();
 
   function handleArchiveButton() {
     console.log("archive");
     archiveBookmark(id);
+    updateArchiveStatus(id, !isArchived);
+  }
+
+  function handleUnarchiveButton() {
+    console.log("unarchive");
+    unarchiveBookmark(id);
     updateArchiveStatus(id, !isArchived);
   }
 
@@ -72,7 +78,7 @@ function ActionsDropdown({
             ) : (
               <>
                 <MenuItem>
-                  <button>
+                  <button onClick={handleUnarchiveButton} type="button">
                     <img src="/img/icon-unarchive.svg" alt="" />
                     <p>Unarchive</p>
                   </button>

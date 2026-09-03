@@ -7,6 +7,7 @@ interface useBookmarkDataStoreType {
   actions: {
     setAllBookmarkData: (allBookMarks: Bookmark[]) => void;
     archiveBookmark: (bookmarkId: string) => void;
+    unarchiveBookmark: (bookmarkId: string) => void;
   };
 }
 
@@ -29,6 +30,27 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
           const newBookmark = {
             ...oldBookmark,
             bookmarksTable: { ...oldBookmark.bookmarksTable, isArchived: true },
+          };
+          console.log({ oldBookmark, newBookmark, newBookmarkList });
+          return { allBookmarkData: [...newBookmarkList, newBookmark] };
+        } else {
+          return { allBookmarkData: state.allBookmarkData };
+        }
+      });
+    },
+    unarchiveBookmark: (bookmarkId: string) => {
+      return set((state) => {
+        const oldBookmark = state.allBookmarkData.find(
+          (bookmark) => bookmark.bookmarksTable.id === bookmarkId,
+        );
+        const newBookmarkList = state.allBookmarkData.filter(
+          (bookmark) => bookmark.bookmarksTable.id !== bookmarkId,
+        );
+
+        if (oldBookmark) {
+          const newBookmark = {
+            ...oldBookmark,
+            bookmarksTable: { ...oldBookmark.bookmarksTable, isArchived: false },
           };
           console.log({ oldBookmark, newBookmark, newBookmarkList });
           return { allBookmarkData: [...newBookmarkList, newBookmark] };
