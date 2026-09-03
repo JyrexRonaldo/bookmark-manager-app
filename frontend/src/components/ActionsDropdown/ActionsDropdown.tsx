@@ -4,10 +4,12 @@ import { updateArchiveStatus } from "../../services";
 import { handleVisitButton, handleCopyUrlButton } from "../../utils";
 
 function ActionsDropdown({
+  currentView,
   id,
   isArchived,
   url,
 }: {
+  currentView: boolean;
   id: string;
   isArchived: boolean;
   url: string;
@@ -32,7 +34,7 @@ function ActionsDropdown({
           anchor="bottom end"
           className="border-none outline-none focus:outline-none active:border-none active:outline-none"
         >
-          <div className="flex h-53 w-50 flex-col gap-1 rounded-lg border border-[#E8F0EF] bg-white p-2 font-manrope drop-shadow-[0px_6px_14px_#2226271A] *:flex *:h-9 *:items-center *:gap-2.5 *:rounded-lg *:p-2 *:text-[14px]/[140%] *:hover:bg-[#E8F0EF]">
+          <div className="flex w-50 flex-col gap-1 rounded-lg border border-[#E8F0EF] bg-white p-2 font-manrope drop-shadow-[0px_6px_14px_#2226271A] *:flex *:h-9 *:items-center *:gap-2.5 *:rounded-lg *:p-2 *:text-[14px]/[140%] *:hover:bg-[#E8F0EF]">
             <MenuItem>
               <button onClick={() => handleVisitButton(url)} type="button">
                 <img src="/img/icon-visit.svg" alt="" />
@@ -45,29 +47,47 @@ function ActionsDropdown({
                 <p>Copy URL</p>
               </button>
             </MenuItem>
-            <MenuItem>
-              <button type="button">
-                <img src="/img/icon-pin.svg" alt="" />
-                <p>Pin</p>
-              </button>
-            </MenuItem>
-            <MenuItem>
-              <button type="button">
-                <img src="/img/icon-edit.svg" alt="" />
-                <p>Edit</p>
-              </button>
-            </MenuItem>
-            <MenuItem>
-              <button onClick={handleArchiveButton} type="button">
-                <img src="/img/icon-archive.svg" alt="" />
-                <p>Archive</p>
-              </button>
-            </MenuItem>
+            <></>
+            {currentView ? (
+              <>
+                <MenuItem>
+                  <button type="button">
+                    <img src="/img/icon-pin.svg" alt="" />
+                    <p>Pin</p>
+                  </button>
+                </MenuItem>
+                <MenuItem>
+                  <button type="button">
+                    <img src="/img/icon-edit.svg" alt="" />
+                    <p>Edit</p>
+                  </button>
+                </MenuItem>
+                <MenuItem>
+                  <button onClick={handleArchiveButton} type="button">
+                    <img src="/img/icon-archive.svg" alt="" />
+                    <p>Archive</p>
+                  </button>
+                </MenuItem>
+              </>
+            ) : (
+              <>
+                <MenuItem>
+                  <button>
+                    <img src="/img/icon-unarchive.svg" alt="" />
+                    <p>Unarchive</p>
+                  </button>
+                </MenuItem>
+                <MenuItem>
+                  <div>
+                    <img src="/img/icon-delete.svg" alt="" />
+                    <p>Delete Permanently</p>
+                  </div>
+                </MenuItem>
+              </>
+            )}
           </div>
         </MenuItems>
       </Menu>
-
-      {/* </div> */}
     </>
   );
 }
