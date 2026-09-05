@@ -8,6 +8,8 @@ interface useBookmarkDataStoreType {
     setAllBookmarkData: (allBookMarks: Bookmark[]) => void;
     archiveBookmark: (bookmarkId: string) => void;
     unarchiveBookmark: (bookmarkId: string) => void;
+    pinBookmark: (bookmarkId: string) => void;
+    unpinBookmark: (bookmarkId: string) => void;
   };
 }
 
@@ -50,7 +52,52 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
         if (oldBookmark) {
           const newBookmark = {
             ...oldBookmark,
-            bookmarksTable: { ...oldBookmark.bookmarksTable, isArchived: false },
+            bookmarksTable: {
+              ...oldBookmark.bookmarksTable,
+              isArchived: false,
+            },
+          };
+          console.log({ oldBookmark, newBookmark, newBookmarkList });
+          return { allBookmarkData: [...newBookmarkList, newBookmark] };
+        } else {
+          return { allBookmarkData: state.allBookmarkData };
+        }
+      });
+    },
+    pinBookmark: (bookmarkId: string) => {
+      return set((state) => {
+        const oldBookmark = state.allBookmarkData.find(
+          (bookmark) => bookmark.bookmarksTable.id === bookmarkId,
+        );
+        const newBookmarkList = state.allBookmarkData.filter(
+          (bookmark) => bookmark.bookmarksTable.id !== bookmarkId,
+        );
+
+        if (oldBookmark) {
+          const newBookmark = {
+            ...oldBookmark,
+            bookmarksTable: { ...oldBookmark.bookmarksTable, pinned: true },
+          };
+          console.log({ oldBookmark, newBookmark, newBookmarkList });
+          return { allBookmarkData: [...newBookmarkList, newBookmark] };
+        } else {
+          return { allBookmarkData: state.allBookmarkData };
+        }
+      });
+    },
+    unpinBookmark: (bookmarkId: string) => {
+      return set((state) => {
+        const oldBookmark = state.allBookmarkData.find(
+          (bookmark) => bookmark.bookmarksTable.id === bookmarkId,
+        );
+        const newBookmarkList = state.allBookmarkData.filter(
+          (bookmark) => bookmark.bookmarksTable.id !== bookmarkId,
+        );
+
+        if (oldBookmark) {
+          const newBookmark = {
+            ...oldBookmark,
+            bookmarksTable: { ...oldBookmark.bookmarksTable, pinned: false },
           };
           console.log({ oldBookmark, newBookmark, newBookmarkList });
           return { allBookmarkData: [...newBookmarkList, newBookmark] };
@@ -62,9 +109,9 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
   },
 }));
 
-export const useAllBookmarkData = () =>
+const useAllBookmarkData = () =>
   useBookmarkDataStore((state) => state.allBookmarkData);
-export const useAllBookmarkDataControls = () =>
+const useAllBookmarkDataControls = () =>
   useBookmarkDataStore((state) => state.actions);
 
 interface useTagsDataStoreType {
@@ -103,12 +150,9 @@ const useTagsDataStore = create<useTagsDataStoreType>()((set) => ({
   },
 }));
 
-export const useAllTagsData = () =>
-  useTagsDataStore((state) => state.allTagsData);
-export const useSeletedTags = () =>
-  useTagsDataStore((state) => state.selectedTags);
-export const useAllTagsControls = () =>
-  useTagsDataStore((state) => state.actions);
+const useAllTagsData = () => useTagsDataStore((state) => state.allTagsData);
+const useSeletedTags = () => useTagsDataStore((state) => state.selectedTags);
+const useAllTagsControls = () => useTagsDataStore((state) => state.actions);
 
 interface useSidebarStatusStoreType {
   sidebarStatus: boolean;
@@ -124,9 +168,9 @@ const useSidebarStatusStore = create<useSidebarStatusStoreType>()((set) => ({
   },
 }));
 
-export const useSidebarStatus = () =>
+const useSidebarStatus = () =>
   useSidebarStatusStore((state) => state.sidebarStatus);
-export const useSidebarStatusControls = () =>
+const useSidebarStatusControls = () =>
   useSidebarStatusStore((state) => state.actions);
 
 interface useBookmarkFormStoreType {
@@ -143,9 +187,9 @@ const useBookmarkFormStore = create<useBookmarkFormStoreType>()((set) => ({
   },
 }));
 
-export const useBookmarkFormStatus = () =>
+const useBookmarkFormStatus = () =>
   useBookmarkFormStore((state) => state.bookmarkFormStatus);
-export const useBookmarkFormStatusControls = () =>
+const useBookmarkFormStatusControls = () =>
   useBookmarkFormStore((state) => state.actions);
 
 interface useSearchStateStoreType {
@@ -163,9 +207,9 @@ const useSearchStateStore = create<useSearchStateStoreType>()((set) => ({
   },
 }));
 
-export const useSearchContent = () =>
+const useSearchContent = () =>
   useSearchStateStore((state) => state.searchContent);
-export const useSearchStatusControls = () =>
+const useSearchStatusControls = () =>
   useSearchStateStore((state) => state.actions);
 
 interface MainViewType {
@@ -174,13 +218,27 @@ interface MainViewType {
 }
 
 const useMainViewStore = create<MainViewType>()((set) => ({
-  currrentView: true,
+  currrentView: false,
   actions: {
     setCurrentView: (value) => set(() => ({ currrentView: value })),
   },
 }));
 
-export const useCurrentView = () =>
-  useMainViewStore((state) => state.currrentView);
-export const useMainViewControls = () =>
-  useMainViewStore((state) => state.actions);
+const useCurrentView = () => useMainViewStore((state) => state.currrentView);
+const useMainViewControls = () => useMainViewStore((state) => state.actions);
+
+export {
+  useCurrentView,
+  useMainViewControls,
+  useAllBookmarkData,
+  useAllBookmarkDataControls,
+  useAllTagsData,
+  useSeletedTags,
+  useAllTagsControls,
+  useSidebarStatus,
+  useSidebarStatusControls,
+  useBookmarkFormStatus,
+  useBookmarkFormStatusControls,
+  useSearchContent,
+  useSearchStatusControls,
+};

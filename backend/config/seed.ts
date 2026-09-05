@@ -7,7 +7,6 @@ import {
 } from "../src/db/schema.ts";
 import { z } from "zod";
 
-
 const BookmarkSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -65,6 +64,9 @@ export async function populateDb() {
     await tx.insert(tagsTable).values(populateTagArray());
     await tx.insert(bookmarksTagsTable).values(populatebookmarkTagArray());
   });
+  setTimeout(() => {
+    console.log("seeding complete");
+  }, 0);
 }
 
 await populateDb();

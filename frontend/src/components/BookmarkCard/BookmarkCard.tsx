@@ -40,7 +40,13 @@ function BookmarkCard({
             <p className="font-manrope text-[20px]/[120%] font-bold">{title}</p>
             <p className="font-manrope text-[12px]/[140%]">{url}</p>
           </div>
-            <ActionsDropdown currentView={currentView} id={id} isArchived={isArchived} url={url} />
+          <ActionsDropdown
+            pinned={pinned}
+            currentView={currentView}
+            id={id}
+            isArchived={isArchived}
+            url={url}
+          />
         </div>
         <hr className="text-[#DDE9E7]" />
 

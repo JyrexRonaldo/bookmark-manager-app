@@ -4,28 +4,39 @@ import { updateArchiveStatus } from "../../services";
 import { handleVisitButton, handleCopyUrlButton } from "../../utils";
 
 function ActionsDropdown({
+  pinned,
   currentView,
   id,
   isArchived,
   url,
 }: {
+  pinned: boolean;
   currentView: boolean;
   id: string;
   isArchived: boolean;
   url: string;
 }) {
-  const { archiveBookmark, unarchiveBookmark } = useAllBookmarkDataControls();
+  const { archiveBookmark, unarchiveBookmark, pinBookmark, unpinBookmark } =
+    useAllBookmarkDataControls();
 
   function handleArchiveButton() {
-    console.log("archive");
     archiveBookmark(id);
     updateArchiveStatus(id, !isArchived);
   }
 
   function handleUnarchiveButton() {
-    console.log("unarchive");
     unarchiveBookmark(id);
     updateArchiveStatus(id, !isArchived);
+  }
+
+  function handlePinButton() {
+    pinBookmark(id);
+    // updateArchiveStatus(id, !isArchived);
+  }
+
+  function handleUnpinButton() {
+    unpinBookmark(id);
+    // updateArchiveStatus(id, !isArchived);
   }
 
   return (
@@ -56,12 +67,22 @@ function ActionsDropdown({
             <></>
             {currentView ? (
               <>
-                <MenuItem>
-                  <button type="button">
-                    <img src="/img/icon-pin.svg" alt="" />
-                    <p>Pin</p>
-                  </button>
-                </MenuItem>
+                {pinned ? (
+                  <MenuItem>
+                    <button onClick={handleUnpinButton} type="button">
+                      <img src="/img/icon-unpin.svg" alt="" />
+                      <p>Unpin</p>
+                    </button>
+                  </MenuItem>
+                ) : (
+                  <MenuItem>
+                    <button onClick={handlePinButton} type="button">
+                      <img src="/img/icon-pin.svg" alt="" />
+                      <p>Pin</p>
+                    </button>
+                  </MenuItem>
+                )}
+
                 <MenuItem>
                   <button type="button">
                     <img src="/img/icon-edit.svg" alt="" />

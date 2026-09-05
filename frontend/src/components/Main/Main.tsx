@@ -24,44 +24,50 @@ function Main() {
 
   useEffect(() => {
     async function fetchData() {
-    try {
-      const data = await getAllBookmarks();
-      setAllBookmarkData(data.allBookmarks);
-      setAllTagsData(data.allTags);
-    } catch (error) {
-      console.log(error);
-    }  
-    } 
-    fetchData()
+      try {
+        const data = await getAllBookmarks();
+        setAllBookmarkData(data.allBookmarks);
+        setAllTagsData(data.allTags);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
   }, [setAllBookmarkData, setAllTagsData]);
 
-  displayedElements = allBookmarkData.map((bookmark) => {
-    const currentBookmark = bookmark.bookmarksTable;
-    const currentTag = bookmark.tags;
-    const favicon = `https://www.google.com/s2/favicons?domain=${currentBookmark.favicon}&sz=${64}`;
+  displayedElements = allBookmarkData
+    .sort((a, b) =>
+      a.bookmarksTable.pinned === true && b.bookmarksTable.pinned === false
+        ? -1
+        : 1,
+    )
+    .map((bookmark) => {
+      const currentBookmark = bookmark.bookmarksTable;
+      const currentTag = bookmark.tags;
+      const favicon = `https://www.google.com/s2/favicons?domain=${currentBookmark.favicon}&sz=${64}`;
 
-    const createdAt = format(currentBookmark.createdAt, "d LLL");
-    const lastVisited = currentBookmark.lastVisited
-      ? format(currentBookmark.lastVisited, "d LLL")
-      : null;
+      const createdAt = format(currentBookmark.createdAt, "d LLL");
+      const lastVisited = currentBookmark.lastVisited
+        ? format(currentBookmark.lastVisited, "d LLL")
+        : null;
 
-    return (
-      <BookmarkCard
-        id={currentBookmark.id}
-        key={currentBookmark.id}
-        title={currentBookmark.title}
-        url={currentBookmark.url}
-        description={currentBookmark.description}
-        pinned={false}
-        tags={currentTag}
-        visitCount={currentBookmark.visitCount}
-        createdAt={createdAt}
-        lastVisited={lastVisited}
-        favicon={favicon}
-        isArchived={currentBookmark.isArchived}
-      />
-    );
-  });
+      return (
+        <BookmarkCard
+          id={currentBookmark.id}
+          key={currentBookmark.id}
+          title={currentBookmark.title}
+          url={currentBookmark.url}
+          description={currentBookmark.description}
+          pinned={currentBookmark.pinned}
+          tags={currentTag}
+          visitCount={currentBookmark.visitCount}
+          createdAt={createdAt}
+          lastVisited={lastVisited}
+          favicon={favicon}
+          isArchived={currentBookmark.isArchived}
+        />
+      );
+    });
 
   if (currentView) {
     displayedElements = displayedElements.filter((item) => {
@@ -98,7 +104,7 @@ function Main() {
           {searchContent ? (
             <div className="flex gap-3">
               <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
-                Results for: "{searchContent}"{" "}
+                Results for: "{searchContent}"
               </p>
               {selectedTags.length !== 0 && (
                 <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
