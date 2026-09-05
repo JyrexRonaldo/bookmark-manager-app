@@ -1,9 +1,8 @@
 import type { Bookmark, Tag, BookmarkData } from "./types";
 
+const BACKEND_API_ENDPOINT = import.meta.env.VITE_HOME_DOMAIN;
 
-const BACKEND_API_ENDPOINT  = import.meta.env.VITE_HOME_DOMAIN
-
-export async function getAllBookmarks() {
+async function getAllBookmarks() {
   const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark`, {
     method: "GET",
     headers: {
@@ -20,42 +19,53 @@ export async function getAllBookmarks() {
   return data;
 }
 
+async function uploadBookmark(bookmarkData: BookmarkData) {
+  try {
+    const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bookmarkData),
+    });
 
-
-export async function uploadBookmark(bookmarkData: BookmarkData) {
-    try {
-      const response = await fetch(
-        `${BACKEND_API_ENDPOINT}/bookmark`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(bookmarkData),
-        },
-      );
-
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
   }
+}
 
-  export async function updateArchiveStatus(id: string , isArchived: boolean) {
-    console.log(id)
-    console.log(JSON.stringify(isArchived))
-    try {
-      const response = await fetch(
-        `${BACKEND_API_ENDPOINT}/bookmark/${id}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({isArchived}),
-        },
-      );
+async function updateArchiveStatus(id: string, isArchived: boolean) {
+  try {
+    const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isArchived }),
+    });
 
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
   }
+}
+
+async function deletedBookmarkBackend(id: string) {
+  try {
+    const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export {
+  getAllBookmarks,
+  uploadBookmark,
+  updateArchiveStatus,
+  deletedBookmarkBackend,
+};

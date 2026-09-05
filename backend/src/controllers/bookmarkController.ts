@@ -91,4 +91,15 @@ const editBookmark = async (req: Request, res: Response) => {
   res.end();
 };
 
-export default { getAllBookmarks, addBookmark, editBookmark };
+const deleteBookmark = async (req: Request, res: Response) => {
+  const { id } = EditBookmarkSchema.parse(req.params);
+  if (id !== undefined) {
+    await db
+      .delete(bookmarksTable)
+      .where(eq(bookmarksTable.id, id))
+      .returning();
+  }
+  res.end();
+};
+
+export default { getAllBookmarks, addBookmark, editBookmark, deleteBookmark };

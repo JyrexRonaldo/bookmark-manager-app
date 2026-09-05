@@ -2,6 +2,8 @@ import "dotenv/config";
 import express from "express";
 import bookmarkRouter from "./routes/bookmarkRouter.ts";
 import cors from "cors";
+import type  {  Request,  Response , NextFunction } from "express";
+
 // const cors = require("cors");
 // import cors from "cors";
 const app = express();
@@ -45,6 +47,12 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/bookmark", bookmarkRouter);
+app.use((err: unknown, _req: Request, _res: Response, _next: NextFunction) => {
+  console.log('772 love');
+  console.log(err);
+  
+  // res.status(err.statusCode || 500).send(err.message);
+});
 
 app.listen(PORT, (error: unknown) => {
   const errorMessage = "Something went wrong, ";

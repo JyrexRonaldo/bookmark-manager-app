@@ -29,11 +29,10 @@ export const bookmarksTagsTable = pgTable(
   {
     bookmarkId: varchar("bookmark_id")
       .notNull()
-      .references(() => bookmarksTable.id),
+      .references(() => bookmarksTable.id, { onDelete: "cascade" }),
     tagId: varchar("tag_id")
       .notNull()
       .references(() => tagsTable.title),
   },
   (table) => [primaryKey({ columns: [table.bookmarkId, table.tagId] })],
 );
-

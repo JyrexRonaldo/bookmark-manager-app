@@ -10,6 +10,7 @@ interface useBookmarkDataStoreType {
     unarchiveBookmark: (bookmarkId: string) => void;
     pinBookmark: (bookmarkId: string) => void;
     unpinBookmark: (bookmarkId: string) => void;
+    deleteBookmark: (bookmarkId: string) => void;
   };
 }
 
@@ -106,6 +107,14 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
         }
       });
     },
+    deleteBookmark: (bookmarkId: string) => {
+      return set((state) => {
+        const newBookmarkList = state.allBookmarkData.filter(
+          (bookmark) => bookmark.bookmarksTable.id !== bookmarkId,
+        );
+        return { allBookmarkData: [...newBookmarkList] };
+      });
+    },
   },
 }));
 
@@ -121,6 +130,7 @@ interface useTagsDataStoreType {
     setAllTagsData: (allTags: Tag[]) => void;
     toggleSelectedTags: (toggledTag: string) => void;
     clearSelectedTags: () => void;
+    updateTagsOnDelete: (tags: string) => void;
   };
 }
 
@@ -147,6 +157,30 @@ const useTagsDataStore = create<useTagsDataStoreType>()((set) => ({
       });
     },
     clearSelectedTags: () => set(() => ({ selectedTags: [] })),
+    updateTagsOnDelete: (tags: string) => {
+      return set((state) => {
+        console.log(tags);
+        let deletetags: Tag[] = [];
+        const newTagList = state.allTagsData.filter((tag) => {
+          if (tags.includes(tag.title)) {
+            deletetags.push(tag);
+            return false;
+          } else {
+            return true;
+          }
+        });
+        deletetags = deletetags
+          .map((tag) => {
+            return { title: tag.title, count: --tag.count };
+          })
+          .filter((tag) => tag.count !== 0);
+        return {
+          allTagsData: [...newTagList, ...deletetags].toSorted((tagA, tagB) =>
+            tagA.title > tagB.title ? 1 : -1,
+          ),
+        };
+      });
+    },
   },
 }));
 
@@ -218,7 +252,7 @@ interface MainViewType {
 }
 
 const useMainViewStore = create<MainViewType>()((set) => ({
-  currrentView: false,
+  currrentView: true,
   actions: {
     setCurrentView: (value) => set(() => ({ currrentView: value })),
   },

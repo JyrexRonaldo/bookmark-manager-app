@@ -41,6 +41,7 @@ function BookmarkCard({
             <p className="font-manrope text-[12px]/[140%]">{url}</p>
           </div>
           <ActionsDropdown
+            tags={tags}
             pinned={pinned}
             currentView={currentView}
             id={id}

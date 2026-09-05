@@ -1,6 +1,6 @@
-import { useAllBookmarkDataControls } from "../../store";
+import { useAllBookmarkDataControls, useAllTagsControls } from "../../store";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { updateArchiveStatus } from "../../services";
+import { updateArchiveStatus, deletedBookmarkBackend } from "../../services";
 import { handleVisitButton, handleCopyUrlButton } from "../../utils";
 
 function ActionsDropdown({
@@ -9,15 +9,23 @@ function ActionsDropdown({
   id,
   isArchived,
   url,
+  tags,
 }: {
+  tags: string;
   pinned: boolean;
   currentView: boolean;
   id: string;
   isArchived: boolean;
   url: string;
 }) {
-  const { archiveBookmark, unarchiveBookmark, pinBookmark, unpinBookmark } =
-    useAllBookmarkDataControls();
+  const {
+    archiveBookmark,
+    unarchiveBookmark,
+    pinBookmark,
+    unpinBookmark,
+    deleteBookmark,
+  } = useAllBookmarkDataControls();
+  const { updateTagsOnDelete } = useAllTagsControls();
 
   function handleArchiveButton() {
     archiveBookmark(id);
@@ -37,6 +45,12 @@ function ActionsDropdown({
   function handleUnpinButton() {
     unpinBookmark(id);
     // updateArchiveStatus(id, !isArchived);
+  }
+
+  function handleDeleteButton() {
+    deleteBookmark(id);
+    updateTagsOnDelete(tags);
+    deletedBookmarkBackend(id);
   }
 
   return (
@@ -105,10 +119,10 @@ function ActionsDropdown({
                   </button>
                 </MenuItem>
                 <MenuItem>
-                  <div>
+                  <button onClick={handleDeleteButton}>
                     <img src="/img/icon-delete.svg" alt="" />
                     <p>Delete Permanently</p>
-                  </div>
+                  </button>
                 </MenuItem>
               </>
             )}

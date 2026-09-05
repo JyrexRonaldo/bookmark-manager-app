@@ -64,9 +64,6 @@ export async function populateDb() {
     await tx.insert(tagsTable).values(populateTagArray());
     await tx.insert(bookmarksTagsTable).values(populatebookmarkTagArray());
   });
-  setTimeout(() => {
-    console.log("seeding complete");
-  }, 0);
 }
 
 await populateDb();
