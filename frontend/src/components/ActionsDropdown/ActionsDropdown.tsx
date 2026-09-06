@@ -1,4 +1,8 @@
-import { useAllBookmarkDataControls, useAllTagsControls } from "../../store";
+import {
+  useAllBookmarkDataControls,
+  useAllTagsControls,
+  useBookmarkFormStatusControls,
+} from "../../store";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { updateArchiveStatus, deletedBookmarkBackend } from "../../services";
 import { handleVisitButton, handleCopyUrlButton } from "../../utils";
@@ -10,7 +14,11 @@ function ActionsDropdown({
   isArchived,
   url,
   tags,
+  title,
+  description,
 }: {
+  title: string;
+  description: string;
   tags: string;
   pinned: boolean;
   currentView: boolean;
@@ -26,6 +34,8 @@ function ActionsDropdown({
     deleteBookmark,
   } = useAllBookmarkDataControls();
   const { updateTagsOnDelete } = useAllTagsControls();
+  const { toggleBookmarkForm, setCurrentFormValues } =
+    useBookmarkFormStatusControls();
 
   function handleArchiveButton() {
     archiveBookmark(id);
@@ -39,18 +49,21 @@ function ActionsDropdown({
 
   function handlePinButton() {
     pinBookmark(id);
-    // updateArchiveStatus(id, !isArchived);
   }
 
   function handleUnpinButton() {
     unpinBookmark(id);
-    // updateArchiveStatus(id, !isArchived);
   }
 
   function handleDeleteButton() {
     deleteBookmark(id);
     updateTagsOnDelete(tags);
     deletedBookmarkBackend(id);
+  }
+
+  function handleEditButton() {
+    setCurrentFormValues({ tags, url, title, description, id });
+    toggleBookmarkForm(false);
   }
 
   return (
@@ -98,7 +111,7 @@ function ActionsDropdown({
                 )}
 
                 <MenuItem>
-                  <button type="button">
+                  <button type="button" onClick={handleEditButton}>
                     <img src="/img/icon-edit.svg" alt="" />
                     <p>Edit</p>
                   </button>

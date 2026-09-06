@@ -1,18 +1,21 @@
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
 import type { Bookmark, BookmarkData } from "../../types";
 import { faker } from "@faker-js/faker";
-import { uploadBookmark } from "../../services";
+// import { uploadBookmark } from "../../services";
 import {
   useAllBookmarkData,
   useBookmarkFormStatusControls,
   useAllBookmarkDataControls,
   useAllTagsData,
   useAllTagsControls,
+  useBookmarkFormView,
+  useBookmarkFormValues,
 } from "../../store";
 
 function BookmarkForm() {
   const allBookmarkData = useAllBookmarkData();
-
+  const formView = useBookmarkFormView();
+  const currentFormValues = useBookmarkFormValues();
   const { toggleBookmarkForm } = useBookmarkFormStatusControls();
   const { setAllBookmarkData } = useAllBookmarkDataControls();
   const allTagsData = useAllTagsData();
@@ -33,7 +36,7 @@ function BookmarkForm() {
       | React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
     if (e.target === e.currentTarget) {
-      toggleBookmarkForm();
+      toggleBookmarkForm(formView);
     }
   }
 
@@ -49,61 +52,108 @@ function BookmarkForm() {
     setValue("tags", tags);
   }
 
-
   const onSubmit: SubmitHandler<BookmarkData> = (formData) => {
-    const lastBookmarkIdNumber =
-      allBookmarkData.length !== 0
-        ? +allBookmarkData[allBookmarkData.length - 1].bookmarksTable.id.slice(
-            4,
-          )
-        : 0;
-    const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
-    const favicon = new URL(formData.url).hostname;
-    const trimmedCapitalizedTags = formData.tags
-      .replace(/\s/g, "")
-      .split(",")
-      .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1))
-      .join();
-    const bookmarkData = { ...formData, id, tags: trimmedCapitalizedTags };
-    const { tags, ...data } = bookmarkData;
+    if (formView) {
+      const lastBookmarkIdNumber =
+        allBookmarkData.length !== 0
+          ? +allBookmarkData[
+              allBookmarkData.length - 1
+            ].bookmarksTable.id.slice(4)
+          : 0;
+      const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
+      const favicon = new URL(formData.url).hostname;
+      const trimmedCapitalizedTags = formData.tags
+        .replace(/\s/g, "")
+        .split(",")
+        .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1))
+        .join();
+      const bookmarkData = { ...formData, id, tags: trimmedCapitalizedTags };
+      const { tags, ...data } = bookmarkData;
 
-    const newBookmark: Bookmark = {
-      bookmarksTable: {
-        ...data,
-        favicon,
-        pinned: false,
-        isArchived: false,
-        visitCount: 0,
-        createdAt: new Date(),
-        lastVisited: null,
-      },
-      tags: tags,
-    };
+      const newBookmark: Bookmark = {
+        bookmarksTable: {
+          ...data,
+          favicon,
+          pinned: false,
+          isArchived: false,
+          visitCount: 0,
+          createdAt: new Date(),
+          lastVisited: null,
+        },
+        tags: tags,
+      };
 
-    const currentTags = tags.split(",");
-    const addedTags: string[] = [];
+      const currentTags = tags.split(",");
+      const addedTags: string[] = [];
 
-    allTagsData.forEach((tag) => {
-      if (currentTags.includes(tag.title)) {
-        tag.count += 1;
-        addedTags.push(tag.title);
-      }
-    });
+      allTagsData.forEach((tag) => {
+        if (currentTags.includes(tag.title)) {
+          tag.count += 1;
+          addedTags.push(tag.title);
+        }
+      });
 
-    const newTags = currentTags
-      .filter((tag) => !addedTags.includes(tag))
-      .map((newTag) => ({ title: newTag, count: 1 }));
+      const newTags = currentTags
+        .filter((tag) => !addedTags.includes(tag))
+        .map((newTag) => ({ title: newTag, count: 1 }));
 
-    const newTagData = [...allTagsData, ...newTags];
+      const newTagData = [...allTagsData, ...newTags];
 
-    setAllBookmarkData([...allBookmarkData, newBookmark]);
-    setAllTagsData(newTagData);
-    uploadBookmark({ ...bookmarkData, createdAt: new Date() });
+      setAllBookmarkData([...allBookmarkData, newBookmark]);
+      setAllTagsData(newTagData);
+    } else {
+      const targetEditBookmark = allBookmarkData.find(
+        (bookmark) => bookmark.bookmarksTable.id === currentFormValues.id,
+      );
+      const { tags, ...bookmarksTableData } = formData;
+      const favicon = new URL(formData.url).hostname;
+      const editedBookmark = {
+        bookmarksTable: {
+          ...targetEditBookmark?.bookmarksTable,
+          ...bookmarksTableData,
+          favicon,
+        },
+        tags: tags,
+      };
+      const newBookmarkList = allBookmarkData.filter(
+        (bookmark) =>
+          bookmark.bookmarksTable.id !== editedBookmark.bookmarksTable.id,
+      );
+
+      const currentTags = tags.split(",");
+      const addedTags: string[] = [];
+
+      allTagsData.forEach((tag) => {
+        if (currentTags.includes(tag.title)) {
+          tag.count += 1;
+          addedTags.push(tag.title);
+        }
+      });
+
+      const newTags = currentTags
+        .filter((tag) => !addedTags.includes(tag))
+        .map((newTag) => ({ title: newTag, count: 1 }));
+
+      const newTagData = [...allTagsData, ...newTags];
+
+      setAllBookmarkData([...newBookmarkList, editedBookmark]);
+      setAllTagsData(newTagData);
+    }
+
+    toggleBookmarkForm(false);
   };
 
   const onError = (error: FieldErrors) => {
     console.log(error);
   };
+
+  if (formView === false) {
+    console.log(currentFormValues);
+    setValue("title", `${currentFormValues.title}`);
+    setValue("description", `${currentFormValues.description}`);
+    setValue("url", `${currentFormValues.url}`);
+    setValue("tags", currentFormValues.tags);
+  }
 
   return (
     <>
@@ -117,9 +167,16 @@ function BookmarkForm() {
         >
           <div className="flex flex-col gap-[8px]">
             <div className="flex justify-between">
-              <p className="font-manrope text-[24px]/[140%] font-bold">
-                Add a bookmark
-              </p>
+              {formView ? (
+                <p className="font-manrope text-[24px]/[140%] font-bold">
+                  Add a bookmark
+                </p>
+              ) : (
+                <p className="font-manrope text-[24px]/[140%] font-bold">
+                  Edit bookmark
+                </p>
+              )}
+
               <img
                 onClick={handleAddBookmarkFormDisplay}
                 src="/img/icon-close.svg"
@@ -127,10 +184,16 @@ function BookmarkForm() {
                 className="size-[32px] rounded-[8px] border border-[#E8F0EF] p-[5px] hover:bg-[#E8F0EF]"
               />
             </div>
-            <p className="font-manrope text-[14px]/[150%] font-medium tracking-[1%] text-[#4C5C59]">
-              Save a link with details to keep your collection organized. We
-              extract the favicon automatically from the URL.
-            </p>
+            {formView ? (
+              <p className="font-manrope text-[14px]/[150%] font-medium tracking-[1%] text-[#4C5C59]">
+                Save a link with details to keep your collection organized.
+              </p>
+            ) : (
+              <p className="font-manrope text-[14px]/[150%] font-medium tracking-[1%] text-[#4C5C59]">
+                Update your saved link details — change the title, description,
+                URL, or tags anytime.
+              </p>
+            )}
           </div>
           <div className="flex flex-col gap-[32px] *:text-[14px]/[150%] **:rounded-[8px]">
             <div className="flex flex-col gap-[6px]">
@@ -197,12 +260,21 @@ function BookmarkForm() {
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className="rounded-[8px] bg-[#014745] text-white"
-            >
-              Add Bookmark
-            </button>
+            {formView ? (
+              <button
+                type="submit"
+                className="rounded-[8px] bg-[#014745] text-white"
+              >
+                Add Bookmark
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="rounded-[8px] bg-[#014745] text-white"
+              >
+                Save Bookmark
+              </button>
+            )}
           </div>
         </form>
       </div>

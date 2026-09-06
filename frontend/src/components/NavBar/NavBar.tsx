@@ -11,7 +11,7 @@ function NavBar() {
   const { populateSearchContent } = useSearchStatusControls();
 
   function handleAddBookmark() {
-    toggleBookmarkForm();
+    toggleBookmarkForm(true);
   }
 
   function handleSideBar() {

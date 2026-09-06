@@ -24,3 +24,11 @@ type BookmarkTable = Bookmark["bookmarksTable"];
 export interface BookmarkData extends BookmarkTable {
   tags: string;
 }
+
+export interface FormValue {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  tags: string;
+}

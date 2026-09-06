@@ -47,6 +47,8 @@ function BookmarkCard({
             id={id}
             isArchived={isArchived}
             url={url}
+            title={title}
+            description={description}
           />
         </div>
         <hr className="text-[#DDE9E7]" />

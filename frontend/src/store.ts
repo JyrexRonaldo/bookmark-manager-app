@@ -1,6 +1,6 @@
 // store.ts
 import { create } from "zustand";
-import type { Bookmark, Tag } from "./types";
+import type { Bookmark, Tag, FormValue } from "./types";
 
 interface useBookmarkDataStoreType {
   allBookmarkData: Bookmark[];
@@ -209,20 +209,44 @@ const useSidebarStatusControls = () =>
 
 interface useBookmarkFormStoreType {
   bookmarkFormStatus: boolean;
-  actions: { toggleBookmarkForm: () => void };
+  formView: boolean;
+  currentFormValues: FormValue;
+  actions: {
+    toggleBookmarkForm: (formView: boolean) => void;
+    setCurrentFormValues: (defaultFormValue: FormValue) => void;
+  };
 }
 
 // Create store using the curried form of `create`
 const useBookmarkFormStore = create<useBookmarkFormStoreType>()((set) => ({
   bookmarkFormStatus: false,
+  formView: true,
+  currentFormValues: {
+    id: "",
+    title: "",
+    description: "",
+    url: "",
+    tags: "",
+  },
   actions: {
-    toggleBookmarkForm: () =>
-      set((state) => ({ bookmarkFormStatus: !state.bookmarkFormStatus })),
+    toggleBookmarkForm: (formView: boolean) =>
+      set((state) => ({
+        bookmarkFormStatus: !state.bookmarkFormStatus,
+        formView,
+      })),
+    setCurrentFormValues: ({ title, description, url, tags, id }: FormValue) =>
+      set(() => ({
+        currentFormValues: { title, description, url, tags, id },
+      })),
   },
 }));
 
 const useBookmarkFormStatus = () =>
   useBookmarkFormStore((state) => state.bookmarkFormStatus);
+const useBookmarkFormView = () =>
+  useBookmarkFormStore((state) => state.formView);
+const useBookmarkFormValues = () =>
+  useBookmarkFormStore((state) => state.currentFormValues);
 const useBookmarkFormStatusControls = () =>
   useBookmarkFormStore((state) => state.actions);
 
@@ -275,4 +299,6 @@ export {
   useBookmarkFormStatusControls,
   useSearchContent,
   useSearchStatusControls,
+  useBookmarkFormView,
+  useBookmarkFormValues,
 };
