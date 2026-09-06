@@ -81,12 +81,41 @@ const addBookmark = async (req: Request, res: Response) => {
 };
 const editBookmark = async (req: Request, res: Response) => {
   const { id } = EditBookmarkSchema.parse(req.params);
-  const { isArchived } = EditBookmarkSchema.parse(req.body);
+  const { isArchived, title, description, url, tags } =
+    EditBookmarkSchema.parse(req.body);
   if (isArchived !== undefined && id !== undefined) {
     await db
       .update(bookmarksTable)
       .set({ isArchived: isArchived })
       .where(eq(bookmarksTable.id, id));
+  }
+
+  if (
+    id !== undefined &&
+    title !== undefined &&
+    description !== undefined &&
+    url !== undefined &&
+    tags !== undefined
+  ) {
+    const faviconUrl = new URL(url).hostname;
+    await db.transaction(async (tx) => {
+      await tx
+        .update(bookmarksTable)
+        .set({ title, description, url, favicon: faviconUrl })
+        .where(eq(bookmarksTable.id, id));
+      const tagTitlesArray = tags.split(",").map((tag) => {
+        return { title: tag.trim() };
+      });
+
+      console.log(tagTitlesArray);
+
+      await tx.insert(tagsTable).values(tagTitlesArray).onConflictDoNothing();
+      await tx.delete(bookmarksTagsTable).where(eq(bookmarksTagsTable.bookmarkId, id));
+      const bookmarkTagsData = tags.split(",").map((tag) => {
+        return { bookmarkId: id, tagId: tag.trim() };
+      });
+      await tx.insert(bookmarksTagsTable).values(bookmarkTagsData).onConflictDoNothing();
+    });
   }
   res.end();
 };

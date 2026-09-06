@@ -22,7 +22,17 @@ export const NewBookmarkEntrySchema = z.object({
 
 export const EditBookmarkSchema = z.object({
   id: z.string().optional(),
+  title: z.string().optional(),
   isArchived: z.coerce.boolean().optional(),
+  url: z.string().optional(),
+  description: z.string().optional(),
+  tags: z.string().transform((val) =>
+    val
+      .replace(/\s/g, "")
+      .split(",")
+      .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1))
+      .join(),
+  ).optional(),
 });
 
 export type NewBookmarkEntry = z.infer<typeof NewBookmarkEntrySchema>;

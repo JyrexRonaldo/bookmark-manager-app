@@ -1,4 +1,4 @@
-import type { Bookmark, Tag, BookmarkData } from "./types";
+import type { Bookmark, Tag, BookmarkData, FormValue } from "./types";
 
 const BACKEND_API_ENDPOINT = import.meta.env.VITE_HOME_DOMAIN;
 
@@ -63,9 +63,26 @@ async function deletedBookmarkBackend(id: string) {
   }
 }
 
+async function editBookmarkBackend(bookmarkId: string, formValue: FormValue) {
+  console.log(formValue)
+  try {
+    const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark/${bookmarkId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formValue),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   getAllBookmarks,
   uploadBookmark,
   updateArchiveStatus,
   deletedBookmarkBackend,
+  editBookmarkBackend,
 };

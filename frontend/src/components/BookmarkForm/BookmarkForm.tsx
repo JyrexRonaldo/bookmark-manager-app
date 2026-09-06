@@ -1,7 +1,7 @@
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
 import type { Bookmark, BookmarkData } from "../../types";
 import { faker } from "@faker-js/faker";
-// import { uploadBookmark } from "../../services";
+import { uploadBookmark, editBookmarkBackend } from "../../services";
 import {
   useAllBookmarkData,
   useBookmarkFormStatusControls,
@@ -101,6 +101,7 @@ function BookmarkForm() {
 
       setAllBookmarkData([...allBookmarkData, newBookmark]);
       setAllTagsData(newTagData);
+      uploadBookmark({ ...bookmarkData, createdAt: new Date() });
     } else {
       const targetEditBookmark = allBookmarkData.find(
         (bookmark) => bookmark.bookmarksTable.id === currentFormValues.id,
@@ -138,9 +139,10 @@ function BookmarkForm() {
 
       setAllBookmarkData([...newBookmarkList, editedBookmark]);
       setAllTagsData(newTagData);
+      editBookmarkBackend(currentFormValues.id , formData);
     }
 
-    toggleBookmarkForm(false);
+    toggleBookmarkForm(formView);
   };
 
   const onError = (error: FieldErrors) => {
