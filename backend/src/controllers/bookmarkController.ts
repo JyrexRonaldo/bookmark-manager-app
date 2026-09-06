@@ -2,7 +2,7 @@ import { type Request, type Response } from "express";
 import { EditBookmarkSchema, NewBookmarkEntrySchema } from "../types.ts";
 import db from "../../config/drizzle.ts";
 import { bookmarksTable, bookmarksTagsTable, tagsTable } from "../db/schema.ts";
-import { eq, sql } from "drizzle-orm";
+import { eq, notInArray, sql } from "drizzle-orm";
 import { ZodError } from "zod";
 
 const getAllBookmarks = async (_req: Request, res: Response) => {
@@ -94,10 +94,22 @@ const editBookmark = async (req: Request, res: Response) => {
 const deleteBookmark = async (req: Request, res: Response) => {
   const { id } = EditBookmarkSchema.parse(req.params);
   if (id !== undefined) {
-    await db
-      .delete(bookmarksTable)
-      .where(eq(bookmarksTable.id, id))
-      .returning();
+    await db.transaction(async (tx) => {
+      await tx
+        .delete(bookmarksTable)
+        .where(eq(bookmarksTable.id, id))
+        .returning();
+      await tx
+        .delete(tagsTable)
+        .where(
+          notInArray(
+            tagsTable.title,
+            tx
+              .select({ id: bookmarksTagsTable.tagId })
+              .from(bookmarksTagsTable),
+          ),
+        );
+    });
   }
   res.end();
 };
