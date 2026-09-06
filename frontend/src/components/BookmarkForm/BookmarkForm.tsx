@@ -19,7 +19,7 @@ function BookmarkForm() {
   const { toggleBookmarkForm } = useBookmarkFormStatusControls();
   const { setAllBookmarkData } = useAllBookmarkDataControls();
   const allTagsData = useAllTagsData();
-  const { setAllTagsData } = useAllTagsControls();
+  const { setAllTagsData, updateTagsOnDelete } = useAllTagsControls();
 
   const { register, handleSubmit, setValue } = useForm<BookmarkData>({
     defaultValues: {
@@ -135,11 +135,21 @@ function BookmarkForm() {
         .filter((tag) => !addedTags.includes(tag))
         .map((newTag) => ({ title: newTag, count: 1 }));
 
+      const formDataTags = formData.tags.split(",");
+
+      const deletedTagsOnUpdate = currentFormValues.tags
+        .split(",")
+        .filter((tag) => {
+          return !formDataTags.includes(tag);
+        })
+        .join();
+
       const newTagData = [...allTagsData, ...newTags];
 
       setAllBookmarkData([...newBookmarkList, editedBookmark]);
       setAllTagsData(newTagData);
-      editBookmarkBackend(currentFormValues.id , formData);
+      editBookmarkBackend(currentFormValues.id, formData);
+      updateTagsOnDelete(deletedTagsOnUpdate);
     }
 
     toggleBookmarkForm(formView);

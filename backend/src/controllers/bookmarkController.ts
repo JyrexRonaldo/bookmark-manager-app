@@ -107,14 +107,17 @@ const editBookmark = async (req: Request, res: Response) => {
         return { title: tag.trim() };
       });
 
-      console.log(tagTitlesArray);
-
       await tx.insert(tagsTable).values(tagTitlesArray).onConflictDoNothing();
-      await tx.delete(bookmarksTagsTable).where(eq(bookmarksTagsTable.bookmarkId, id));
+      await tx
+        .delete(bookmarksTagsTable)
+        .where(eq(bookmarksTagsTable.bookmarkId, id));
       const bookmarkTagsData = tags.split(",").map((tag) => {
         return { bookmarkId: id, tagId: tag.trim() };
       });
-      await tx.insert(bookmarksTagsTable).values(bookmarkTagsData).onConflictDoNothing();
+      await tx
+        .insert(bookmarksTagsTable)
+        .values(bookmarkTagsData)
+        .onConflictDoNothing();
     });
   }
   res.end();

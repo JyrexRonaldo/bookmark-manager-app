@@ -159,7 +159,6 @@ const useTagsDataStore = create<useTagsDataStoreType>()((set) => ({
     clearSelectedTags: () => set(() => ({ selectedTags: [] })),
     updateTagsOnDelete: (tags: string) => {
       return set((state) => {
-        console.log(tags);
         let deletetags: Tag[] = [];
         const newTagList = state.allTagsData.filter((tag) => {
           if (tags.includes(tag.title)) {
