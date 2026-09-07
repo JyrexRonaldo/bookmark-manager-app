@@ -11,7 +11,7 @@ interface useBookmarkDataStoreType {
     pinBookmark: (bookmarkId: string) => void;
     unpinBookmark: (bookmarkId: string) => void;
     deleteBookmark: (bookmarkId: string) => void;
-    updateLastVistedDate: (bookmarkId: string) => void;
+    updateLastVistDate: (bookmarkId: string) => void;
   };
 }
 
@@ -35,7 +35,6 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
             ...oldBookmark,
             bookmarksTable: { ...oldBookmark.bookmarksTable, isArchived: true },
           };
-          console.log({ oldBookmark, newBookmark, newBookmarkList });
           return { allBookmarkData: [...newBookmarkList, newBookmark] };
         } else {
           return { allBookmarkData: state.allBookmarkData };
@@ -80,7 +79,6 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
             ...oldBookmark,
             bookmarksTable: { ...oldBookmark.bookmarksTable, pinned: true },
           };
-          console.log({ oldBookmark, newBookmark, newBookmarkList });
           return { allBookmarkData: [...newBookmarkList, newBookmark] };
         } else {
           return { allBookmarkData: state.allBookmarkData };
@@ -115,7 +113,7 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
         return { allBookmarkData: [...newBookmarkList] };
       });
     },
-    updateLastVistedDate: (bookmarkId: string) => {
+    updateLastVistDate: (bookmarkId: string) => {
       return set((state) => {
         const targetBookmark = state.allBookmarkData.find(
           (bookmark) => bookmark.bookmarksTable.id === bookmarkId,

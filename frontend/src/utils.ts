@@ -1,6 +1,4 @@
-export async function handleVisitButton(url: string) {
-  window.location.href = `${url}`;
-}
+
 
 export async function handleCopyUrlButton(url: string) {
   try {

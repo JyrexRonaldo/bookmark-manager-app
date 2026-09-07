@@ -64,14 +64,26 @@ async function deletedBookmarkBackend(id: string) {
 }
 
 async function editBookmarkBackend(bookmarkId: string, formValue: FormValue) {
-  console.log(formValue)
   try {
     const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark/${bookmarkId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formValue),
     });
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
+async function updateLastVisitDateBackend(bookmarkId: string) {
+  try {
+    const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark/${bookmarkId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({lastVisited: new Date().toISOString()}),
+    });
     const data = await response.json();
     console.log(data);
   } catch (error) {
@@ -85,4 +97,5 @@ export {
   updateArchiveStatus,
   deletedBookmarkBackend,
   editBookmarkBackend,
+  updateLastVisitDateBackend
 };

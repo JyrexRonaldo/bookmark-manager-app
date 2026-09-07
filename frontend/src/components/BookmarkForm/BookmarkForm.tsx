@@ -160,7 +160,6 @@ function BookmarkForm() {
   };
 
   if (formView === false) {
-    console.log(currentFormValues);
     setValue("title", `${currentFormValues.title}`);
     setValue("description", `${currentFormValues.description}`);
     setValue("url", `${currentFormValues.url}`);

@@ -81,7 +81,7 @@ const addBookmark = async (req: Request, res: Response) => {
 };
 const editBookmark = async (req: Request, res: Response) => {
   const { id } = EditBookmarkSchema.parse(req.params);
-  const { isArchived, title, description, url, tags } =
+  const { isArchived, title, description, url, tags, lastVisited } =
     EditBookmarkSchema.parse(req.body);
   if (isArchived !== undefined && id !== undefined) {
     await db
@@ -89,6 +89,15 @@ const editBookmark = async (req: Request, res: Response) => {
       .set({ isArchived: isArchived })
       .where(eq(bookmarksTable.id, id));
   }
+
+  if (lastVisited !== undefined && id !== undefined) {
+    await db
+      .update(bookmarksTable)
+      .set({ lastVisited: lastVisited })
+      .where(eq(bookmarksTable.id, id));
+  }
+
+  
 
   if (
     id !== undefined &&

@@ -4,8 +4,8 @@ import {
   useBookmarkFormStatusControls,
 } from "../../store";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { updateArchiveStatus, deletedBookmarkBackend } from "../../services";
-import { handleVisitButton, handleCopyUrlButton } from "../../utils";
+import { updateArchiveStatus, deletedBookmarkBackend, updateLastVisitDateBackend } from "../../services";
+import { handleCopyUrlButton } from "../../utils";
 
 function ActionsDropdown({
   pinned,
@@ -32,6 +32,7 @@ function ActionsDropdown({
     pinBookmark,
     unpinBookmark,
     deleteBookmark,
+    updateLastVistDate
   } = useAllBookmarkDataControls();
   const { updateTagsOnDelete } = useAllTagsControls();
   const { toggleBookmarkForm, setCurrentFormValues } =
@@ -64,6 +65,12 @@ function ActionsDropdown({
   function handleEditButton() {
     setCurrentFormValues({ tags, url, title, description, id });
     toggleBookmarkForm(false);
+  }
+
+  async function handleVisitButton(url: string) {
+    updateLastVistDate(id)
+    await updateLastVisitDateBackend(id);
+    window.location.href = `${url}`;
   }
 
   return (

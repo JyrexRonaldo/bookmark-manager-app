@@ -7,7 +7,6 @@ function SortByDropdown() {
   const { setSortValue } = useSortControls();
 
   function handleSort(sortValue: SortVariableType) {
-    console.log(sortValue);
     setSortValue(sortValue);
   }
 
