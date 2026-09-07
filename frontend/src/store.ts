@@ -1,6 +1,6 @@
 // store.ts
 import { create } from "zustand";
-import type { Bookmark, Tag, FormValue } from "./types";
+import type { Bookmark, Tag, FormValue, SortVariableType } from "./types";
 
 interface useBookmarkDataStoreType {
   allBookmarkData: Bookmark[];
@@ -284,6 +284,27 @@ const useMainViewStore = create<MainViewType>()((set) => ({
 const useCurrentView = () => useMainViewStore((state) => state.currrentView);
 const useMainViewControls = () => useMainViewStore((state) => state.actions);
 
+interface SortValueType {
+  sortValue: SortVariableType;
+  actions: {
+    setSortValue: (value: SortVariableType) => void;
+  };
+}
+
+const useSortValueStore = create<SortValueType>()((set) => ({
+  sortValue: "recentlyAdded",
+  actions: {
+    setSortValue: (value: SortVariableType) => {
+      return set(() => {
+        return { sortValue: value };
+      });
+    },
+  },
+}));
+
+const useSortValue = () => useSortValueStore((state) => state.sortValue)
+const useSortControls = () => useSortValueStore((state) => state.actions)
+
 export {
   useCurrentView,
   useMainViewControls,
@@ -300,4 +321,6 @@ export {
   useSearchStatusControls,
   useBookmarkFormView,
   useBookmarkFormValues,
+  useSortValue,
+  useSortControls
 };

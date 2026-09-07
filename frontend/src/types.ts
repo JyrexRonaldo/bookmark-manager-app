@@ -32,3 +32,6 @@ export interface FormValue {
   url: string;
   tags: string;
 }
+
+
+export type SortVariableType = "mostVisited" | "recentlyAdded" | "recentlyVisited"

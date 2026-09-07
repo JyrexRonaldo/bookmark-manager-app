@@ -14,8 +14,12 @@ function BookmarkCard({
   createdAt,
   lastVisited,
   isArchived,
+  createdAtValue,
+  lastVisitedValue,
 }: Omit<BookmarkData, "createdAt"> & {
   createdAt: string;
+  createdAtValue: string;
+  lastVisitedValue: string | null;
 }) {
   const currentView = useCurrentView();
   const tagElements = tags.split(",").map((tag: string, index: number) => (
@@ -76,12 +80,12 @@ function BookmarkCard({
                 src="/img/icon-last-visited.svg"
                 alt=""
               />
-              <p>{lastVisited}</p>
+              <p data-last-visited-value={lastVisitedValue}>{lastVisited}</p>
             </div>
           )}
           <div>
             <img className="size-[12px]" src="/img/icon-created.svg" alt="" />
-            <p>{createdAt}</p>
+            <p data-created-at-value={createdAtValue}>{createdAt}</p>
           </div>
         </div>
         <div className="flex items-center gap-1">

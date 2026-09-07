@@ -1,6 +1,16 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { useSortControls, useSortValue } from "../../store";
+import type { SortVariableType } from "../../types";
 
 function SortByDropdown() {
+  const sortValue = useSortValue();
+  const { setSortValue } = useSortControls();
+
+  function handleSort(sortValue: SortVariableType) {
+    console.log(sortValue);
+    setSortValue(sortValue);
+  }
+
   return (
     <>
       <Menu>
@@ -16,22 +26,55 @@ function SortByDropdown() {
         >
           <div className="flex h-[132px] w-[200px] flex-col gap-[4px] rounded-[8px] border border-[#E8F0EF] bg-white p-[8px] font-manrope *:flex *:h-[36px] *:items-center *:justify-between *:rounded-[8px] *:p-[8px] *:hover:bg-[#E8F0EF]">
             <MenuItem>
-              <div>
+              <button
+                type="button"
+                onClick={() => {
+                  handleSort("recentlyAdded");
+                }}
+              >
                 <p>Recently added</p>
-                <img src="/img/icon-check.svg" className="size-[16px]" alt="" />
-              </div>
+                {sortValue === "recentlyAdded" && (
+                  <img
+                    src="/img/icon-check.svg"
+                    className="size-[16px]"
+                    alt=""
+                  />
+                )}
+              </button>
             </MenuItem>
             <MenuItem>
-              <div>
+              <button
+                type="button"
+                onClick={() => {
+                  handleSort("recentlyVisited");
+                }}
+              >
                 <p>Recently visited</p>
-                <img src="" alt="" />
-              </div>
+                {sortValue === "recentlyVisited" && (
+                  <img
+                    src="/img/icon-check.svg"
+                    className="size-[16px]"
+                    alt=""
+                  />
+                )}
+              </button>
             </MenuItem>
             <MenuItem>
-              <div>
+              <button
+                type="button"
+                onClick={() => {
+                  handleSort("mostVisited");
+                }}
+              >
                 <p>Most visited</p>
-                <img src="" alt="" />
-              </div>
+                {sortValue === "mostVisited" && (
+                  <img
+                    src="/img/icon-check.svg"
+                    className="size-[16px]"
+                    alt=""
+                  />
+                )}
+              </button>
             </MenuItem>
           </div>
         </MenuItems>

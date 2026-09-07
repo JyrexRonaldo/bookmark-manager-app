@@ -9,6 +9,7 @@ import {
   useSearchContent,
   useSeletedTags,
   useCurrentView,
+  useSortValue,
 } from "../../store";
 import { getAllBookmarks } from "../../services";
 
@@ -21,6 +22,7 @@ function Main() {
   let displayedElements: React.JSX.Element[] = [];
   let selectedTagsText = "";
   const currentView = useCurrentView();
+  const sortValue = useSortValue();
 
   useEffect(() => {
     async function fetchData() {
@@ -45,7 +47,11 @@ function Main() {
       const currentBookmark = bookmark.bookmarksTable;
       const currentTag = bookmark.tags;
       const favicon = `https://www.google.com/s2/favicons?domain=${currentBookmark.favicon}&sz=${64}`;
-
+      let lastVisitedValue = null;
+      if (currentBookmark.lastVisited) {
+        lastVisitedValue = new Date(currentBookmark.lastVisited).toISOString();
+      }
+      const createdAtValue = new Date(currentBookmark.createdAt).toISOString();
       const createdAt = format(currentBookmark.createdAt, "d LLL");
       const lastVisited = currentBookmark.lastVisited
         ? format(currentBookmark.lastVisited, "d LLL")
@@ -65,6 +71,8 @@ function Main() {
           lastVisited={lastVisited}
           favicon={favicon}
           isArchived={currentBookmark.isArchived}
+          createdAtValue={createdAtValue}
+          lastVisitedValue={lastVisitedValue}
         />
       );
     });
@@ -95,6 +103,36 @@ function Main() {
       selectedTagsText += `${tag}, `;
     });
     selectedTagsText = selectedTagsText.slice(0, selectedTagsText.length - 2);
+  }
+
+  if (sortValue === "recentlyAdded") {
+    displayedElements = displayedElements.sort((a, b) => {
+      if (new Date (a.props.createdAtValue).getTime() > new Date(b.props.createdAtValue).getTime()) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+  }
+
+  if (sortValue === "recentlyVisited") {
+    displayedElements = displayedElements.sort((a, b) => {
+      if ( new Date (a.props.lastVisitedValue).getTime() >  new Date (b.props.lastVisitedValue).getTime()) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+  }
+
+  if (sortValue === "mostVisited") {
+    displayedElements = displayedElements.sort((a, b) => {
+      if (a.props.visitCount > b.props.visitCount) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
   }
 
   return (

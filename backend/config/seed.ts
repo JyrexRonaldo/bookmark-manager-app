@@ -17,7 +17,7 @@ const BookmarkSchema = z.object({
   isArchived: z.boolean(),
   visitCount: z.number(),
   createdAt: z.coerce.date(),
-  lastVisited: z.coerce.date(),
+  lastVisited: z.union([z.null(), z.coerce.date()]),
 });
 
 const SampleBookmarkDataSchema = z.array(BookmarkSchema);
