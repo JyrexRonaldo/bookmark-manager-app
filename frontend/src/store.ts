@@ -11,6 +11,7 @@ interface useBookmarkDataStoreType {
     pinBookmark: (bookmarkId: string) => void;
     unpinBookmark: (bookmarkId: string) => void;
     deleteBookmark: (bookmarkId: string) => void;
+    updateLastVistedDate: (bookmarkId: string) => void;
   };
 }
 
@@ -100,7 +101,6 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
             ...oldBookmark,
             bookmarksTable: { ...oldBookmark.bookmarksTable, pinned: false },
           };
-          console.log({ oldBookmark, newBookmark, newBookmarkList });
           return { allBookmarkData: [...newBookmarkList, newBookmark] };
         } else {
           return { allBookmarkData: state.allBookmarkData };
@@ -113,6 +113,28 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
           (bookmark) => bookmark.bookmarksTable.id !== bookmarkId,
         );
         return { allBookmarkData: [...newBookmarkList] };
+      });
+    },
+    updateLastVistedDate: (bookmarkId: string) => {
+      return set((state) => {
+        const targetBookmark = state.allBookmarkData.find(
+          (bookmark) => bookmark.bookmarksTable.id === bookmarkId,
+        );
+        const newBookmarkList = state.allBookmarkData.filter(
+          (bookmark) => bookmark.bookmarksTable.id !== bookmarkId,
+        );
+        if (targetBookmark) {
+          const updatedBookmark = {
+            ...targetBookmark,
+            bookmarksTable: {
+              ...targetBookmark.bookmarksTable,
+              lastVisited: new Date().toISOString(),
+            },
+          };
+          return { allBookmarkData : [...newBookmarkList, updatedBookmark]}
+        } else {
+          return { allBookmarkData: state.allBookmarkData };
+        }
       });
     },
   },
@@ -302,8 +324,8 @@ const useSortValueStore = create<SortValueType>()((set) => ({
   },
 }));
 
-const useSortValue = () => useSortValueStore((state) => state.sortValue)
-const useSortControls = () => useSortValueStore((state) => state.actions)
+const useSortValue = () => useSortValueStore((state) => state.sortValue);
+const useSortControls = () => useSortValueStore((state) => state.actions);
 
 export {
   useCurrentView,
@@ -322,5 +344,5 @@ export {
   useBookmarkFormView,
   useBookmarkFormValues,
   useSortValue,
-  useSortControls
+  useSortControls,
 };
