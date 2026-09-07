@@ -35,3 +35,6 @@ export interface FormValue {
 
 
 export type SortVariableType = "mostVisited" | "recentlyAdded" | "recentlyVisited"
+
+
+export type ThemeVariableType = 'light' | 'dark'

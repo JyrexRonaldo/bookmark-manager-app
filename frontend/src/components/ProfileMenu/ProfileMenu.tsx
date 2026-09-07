@@ -1,4 +1,16 @@
+import clsx from "clsx";
+import { useTheme, useThemeControls } from "../../store";
+import type { ThemeVariableType } from "../../types";
+
 function ProfileMenu() {
+  //light theme is represented by true
+  const theme = useTheme();
+  const { setTheme } = useThemeControls();
+
+  function handleThemeChange(value: ThemeVariableType) {
+  setTheme(value);
+  }
+
   return (
     <>
       <div
@@ -23,16 +35,40 @@ function ProfileMenu() {
           <img src="/img/icon-theme.svg" alt="" />
           <p className="grow font-manrope text-[14px]/[140%]">Theme</p>
           <div className="flex h-[30px] w-[64px] items-center rounded-[4px] bg-[#DDE9E7] p-[2px]">
-            <img
-              className="h-[26px] w-[30px] rounded-[4px] bg-white px-[8px] py-[6px]"
-              src="/img/icon-light-theme.svg"
-              alt=""
-            />
-            <img
-              className="h-[26px] w-[30px] rounded-[4px] px-[8px] py-[6px]"
-              src="/img/icon-dark-theme.svg"
-              alt=""
-            />
+            <button
+              type="button"
+              className="cursor-pointer"
+              onClick={() => {
+                handleThemeChange('light');
+              }}
+            >
+              <img
+                className={clsx(
+                  "h-[26px] w-[30px] rounded-[4px]",
+                  theme  === 'light' && "bg-white",
+                  "px-[8px] py-[6px]",
+                )}
+                src="/img/icon-light-theme.svg"
+                alt=""
+              />
+            </button>
+            <button
+              type="button"
+              className="cursor-pointer"
+              onClick={() => {
+                handleThemeChange('dark');
+              }}
+            >
+              <img
+                className={clsx(
+                  "h-[26px] w-[30px] rounded-[4px]",
+                  theme  === 'dark' && "bg-white",
+                  "px-[8px] py-[6px]",
+                )}
+                src="/img/icon-dark-theme.svg"
+                alt=""
+              />
+            </button>
           </div>
         </div>
         <div className="flex h-[36px] items-center gap-[10px] border-t border-t-[#E8F0EF] px-[16px] py-[4px]">

@@ -107,7 +107,10 @@ function Main() {
 
   if (sortValue === "recentlyAdded") {
     displayedElements = displayedElements.sort((a, b) => {
-      if (new Date (a.props.createdAtValue).getTime() > new Date(b.props.createdAtValue).getTime()) {
+      if (
+        new Date(a.props.createdAtValue).getTime() >
+        new Date(b.props.createdAtValue).getTime()
+      ) {
         return -1;
       } else {
         return 1;
@@ -117,7 +120,10 @@ function Main() {
 
   if (sortValue === "recentlyVisited") {
     displayedElements = displayedElements.sort((a, b) => {
-      if ( new Date (a.props.lastVisitedValue).getTime() >  new Date (b.props.lastVisitedValue).getTime()) {
+      if (
+        new Date(a.props.lastVisitedValue).getTime() >
+        new Date(b.props.lastVisitedValue).getTime()
+      ) {
         return -1;
       } else {
         return 1;
@@ -153,11 +159,11 @@ function Main() {
           ) : (
             <div className="flex gap-3">
               {currentView ? (
-                <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
+                <p className="min-w-max font-manrope text-[24px]/[140%] font-bold text-[#051513]">
                   All bookmarks
                 </p>
               ) : (
-                <p className="font-manrope text-[24px]/[140%] font-bold text-[#051513]">
+                <p className="min-w-max font-manrope text-[24px]/[140%] font-bold text-[#051513]">
                   Archived bookmarks
                 </p>
               )}

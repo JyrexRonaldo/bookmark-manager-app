@@ -1,6 +1,12 @@
 // store.ts
 import { create } from "zustand";
-import type { Bookmark, Tag, FormValue, SortVariableType } from "./types";
+import type {
+  Bookmark,
+  Tag,
+  FormValue,
+  SortVariableType,
+  ThemeVariableType,
+} from "./types";
 
 interface useBookmarkDataStoreType {
   allBookmarkData: Bookmark[];
@@ -249,7 +255,7 @@ const useBookmarkFormStore = create<useBookmarkFormStoreType>()((set) => ({
     tags: "",
   },
   actions: {
-    toggleBookmarkForm: (formView: boolean) =>
+    toggleBookmarkForm: (formView) =>
       set((state) => ({
         bookmarkFormStatus: !state.bookmarkFormStatus,
         formView,
@@ -315,7 +321,7 @@ interface SortValueType {
 const useSortValueStore = create<SortValueType>()((set) => ({
   sortValue: "recentlyAdded",
   actions: {
-    setSortValue: (value: SortVariableType) => {
+    setSortValue: (value) => {
       return set(() => {
         return { sortValue: value };
       });
@@ -325,6 +331,31 @@ const useSortValueStore = create<SortValueType>()((set) => ({
 
 const useSortValue = () => useSortValueStore((state) => state.sortValue);
 const useSortControls = () => useSortValueStore((state) => state.actions);
+
+interface ThemeStoreType {
+  theme: ThemeVariableType;
+  actions: {
+    setTheme: (value: ThemeVariableType) => void;
+  };
+}
+
+const useThemeStore = create<ThemeStoreType>()((set) => ({
+  theme: (localStorage.getItem("theme") as ThemeVariableType) || "light",
+  actions: {
+    setTheme: (value) => {
+      return set(() => {
+        return { theme: value };
+      });
+    },
+  },
+}));
+
+const useTheme = () => {
+  return useThemeStore((state) => state.theme);
+};
+const useThemeControls = () => {
+  return useThemeStore((state) => state.actions);
+};
 
 export {
   useCurrentView,
@@ -344,4 +375,6 @@ export {
   useBookmarkFormValues,
   useSortValue,
   useSortControls,
+  useTheme,
+  useThemeControls,
 };

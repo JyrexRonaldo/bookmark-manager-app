@@ -24,7 +24,7 @@ function NavBar() {
 
   return (
     <>
-      <nav className="col-start-2 col-end-6 row-start-1 row-end-2 flex w-auto items-center gap-[10px] px-[16px] py-[12px]">
+      <nav className="dark:bg-red-500 col-start-2 col-end-6 row-start-1 row-end-2 flex w-auto items-center gap-[10px] px-[16px] py-[12px]">
         <button
           onClick={handleSideBar}
           className="flex size-[40px] items-center justify-center rounded-[8px] border border-[#C0CFCC] lg:hidden"
