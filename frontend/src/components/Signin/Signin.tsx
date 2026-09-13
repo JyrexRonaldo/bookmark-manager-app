@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 function Signin() {
   return (
     <>
@@ -54,9 +56,9 @@ function Signin() {
               <p className="-manrope text-[14px]/[150%] tracking-[1%]">
                 Don't have an account?
               </p>
-              <p className="font-manrope text-[14px]/[140%] font-semibold">
+              <Link to='/signup' className="font-manrope text-[14px]/[140%] font-semibold">
                 Sign up
-              </p>
+              </Link>
             </div>
           </div>
         </div>

@@ -1,8 +1,32 @@
+import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
+import type { UserType } from "../../types";
+import { createUser } from "../../services";
+import { Link } from "react-router";
+
 function Signup() {
+  const { register, handleSubmit } = useForm<UserType>({
+    defaultValues: {
+      fullName: "",
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<UserType> = (formData) => {
+    createUser(formData)
+  };
+
+  const onError = (error: FieldErrors) => {
+    console.log(error);
+  };
+
   return (
     <>
       <div className="flex h-screen items-center justify-center bg-[#E8F0EF]">
-        <div className="flex h-[618px] w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]">
+        <form
+          className="flex h-[618px] w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]"
+          onSubmit={handleSubmit(onSubmit, onError)}
+        >
           <div>
             <img src="/img/logo-light-theme.svg" alt="" />
           </div>
@@ -21,9 +45,9 @@ function Signup() {
                 Full name *
               </label>
               <input
-                type="email"
-                name="email"
-                id="email"
+                type="text"
+                {...register("fullName", { required: "please enter fullname" })}
+                id="full-name"
                 className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
             </div>
@@ -33,7 +57,7 @@ function Signup() {
               </label>
               <input
                 type="email"
-                name="email"
+                {...register("email", { required: "please enter email" })}
                 id="email"
                 className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
@@ -44,12 +68,15 @@ function Signup() {
               </label>
               <input
                 type="password"
-                name="password"
+                {...register("password", { required: "please enter password" })}
                 id="password"
                 className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
             </div>
-            <button className="h-[46px] w-[384px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] font-manrope text-[16px]/[140%] text-white">
+            <button
+              type="submit"
+              className="h-[46px] w-[384px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] font-manrope text-[16px]/[140%] text-white"
+            >
               Create account
             </button>
           </div>
@@ -58,12 +85,12 @@ function Signup() {
               <p className="font-manrope text-[14px]/[150%] tracking-[1%]">
                 Already have an account?
               </p>
-              <p className="font-manrope text-[14px]/[140%] font-semibold">
+              <Link to='/signin'  className="font-manrope text-[14px]/[140%] font-semibold">
                 Log in
-              </p>
+              </Link>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

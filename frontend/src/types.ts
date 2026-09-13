@@ -38,3 +38,10 @@ export type SortVariableType = "mostVisited" | "recentlyAdded" | "recentlyVisite
 
 
 export type ThemeVariableType = 'light' | 'dark'
+
+export interface UserType  {
+  fullName: string;
+  email: string;
+  password: string;
+
+}
