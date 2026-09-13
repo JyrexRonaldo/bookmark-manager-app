@@ -33,15 +33,20 @@ export interface FormValue {
   tags: string;
 }
 
+export type SortVariableType =
+  | "mostVisited"
+  | "recentlyAdded"
+  | "recentlyVisited";
 
-export type SortVariableType = "mostVisited" | "recentlyAdded" | "recentlyVisited"
+export type ThemeVariableType = "light" | "dark";
 
-
-export type ThemeVariableType = 'light' | 'dark'
-
-export interface UserType  {
+export interface NewUserType {
   fullName: string;
   email: string;
   password: string;
+}
 
+export interface UserType {
+  email: string;
+  password: string;
 }

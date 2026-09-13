@@ -1,4 +1,11 @@
-import type { Bookmark, Tag, BookmarkData, FormValue, UserType } from "./types";
+import type {
+  Bookmark,
+  Tag,
+  BookmarkData,
+  FormValue,
+  NewUserType,
+  UserType,
+} from "./types";
 
 const BACKEND_API_ENDPOINT = import.meta.env.VITE_HOME_DOMAIN;
 
@@ -7,7 +14,7 @@ async function getAllBookmarks() {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `${localStorage.getItem("userToken")}`,
+      Authorization: `${localStorage.getItem("userToken")}`,
     },
   });
 
@@ -23,7 +30,10 @@ async function uploadBookmark(bookmarkData: BookmarkData) {
   try {
     const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("userToken")}`,
+      },
       body: JSON.stringify(bookmarkData),
     });
 
@@ -38,7 +48,10 @@ async function updateArchiveStatus(id: string, isArchived: boolean) {
   try {
     const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("userToken")}`,
+      },
       body: JSON.stringify({ isArchived }),
     });
 
@@ -53,7 +66,10 @@ async function deletedBookmarkBackend(id: string) {
   try {
     const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("userToken")}`,
+      },
     });
 
     const data = await response.json();
@@ -65,11 +81,17 @@ async function deletedBookmarkBackend(id: string) {
 
 async function editBookmarkBackend(bookmarkId: string, formValue: FormValue) {
   try {
-    const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark/${bookmarkId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formValue),
-    });
+    const response = await fetch(
+      `${BACKEND_API_ENDPOINT}/bookmark/${bookmarkId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${localStorage.getItem("userToken")}`,
+        },
+        body: JSON.stringify(formValue),
+      },
+    );
     const data = await response.json();
     console.log(data);
   } catch (error) {
@@ -79,11 +101,17 @@ async function editBookmarkBackend(bookmarkId: string, formValue: FormValue) {
 
 async function updateLastVisitDateBackend(bookmarkId: string) {
   try {
-    const response = await fetch(`${BACKEND_API_ENDPOINT}/bookmark/${bookmarkId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({lastVisited: new Date().toISOString()}),
-    });
+    const response = await fetch(
+      `${BACKEND_API_ENDPOINT}/bookmark/${bookmarkId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${localStorage.getItem("userToken")}`,
+        },
+        body: JSON.stringify({ lastVisited: new Date().toISOString() }),
+      },
+    );
     const data = await response.json();
     console.log(data);
   } catch (error) {
@@ -91,7 +119,7 @@ async function updateLastVisitDateBackend(bookmarkId: string) {
   }
 }
 
-async function createUser(userData: UserType) {
+async function createUser(userData: NewUserType) {
   try {
     const response = await fetch(`${BACKEND_API_ENDPOINT}/auth/signup`, {
       method: "POST",
@@ -105,6 +133,21 @@ async function createUser(userData: UserType) {
   }
 }
 
+async function signIn(userData: UserType) {
+  try {
+    const response = await fetch(`${BACKEND_API_ENDPOINT}/auth/signin`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   getAllBookmarks,
   uploadBookmark,
@@ -112,5 +155,6 @@ export {
   deletedBookmarkBackend,
   editBookmarkBackend,
   updateLastVisitDateBackend,
-  createUser
+  createUser,
+  signIn,
 };

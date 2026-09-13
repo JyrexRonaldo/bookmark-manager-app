@@ -13,9 +13,9 @@ function App() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // if (localStorage.getItem('email') === null) {
-    //         navigate('/signin')
-    //     }
+    if (localStorage.getItem('email') === null) {
+            navigate('/signin')
+        }
     if (theme === 'light') {
       document.body.classList.remove("dark");
       localStorage.setItem('theme', 'light')

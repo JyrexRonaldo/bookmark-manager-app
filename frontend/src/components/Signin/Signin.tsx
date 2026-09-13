@@ -1,10 +1,40 @@
 import { Link } from "react-router";
+import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
+import type { UserType } from "../../types";
+import { signIn } from "../../services";
+import { useNavigate } from "react-router";
 
 function Signin() {
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm<UserType>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<UserType> = async (formData) => {
+    const userData = await signIn(formData);
+    console.log({ userData });
+    localStorage.setItem("email", userData.email);
+    localStorage.setItem("fullname", userData.fullname);
+    localStorage.setItem("userToken", userData.token);
+    localStorage.setItem("userId", userData.userId);
+    console.log(localStorage);
+    navigate("/");
+  };
+
+  const onError = (error: FieldErrors) => {
+    console.log(error);
+  };
+
   return (
     <>
       <div className="flex h-screen items-center justify-center bg-[#E8F0EF]">
-        <div className="flex h-[543px] w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]">
+        <form
+          onSubmit={handleSubmit(onSubmit, onError)}
+          className="flex h-[543px] w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]"
+        >
           <div>
             <img src="/img/logo-light-theme.svg" alt="" />
           </div>
@@ -23,7 +53,7 @@ function Signin() {
               </label>
               <input
                 type="email"
-                name="email"
+                {...register("email", { required: "please enter email" })}
                 id="email"
                 className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
@@ -34,7 +64,7 @@ function Signin() {
               </label>
               <input
                 type="password"
-                name="password"
+                {...register("password", { required: "please enter password" })}
                 id="password"
                 className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
@@ -56,12 +86,15 @@ function Signin() {
               <p className="-manrope text-[14px]/[150%] tracking-[1%]">
                 Don't have an account?
               </p>
-              <Link to='/signup' className="font-manrope text-[14px]/[140%] font-semibold">
+              <Link
+                to="/signup"
+                className="font-manrope text-[14px]/[140%] font-semibold"
+              >
                 Sign up
               </Link>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

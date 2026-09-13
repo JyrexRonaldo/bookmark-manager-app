@@ -4,14 +4,12 @@ import db from "../../config/drizzle.ts";
 import { usersTable } from "../db/schema.ts";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
-import  jwt  from "jsonwebtoken";
-
+import jwt from "jsonwebtoken";
 
 const createUser = async (req: Request, res: Response) => {
   const { email, password, fullName } = NewUserSchema.parse(req.body);
   console.log({ email, password, fullName });
   const passwordHash = await bcrypt.hash(password, 10);
-  console.log(passwordHash);
   await db.insert(usersTable).values({ email, passwordHash, fullName });
   res.end();
 };
@@ -34,26 +32,29 @@ const signIn = async (req: Request, res: Response) => {
   }
 
   const token = jwt.sign(
-        { id: user.id, email: user.email },
-        process.env.JWT_SECRET_KEY || 'secretKey',
-        { expiresIn: "14d" },
-      );
+    { id: user.id, email: user.email },
+    process.env.JWT_SECRET_KEY || "secretKey",
+    { expiresIn: "14d" },
+  );
 
-      console.log(req.body);
+  console.log(req.body);
+  console.log(".body");
 
-    //   let message = null;
-    // if (req.body.name) {
-    //   message = "Registration successful!, logging you in";
-    // } else {
-    //   message = "Welcome, logging you in";
-    // }
+  //   let message = null;
+  // if (req.body.name) {
+  //   message = "Registration successful!, logging you in";
+  // } else {
+  //   message = "Welcome, logging you in";
+  // }
 
-    return res.status(200).json({
-      token: `Bearer ${token}`,
-      userId: user.id,
-      email: user.email,
-    });
+  console.log({user});
 
+  return res.status(200).json({
+    token: `Bearer ${token}`,
+    userId: user.id,
+    email: user.email,
+    fullname: user.fullName,
+  });
 };
 
 export default { createUser, signIn };

@@ -4,15 +4,12 @@ import passport from "passport";
 import { usersTable } from "../src/db/schema.ts";
 import { Strategy as JwtStrategy, type StrategyOptions } from "passport-jwt";
 import { ExtractJwt } from "passport-jwt";
-import { PayloadType } from "../src/types.ts";
+import type { PayloadType } from "../src/types.ts";
 
 const opts: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET_KEY as string,
+  secretOrKey: process.env.JWT_SECRET_KEY || 'secretKey',
 };
-
-
-
 
 export default passport.use(
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -21,6 +18,7 @@ export default passport.use(
       .select()
       .from(usersTable)
       .where(eq(usersTable.id, jwt_payload.id));
+    console.log({user});
 
     if (user) {
       return done(null, user);

@@ -1,14 +1,20 @@
 import clsx from "clsx";
 import { useTheme, useThemeControls } from "../../store";
 import type { ThemeVariableType } from "../../types";
+import { useNavigate } from "react-router";
 
 function ProfileMenu() {
-  //light theme is represented by true
+  const navigate = useNavigate();
   const theme = useTheme();
   const { setTheme } = useThemeControls();
 
   function handleThemeChange(value: ThemeVariableType) {
-  setTheme(value);
+    setTheme(value);
+  }
+
+  function logOut() {
+    localStorage.clear();
+    navigate("/signin");
   }
 
   return (
@@ -24,10 +30,10 @@ function ProfileMenu() {
           </div>
           <div>
             <p className="font-manrope text-[14px]/[140%] font-semibold">
-              Emily Carter
+              {localStorage.getItem("fullname")}
             </p>
             <p className="font-manrope text-[14px]/[150%] tracking-[1%]">
-              emily101@gmail.com
+              {localStorage.getItem("email")}
             </p>
           </div>
         </div>
@@ -39,13 +45,13 @@ function ProfileMenu() {
               type="button"
               className="cursor-pointer"
               onClick={() => {
-                handleThemeChange('light');
+                handleThemeChange("light");
               }}
             >
               <img
                 className={clsx(
                   "h-[26px] w-[30px] rounded-[4px]",
-                  theme  === 'light' && "bg-white",
+                  theme === "light" && "bg-white",
                   "px-[8px] py-[6px]",
                 )}
                 src="/img/icon-light-theme.svg"
@@ -56,13 +62,13 @@ function ProfileMenu() {
               type="button"
               className="cursor-pointer"
               onClick={() => {
-                handleThemeChange('dark');
+                handleThemeChange("dark");
               }}
             >
               <img
                 className={clsx(
                   "h-[26px] w-[30px] rounded-[4px]",
-                  theme  === 'dark' && "bg-white",
+                  theme === "dark" && "bg-white",
                   "px-[8px] py-[6px]",
                 )}
                 src="/img/icon-dark-theme.svg"
@@ -71,10 +77,14 @@ function ProfileMenu() {
             </button>
           </div>
         </div>
-        <div className="flex h-[36px] items-center gap-[10px] border-t border-t-[#E8F0EF] px-[16px] py-[4px]">
+        <button
+          type="button"
+          onClick={logOut}
+          className="flex h-[36px] cursor-pointer items-center gap-[10px] border-t border-t-[#E8F0EF] px-[16px] py-[4px]"
+        >
           <img src="/img/icon-logout.svg" alt="" />
           <p className="font-manrope text-[14px]/[140%]">Logout</p>
-        </div>
+        </button>
       </div>
     </>
   );

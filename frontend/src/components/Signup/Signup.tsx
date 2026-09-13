@@ -1,10 +1,10 @@
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
-import type { UserType } from "../../types";
+import type { NewUserType } from "../../types";
 import { createUser } from "../../services";
 import { Link } from "react-router";
 
 function Signup() {
-  const { register, handleSubmit } = useForm<UserType>({
+  const { register, handleSubmit } = useForm<NewUserType>({
     defaultValues: {
       fullName: "",
       email: "",
@@ -12,7 +12,7 @@ function Signup() {
     },
   });
 
-  const onSubmit: SubmitHandler<UserType> = (formData) => {
+  const onSubmit: SubmitHandler<NewUserType> = (formData) => {
     createUser(formData)
   };
 
