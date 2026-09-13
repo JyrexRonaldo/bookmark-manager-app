@@ -5,6 +5,8 @@ import {
   boolean,
   timestamp,
   primaryKey,
+  uuid,
+  text,
 } from "drizzle-orm/pg-core";
 
 export const bookmarksTable = pgTable("bookmarks", {
@@ -36,3 +38,11 @@ export const bookmarksTagsTable = pgTable(
   },
   (table) => [primaryKey({ columns: [table.bookmarkId, table.tagId] })],
 );
+
+export const usersTable = pgTable("users", {
+  id: uuid().primaryKey().defaultRandom(),
+  fullName: varchar().notNull(),
+  email: varchar({ length: 255 }).unique().notNull(),
+  passwordHash: text("password_hash").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});

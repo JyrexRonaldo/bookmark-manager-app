@@ -39,4 +39,10 @@ export const EditBookmarkSchema = z.object({
     .optional(),
 });
 
+export const NewUserSchema = z.object({
+  email: z.email(),
+  password: z.string(),
+  fullName: z.string(),
+});
+
 export type NewBookmarkEntry = z.infer<typeof NewBookmarkEntrySchema>;

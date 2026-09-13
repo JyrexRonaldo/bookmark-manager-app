@@ -3,6 +3,7 @@ import express from "express";
 import bookmarkRouter from "./routes/bookmarkRouter.ts";
 import cors from "cors";
 import type  {  Request,  Response , NextFunction } from "express";
+import authRouter from "./routes/authRouter.ts";
 
 // const cors = require("cors");
 // import cors from "cors";
@@ -46,6 +47,7 @@ app.get("/", (_req, res) => {
   res.send("pong");
 });
 
+app.use("/auth", authRouter);
 app.use("/bookmark", bookmarkRouter);
 app.use((err: unknown, _req: Request, _res: Response, _next: NextFunction) => {
   console.log('772 love');
