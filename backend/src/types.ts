@@ -45,4 +45,14 @@ export const NewUserSchema = z.object({
   fullName: z.string(),
 });
 
+export const UserSchema = z.object({
+  email: z.email(),
+  password: z.string(),
+});
+
 export type NewBookmarkEntry = z.infer<typeof NewBookmarkEntrySchema>;
+
+
+export interface PayloadType {
+  id: string
+}

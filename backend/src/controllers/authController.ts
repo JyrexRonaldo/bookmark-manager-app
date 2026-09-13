@@ -1,54 +1,11 @@
 import type { Request, Response } from "express";
-import { NewUserSchema } from "../types.ts";
+import { NewUserSchema, UserSchema } from "../types.ts";
 import db from "../../config/drizzle.ts";
 import { usersTable } from "../db/schema.ts";
 import bcrypt from "bcryptjs";
+import { eq } from "drizzle-orm";
+import  jwt  from "jsonwebtoken";
 
-// const addBookmark = async (req: Request, res: Response) => {
-//   try {
-//     const { id, title, description, url, tags, createdAt } =
-//       NewBookmarkEntrySchema.parse(req.body);
-//     const faviconUrl = new URL(url).hostname;
-//     const newBookmark = await db.transaction(async (tx) => {
-//       const newBookmarks = await tx
-//         .insert(bookmarksTable)
-//         .values({
-//           id,
-//           title,
-//           description,
-//           url,
-//           favicon: faviconUrl,
-//           createdAt,
-//         })
-//         .returning();
-//       const tagTitlesArray = tags.split(",").map((tag) => {
-//         return { title: tag.trim() };
-//       });
-//       const newTags = await tx
-//         .insert(tagsTable)
-//         .values(tagTitlesArray)
-//         .onConflictDoNothing()
-//         .returning();
-//       const bookmarkTagsData = tags.split(",").map((tag) => {
-//         return { bookmarkId: id, tagId: tag.trim() };
-//       });
-//       const newBookmarksTags = await tx
-//         .insert(bookmarksTagsTable)
-//         .values(bookmarkTagsData)
-//         .returning();
-//       return { newBookmarks, newTags, newBookmarksTags };
-//     });
-//     res.json(newBookmark);
-//   } catch (error: unknown) {
-//     if (error instanceof ZodError) {
-//       console.log(error);
-//       res.status(400).send({ error: error.issues });
-//     } else {
-//       console.log(error);
-//       res.status(400).send({ error: "unknown error" });
-//     }
-//   }
-// };
 
 const createUser = async (req: Request, res: Response) => {
   const { email, password, fullName } = NewUserSchema.parse(req.body);
@@ -59,4 +16,44 @@ const createUser = async (req: Request, res: Response) => {
   res.end();
 };
 
-export default { createUser };
+const signIn = async (req: Request, res: Response) => {
+  const { email, password } = UserSchema.parse(req.body);
+
+  const [user] = [
+    ...(await db.select().from(usersTable).where(eq(usersTable.email, email))),
+  ];
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const match = await bcrypt.compare(password, user.passwordHash);
+
+  if (!match) {
+    return res.status(401).json({ message: "Invalid password" });
+  }
+
+  const token = jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.JWT_SECRET_KEY || 'secretKey',
+        { expiresIn: "14d" },
+      );
+
+      console.log(req.body);
+
+    //   let message = null;
+    // if (req.body.name) {
+    //   message = "Registration successful!, logging you in";
+    // } else {
+    //   message = "Welcome, logging you in";
+    // }
+
+    return res.status(200).json({
+      token: `Bearer ${token}`,
+      userId: user.id,
+      email: user.email,
+    });
+
+};
+
+export default { createUser, signIn };

@@ -2,8 +2,9 @@ import "dotenv/config";
 import express from "express";
 import bookmarkRouter from "./routes/bookmarkRouter.ts";
 import cors from "cors";
-import type  {  Request,  Response , NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import authRouter from "./routes/authRouter.ts";
+import passport from "../config/passport.ts";
 
 // const cors = require("cors");
 // import cors from "cors";
@@ -42,17 +43,16 @@ app.use(express.urlencoded({ extended: true }));
 //   // res.status(err.statusCode || 500).send(err.message);
 // });
 
-app.get("/", (_req, res) => {
-  console.log("someone pinged here");
-  res.send("pong");
-});
+// app.get("/", (_req, res) => {
+//   console.log("someone pinged here");
+//   res.send("pong");
+// });
 
 app.use("/auth", authRouter);
+app.use(passport.authenticate("jwt", { session: false }));
 app.use("/bookmark", bookmarkRouter);
 app.use((err: unknown, _req: Request, _res: Response, _next: NextFunction) => {
-  console.log('772 love');
   console.log(err);
-  
   // res.status(err.statusCode || 500).send(err.message);
 });
 
