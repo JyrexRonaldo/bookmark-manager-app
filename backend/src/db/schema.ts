@@ -20,10 +20,16 @@ export const bookmarksTable = pgTable("bookmarks", {
   visitCount: integer().default(0),
   createdAt: timestamp({ mode: "date" }).defaultNow(),
   lastVisited: timestamp({ mode: "date" }),
+  userId: uuid("user_Id")
+    .notNull()
+    .references(() => usersTable.id),
 });
 
 export const tagsTable = pgTable("tags", {
   title: varchar({ length: 255 }).notNull().primaryKey(),
+  userId: uuid("user_Id")
+    .notNull()
+    .references(() => usersTable.id),
 });
 
 export const bookmarksTagsTable = pgTable(
@@ -35,6 +41,9 @@ export const bookmarksTagsTable = pgTable(
     tagId: varchar("tag_id")
       .notNull()
       .references(() => tagsTable.title),
+    userId: uuid("user_Id")
+      .notNull()
+      .references(() => usersTable.id),
   },
   (table) => [primaryKey({ columns: [table.bookmarkId, table.tagId] })],
 );

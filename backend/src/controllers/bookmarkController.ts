@@ -1,41 +1,54 @@
 import { type Request, type Response } from "express";
-import { EditBookmarkSchema, NewBookmarkEntrySchema } from "../types.ts";
+import {
+  EditBookmarkSchema,
+  NewBookmarkEntrySchema,
+  LoggedInUserSchema,
+} from "../types.ts";
 import db from "../../config/drizzle.ts";
 import { bookmarksTable, bookmarksTagsTable, tagsTable } from "../db/schema.ts";
 import { eq, notInArray, sql } from "drizzle-orm";
 import { ZodError } from "zod";
 
-const getAllBookmarks = async (_req: Request, res: Response) => {
-  const allData = await db.transaction(async (tx) => {
-    const allTags = await tx
-      .select({
-        title: bookmarksTagsTable.tagId,
-        count: sql<number>`cast(count(${bookmarksTagsTable.tagId}) as int)`,
-      })
-      .from(bookmarksTagsTable)
-      .groupBy(bookmarksTagsTable.tagId);
+const getAllBookmarks = async (req: Request, res: Response) => {
+  const user = LoggedInUserSchema.parse(req.user)[0];
 
-    const allBookmarks = await tx
-      .select({
-        bookmarksTable,
-        tags: sql<string>`string_agg(${tagsTable.title}, ',')`.as("tags"),
-      })
-      .from(bookmarksTagsTable)
-      .innerJoin(
-        bookmarksTable,
-        eq(bookmarksTable.id, bookmarksTagsTable.bookmarkId),
-      )
-      .innerJoin(tagsTable, eq(tagsTable.title, bookmarksTagsTable.tagId))
-      .groupBy(bookmarksTable.id)
-      .orderBy(bookmarksTable.id);
+  if (user !== undefined) {
+    const allData = await db.transaction(async (tx) => {
+      const allTags = await tx
+        .select({
+          title: bookmarksTagsTable.tagId,
+          count: sql<number>`cast(count(${bookmarksTagsTable.tagId}) as int)`,
+        })
+        .from(bookmarksTagsTable)
+        .where(eq(bookmarksTagsTable.userId, user.id))
+        .groupBy(bookmarksTagsTable.tagId);
 
-    return { allBookmarks, allTags };
-  });
-  res.json(allData);
+      const allBookmarks = await tx
+        .select({
+          bookmarksTable,
+          tags: sql<string>`string_agg(${tagsTable.title}, ',')`.as("tags"),
+        })
+        .from(bookmarksTagsTable)
+        .innerJoin(
+          bookmarksTable,
+          eq(bookmarksTable.id, bookmarksTagsTable.bookmarkId),
+        )
+        .innerJoin(tagsTable, eq(tagsTable.title, bookmarksTagsTable.tagId))
+        .where(eq(bookmarksTable.userId, user.id))
+        .groupBy(bookmarksTable.id)
+        .orderBy(bookmarksTable.id);
+
+      return { allBookmarks, allTags };
+    });
+    res.json(allData);
+  } else {
+    res.status(404).json({ message: "user not logged in" });
+  }
 };
 
 const addBookmark = async (req: Request, res: Response) => {
   try {
+    const user = LoggedInUserSchema.parse(req.user)[0];
     const { id, title, description, url, tags, createdAt } =
       NewBookmarkEntrySchema.parse(req.body);
     const faviconUrl = new URL(url).hostname;
@@ -49,10 +62,11 @@ const addBookmark = async (req: Request, res: Response) => {
           url,
           favicon: faviconUrl,
           createdAt,
+          userId: user.id,
         })
         .returning();
       const tagTitlesArray = tags.split(",").map((tag) => {
-        return { title: tag.trim() };
+        return { title: tag.trim(), userId: user.id };
       });
       const newTags = await tx
         .insert(tagsTable)
@@ -60,7 +74,7 @@ const addBookmark = async (req: Request, res: Response) => {
         .onConflictDoNothing()
         .returning();
       const bookmarkTagsData = tags.split(",").map((tag) => {
-        return { bookmarkId: id, tagId: tag.trim() };
+        return { bookmarkId: id, tagId: tag.trim() , userId: user.id};
       });
       const newBookmarksTags = await tx
         .insert(bookmarksTagsTable)
@@ -80,6 +94,7 @@ const addBookmark = async (req: Request, res: Response) => {
   }
 };
 const editBookmark = async (req: Request, res: Response) => {
+  const user = LoggedInUserSchema.parse(req.user)[0];
   const { id } = EditBookmarkSchema.parse(req.params);
   const { isArchived, title, description, url, tags, lastVisited } =
     EditBookmarkSchema.parse(req.body);
@@ -117,7 +132,7 @@ const editBookmark = async (req: Request, res: Response) => {
         .set({ title, description, url, favicon: faviconUrl })
         .where(eq(bookmarksTable.id, id));
       const tagTitlesArray = tags.split(",").map((tag) => {
-        return { title: tag.trim() };
+        return { title: tag.trim(), userId: user.id };
       });
 
       await tx.insert(tagsTable).values(tagTitlesArray).onConflictDoNothing();
@@ -125,7 +140,7 @@ const editBookmark = async (req: Request, res: Response) => {
         .delete(bookmarksTagsTable)
         .where(eq(bookmarksTagsTable.bookmarkId, id));
       const bookmarkTagsData = tags.split(",").map((tag) => {
-        return { bookmarkId: id, tagId: tag.trim() };
+        return { bookmarkId: id, tagId: tag.trim(), userId: user.id };
       });
       await tx
         .insert(bookmarksTagsTable)

@@ -50,9 +50,26 @@ export const UserSchema = z.object({
   password: z.string(),
 });
 
+export const LoggedInUserSchema = z.array(
+  z.object({
+    id: z.string(),
+    fullName: z.string(),
+    email: z.email(),
+    passwordHash: z.string(),
+    createdAt: z.coerce.date(),
+  }),
+);
+
+// {
+//   id: '45b54536-6d49-489d-8e87-53b82faa6e05',
+//   fullName: 'Jyrex Ronaldo',
+//   email: 'ron@gmail.com',
+//   passwordHash: '$2b$10$8idUNulnyW5swCJXzkB4t.jBTAxgJmA3OtbSlxgVwVZp5JKt5UOJm',
+//   createdAt: 2026-09-13T18:56:38.189Z
+// }
+
 export type NewBookmarkEntry = z.infer<typeof NewBookmarkEntrySchema>;
 
-
 export interface PayloadType {
-  id: string
+  id: string;
 }
