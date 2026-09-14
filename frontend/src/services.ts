@@ -149,6 +149,21 @@ async function signIn(userData: UserType) {
   }
 }
 
+async function resetPassword(email: string) {
+  try {
+    const response = await fetch(`${BACKEND_API_ENDPOINT}/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(email),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   getAllBookmarks,
   uploadBookmark,
@@ -158,4 +173,5 @@ export {
   updateLastVisitDateBackend,
   createUser,
   signIn,
+  resetPassword
 };
