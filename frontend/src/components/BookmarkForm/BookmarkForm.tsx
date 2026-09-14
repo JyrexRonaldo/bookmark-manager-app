@@ -54,13 +54,15 @@ function BookmarkForm() {
 
   const onSubmit: SubmitHandler<BookmarkData> = (formData) => {
     if (formView) {
-      const lastBookmarkIdNumber =
-        allBookmarkData.length !== 0
-          ? +allBookmarkData[
-              allBookmarkData.length - 1
-            ].bookmarksTable.id.slice(4)
-          : 0;
-      const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
+      // const lastBookmarkIdNumber =
+      //   allBookmarkData.length !== 0
+      //     ? +allBookmarkData[
+      //         allBookmarkData.length - 1
+      //       ].bookmarksTable.id.slice(4)
+      //     : 0;
+      // const id = `bm-${String(lastBookmarkIdNumber + 1).padStart(3, "0")}`;
+      const id = self.crypto.randomUUID();
+
       const favicon = new URL(formData.url).hostname;
       const trimmedCapitalizedTags = formData.tags
         .replace(/\s/g, "")

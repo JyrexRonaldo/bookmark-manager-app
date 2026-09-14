@@ -74,7 +74,7 @@ const addBookmark = async (req: Request, res: Response) => {
         .onConflictDoNothing()
         .returning();
       const bookmarkTagsData = tags.split(",").map((tag) => {
-        return { bookmarkId: id, tagId: tag.trim() , userId: user.id};
+        return { bookmarkId: id, tagId: tag.trim(), userId: user.id };
       });
       const newBookmarksTags = await tx
         .insert(bookmarksTagsTable)
