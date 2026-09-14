@@ -66,7 +66,7 @@ const addBookmark = async (req: Request, res: Response) => {
         })
         .returning();
       const tagTitlesArray = tags.split(",").map((tag) => {
-        return { title: tag.trim(), userId: user.id };
+        return { title: tag.trim() };
       });
       const newTags = await tx
         .insert(tagsTable)
@@ -132,7 +132,7 @@ const editBookmark = async (req: Request, res: Response) => {
         .set({ title, description, url, favicon: faviconUrl })
         .where(eq(bookmarksTable.id, id));
       const tagTitlesArray = tags.split(",").map((tag) => {
-        return { title: tag.trim(), userId: user.id };
+        return { title: tag.trim() };
       });
 
       await tx.insert(tagsTable).values(tagTitlesArray).onConflictDoNothing();

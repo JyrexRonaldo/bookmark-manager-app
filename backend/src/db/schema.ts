@@ -27,9 +27,6 @@ export const bookmarksTable = pgTable("bookmarks", {
 
 export const tagsTable = pgTable("tags", {
   title: varchar({ length: 255 }).notNull().primaryKey(),
-  userId: uuid("user_Id")
-    .notNull()
-    .references(() => usersTable.id),
 });
 
 export const bookmarksTagsTable = pgTable(
