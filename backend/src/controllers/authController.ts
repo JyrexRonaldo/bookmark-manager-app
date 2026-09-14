@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { NewUserSchema, UserSchema } from "../types.ts";
 import db from "../../config/drizzle.ts";
 import { usersTable } from "../db/schema.ts";
@@ -6,12 +6,12 @@ import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import jwt from "jsonwebtoken";
 
-const createUser = async (req: Request, res: Response) => {
+const createUser = async (req: Request, _res: Response, next: NextFunction) => {
   const { email, password, fullName } = NewUserSchema.parse(req.body);
   console.log({ email, password, fullName });
   const passwordHash = await bcrypt.hash(password, 10);
   await db.insert(usersTable).values({ email, passwordHash, fullName });
-  res.end();
+  next();
 };
 
 const signIn = async (req: Request, res: Response) => {
@@ -37,8 +37,8 @@ const signIn = async (req: Request, res: Response) => {
     { expiresIn: "14d" },
   );
 
-  console.log(req.body);
-  console.log(".body");
+  // console.log(req.body);
+  // console.log(".body");
 
   //   let message = null;
   // if (req.body.name) {
@@ -47,7 +47,7 @@ const signIn = async (req: Request, res: Response) => {
   //   message = "Welcome, logging you in";
   // }
 
-  console.log({user});
+  // console.log({ user });
 
   return res.status(200).json({
     token: `Bearer ${token}`,

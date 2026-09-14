@@ -1,9 +1,10 @@
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
 import type { NewUserType } from "../../types";
 import { createUser } from "../../services";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function Signup() {
+  const navigate = useNavigate();
   const { register, handleSubmit } = useForm<NewUserType>({
     defaultValues: {
       fullName: "",
@@ -12,8 +13,13 @@ function Signup() {
     },
   });
 
-  const onSubmit: SubmitHandler<NewUserType> = (formData) => {
-    createUser(formData)
+  const onSubmit: SubmitHandler<NewUserType> = async (formData) => {
+    const userData = await createUser(formData);
+    localStorage.setItem("email", userData.email);
+    localStorage.setItem("fullname", userData.fullname);
+    localStorage.setItem("userToken", userData.token);
+    localStorage.setItem("userId", userData.userId);
+    navigate("/");
   };
 
   const onError = (error: FieldErrors) => {
@@ -85,7 +91,10 @@ function Signup() {
               <p className="font-manrope text-[14px]/[150%] tracking-[1%]">
                 Already have an account?
               </p>
-              <Link to='/signin'  className="font-manrope text-[14px]/[140%] font-semibold">
+              <Link
+                to="/signin"
+                className="font-manrope text-[14px]/[140%] font-semibold"
+              >
                 Log in
               </Link>
             </div>

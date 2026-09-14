@@ -1,8 +1,10 @@
+import { Link } from "react-router";
+
 function ResetPassword() {
   return (
     <>
       <div className="flex h-screen items-center justify-center bg-[#E8F0EF]">
-        <div className="flex h-[530px] w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]">
+        <div className="mx-[20px] flex h-[530px] max-w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]">
           <div>
             <img src="/img/logo-light-theme.svg" alt="" />
           </div>
@@ -19,7 +21,7 @@ function ResetPassword() {
                 type="password"
                 name="password"
                 id="password"
-                className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
+                className="h-[45px] max-w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
             </div>
             <div className="flex flex-col gap-[6px]">
@@ -28,16 +30,18 @@ function ResetPassword() {
                 type="password"
                 name="password"
                 id="password"
-                className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
+                className="h-[45px] max-w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
             </div>
-            <button className="h-[46px] w-[384px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] text-[16px]/[140%] text-white">
+            <button className="h-[46px] max-w-[384px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] text-[16px]/[140%] text-white">
               Reset password
             </button>
           </div>
           <div className="flex flex-col justify-center gap-[12px]">
             <div className="flex justify-center">
-              <p className="text-[14px]/[140%]">Back to login</p>
+              <Link to="/">
+                <p className="text-[14px]/[140%]">Back to login</p>
+              </Link>
             </div>
           </div>
         </div>

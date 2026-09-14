@@ -1,8 +1,7 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
 import type { UserType } from "../../types";
 import { signIn } from "../../services";
-import { useNavigate } from "react-router";
 
 function Signin() {
   const navigate = useNavigate();
@@ -20,7 +19,6 @@ function Signin() {
     localStorage.setItem("fullname", userData.fullname);
     localStorage.setItem("userToken", userData.token);
     localStorage.setItem("userId", userData.userId);
-    console.log(localStorage);
     navigate("/");
   };
 
@@ -78,9 +76,9 @@ function Signin() {
               <p className="font-manrope text-[14px]/[150%] tracking-[1%]">
                 Forgot password?
               </p>
-              <p className="font-manrope text-[14px]/[140%] font-semibold">
+              <Link to="/forget" className="font-manrope text-[14px]/[140%] font-semibold">
                 Reset it
-              </p>
+              </Link>
             </div>
             <div className="flex justify-center gap-[6px]">
               <p className="-manrope text-[14px]/[150%] tracking-[1%]">
