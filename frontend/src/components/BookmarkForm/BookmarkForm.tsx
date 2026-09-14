@@ -10,6 +10,7 @@ import {
   useAllTagsControls,
   useBookmarkFormView,
   useBookmarkFormValues,
+  useToastStatusControls,
 } from "../../store";
 
 function BookmarkForm() {
@@ -20,6 +21,7 @@ function BookmarkForm() {
   const { setAllBookmarkData } = useAllBookmarkDataControls();
   const allTagsData = useAllTagsData();
   const { setAllTagsData, updateTagsOnDelete } = useAllTagsControls();
+  const { setToastStatus } = useToastStatusControls();
 
   const { register, handleSubmit, setValue } = useForm<BookmarkData>({
     defaultValues: {
@@ -155,6 +157,7 @@ function BookmarkForm() {
     }
 
     toggleBookmarkForm(formView);
+    setToastStatus(true);
   };
 
   const onError = (error: FieldErrors) => {

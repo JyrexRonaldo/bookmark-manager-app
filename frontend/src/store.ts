@@ -357,6 +357,32 @@ const useThemeControls = () => {
   return useThemeStore((state) => state.actions);
 };
 
+interface ToastStoreType {
+  toastStatus: boolean;
+  actions: {
+    setToastStatus: (value: boolean) => void;
+  };
+}
+
+const useToastStore = create<ToastStoreType>()((set) => ({
+  toastStatus: false,
+  actions: {
+    setToastStatus: (value) => {
+      return set(() => {
+        return { toastStatus: value };
+      });
+    },
+  },
+}));
+
+const useToastStatus = () => {
+  return useToastStore((state) => state.toastStatus);
+};
+
+const useToastStatusControls = () => {
+  return useToastStore((state) => state.actions);
+};
+
 export {
   useCurrentView,
   useMainViewControls,
@@ -377,4 +403,6 @@ export {
   useSortControls,
   useTheme,
   useThemeControls,
+  useToastStatus,
+  useToastStatusControls,
 };

@@ -12,6 +12,7 @@ import {
   useSortValue,
 } from "../../store";
 import { getAllBookmarks } from "../../services";
+import Toast from "../Toast/Toast";
 
 function Main() {
   const allBookmarkData = useAllBookmarkData();
@@ -176,6 +177,7 @@ function Main() {
           )}
 
           <SortByDropdown />
+          <Toast message="Bookmark added successfully" />
         </div>
         <div className="scrollbar-hide grid h-[200px] grow grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] content-start gap-[32px] overflow-y-scroll bg-[#E8F0EF]">
           {displayedElements}
