@@ -16,10 +16,10 @@ export const bookmarksTable = pgTable("bookmarks", {
   favicon: varchar({ length: 255 }).notNull(),
   description: varchar({ length: 255 }).notNull(),
   pinned: boolean().default(false),
-  isArchived: boolean().default(false),
-  visitCount: integer().default(0),
-  createdAt: timestamp({ mode: "date" }).defaultNow(),
-  lastVisited: timestamp({ mode: "date" }),
+  isArchived: boolean("is_archived").default(false),
+  visitCount: integer("visit_count").default(0),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+  lastVisited: timestamp("last_visited", { mode: "date" }),
   userId: uuid("user_Id")
     .notNull()
     .references(() => usersTable.id),
@@ -30,7 +30,7 @@ export const tagsTable = pgTable("tags", {
 });
 
 export const bookmarksTagsTable = pgTable(
-  "bookmarks_Tags",
+  "bookmarks_tags",
   {
     bookmarkId: varchar("bookmark_id")
       .notNull()
@@ -47,8 +47,17 @@ export const bookmarksTagsTable = pgTable(
 
 export const usersTable = pgTable("users", {
   id: uuid().primaryKey().defaultRandom(),
-  fullName: varchar().notNull(),
+  fullName: varchar("full_name").notNull(),
   email: varchar({ length: 255 }).unique().notNull(),
   passwordHash: text("password_hash").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+export const passwordResetTokenTable = pgTable(
+  "password_reset_token",
+  {
+    userId: uuid("user_id"),
+    token: varchar().notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.token] })],
+);

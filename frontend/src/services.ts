@@ -154,7 +154,7 @@ async function resetPassword(email: string) {
     const response = await fetch(`${BACKEND_API_ENDPOINT}/reset-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(email),
+      body: JSON.stringify({ email }),
     });
     const data = await response.json();
     console.log(data);
@@ -173,5 +173,5 @@ export {
   updateLastVisitDateBackend,
   createUser,
   signIn,
-  resetPassword
+  resetPassword,
 };

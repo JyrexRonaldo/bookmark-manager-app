@@ -5,6 +5,7 @@ import cors from "cors";
 import type { Request, Response, NextFunction } from "express";
 import authRouter from "./routes/authRouter.ts";
 import passport from "../config/passport.ts";
+import resetPasswordRouter from "./routes/resetPasswordRouter.ts";
 
 // const cors = require("cors");
 // import cors from "cors";
@@ -47,7 +48,7 @@ app.use(express.urlencoded({ extended: true }));
 //   console.log("someone pinged here");
 //   res.send("pong");
 // });
-
+app.use("/reset-password", resetPasswordRouter);
 app.use("/auth", authRouter);
 app.use(passport.authenticate("jwt", { session: false }));
 app.use("/bookmark", bookmarkRouter);

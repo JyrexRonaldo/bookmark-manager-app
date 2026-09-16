@@ -60,6 +60,13 @@ export const LoggedInUserSchema = z.array(
   }),
 );
 
+export const ResetPasswordSchema = z.object({ email: z.string() });
+
+export const NewPasswordSchema = z.object({
+  newPasswword: z.string(),
+  token: z.string(),
+});
+
 // {
 //   id: '45b54536-6d49-489d-8e87-53b82faa6e05',
 //   fullName: 'Jyrex Ronaldo',
