@@ -50,3 +50,8 @@ export interface UserType {
   email: string;
   password: string;
 }
+
+export interface ResetPasswordType {
+  newPassword: string;
+  confirmPassword: string;
+}

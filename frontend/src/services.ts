@@ -164,6 +164,24 @@ async function resetPassword(email: string) {
   }
 }
 
+async function updatePassword(password: string, token: string) {
+  try {
+    const response = await fetch(
+      `${BACKEND_API_ENDPOINT}/reset-password/${token}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newPassword: password }),
+      },
+    );
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   getAllBookmarks,
   uploadBookmark,
@@ -174,4 +192,5 @@ export {
   createUser,
   signIn,
   resetPassword,
+  updatePassword,
 };

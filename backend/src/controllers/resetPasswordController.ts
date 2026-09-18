@@ -1,31 +1,44 @@
 import { type Request, type Response } from "express";
-import { ResetPasswordSchema } from "../types.ts";
+import {
+  ResetPasswordSchema,
+  NewPasswordSchema,
+  ResetTokenSchema,
+} from "../types.ts";
 import db from "../../config/drizzle.ts";
 import { usersTable, passwordResetTokenTable } from "../db/schema.ts";
 import { eq } from "drizzle-orm";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 import transporter from "../../config/mailtransport.ts";
 import nodemailer from "nodemailer";
+// import type {
+//   TokenExpiredError,
+//   JsonWebTokenError,
+//   NotBeforeError,
+// } from "jsonwebtoken";
+import * as jose from "jose";
+import bcrypt from "bcryptjs";
 
 // import { ZodError } from "zod";
-const PASSWORD_RESET_KEY = process.env.PASSWORD_RESET_KEY || "secretKey";
+const PASSWORD_RESET_SECRET = new TextEncoder().encode(
+  process.env.PASSWORD_RESET_KEY || "secretKey",
+);
 
 const sendResetLink = async (req: Request, res: Response) => {
   const { email } = ResetPasswordSchema.parse(req.body);
 
   const token = await db.transaction(async (tx) => {
-    const user = [
+    const userId = [
       ...(await tx
-        .select()
+        .select({ id: usersTable.id })
         .from(usersTable)
         .where(eq(usersTable.email, email))),
-    ][0];
-    const token = jwt.sign(
-      { name: user.fullName, email: user.email },
-      PASSWORD_RESET_KEY,
-      { expiresIn: "2m" },
-    );
-    await tx.insert(passwordResetTokenTable).values({ userId: user.id, token });
+    ][0].id;
+    const token = await new jose.SignJWT({ userId })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime("2h")
+      .sign(PASSWORD_RESET_SECRET);
+
+    await tx.insert(passwordResetTokenTable).values({ userId, token });
     return token;
   });
   console.log(token);
@@ -33,7 +46,7 @@ const sendResetLink = async (req: Request, res: Response) => {
   const info = await transporter.sendMail({
     from: '"Test Sender" <test@example.com>',
     to: "recipient@example.com",
-    subject: "Email reset link",
+    subject: `${process.env.HOME_DOMAIN}/reset-password?token=${token}`,
     text: "This is a test email sent via Ethereal!",
     html: "<p>This is a <b>test email</b> sent via Ethereal!</p>",
   });
@@ -48,6 +61,54 @@ const sendResetLink = async (req: Request, res: Response) => {
   res.end();
 };
 
+const changePassword = async (req: Request, res: Response) => {
+  const { token } = ResetTokenSchema.parse(req.params);
+  const { newPassword } = NewPasswordSchema.parse(req.body);
 
+  // console.log({ newPassword, token });
 
-export default { sendResetLink, };
+  try {
+    const value = await jose.jwtVerify(token, PASSWORD_RESET_SECRET);
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+    await db
+      .update(usersTable)
+      .set({ passwordHash })
+      .where(eq(usersTable.id, value.payload.userId as string));
+  } catch (error) {
+    if (error instanceof jose.errors.JOSEError) {
+      console.log(error);
+      console.log(error.code);
+    }
+  }
+  // try {
+  //   const decoded = jwt.verify(token, PASSWORD_RESET_KEY);
+  //   console.log(decoded);
+  // } catch (error) {
+  //   if (error instanceof TokenExpiredError) {
+  //     return {
+  //       valid: false,
+  //       error: "Token has expired",
+  //       code: "TOKEN_EXPIRED",
+  //     };
+  //   }
+  //   if (error instanceof JsonWebTokenError) {
+  //     return {
+  //       valid: false,
+  //       error: "Invalid token signature or structure",
+  //       code: "INVALID_TOKEN",
+  //     };
+  //   }
+  //   if (error instanceof NotBeforeError) {
+  //     return {
+  //       valid: false,
+  //       error: "Token is not active yet",
+  //       code: "TOKEN_NOT_ACTIVE",
+  //     };
+  //   }
+  //   return { valid: false, error: "Authentication failed", code: "AUTH_ERROR" };
+  // }
+
+  res.end();
+};
+
+export default { sendResetLink, changePassword };

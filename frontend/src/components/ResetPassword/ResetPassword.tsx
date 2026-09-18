@@ -1,10 +1,44 @@
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
+import type { ResetPasswordType } from "../../types";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { updatePassword } from "../../services";
 
 function ResetPassword() {
+  const [searchParams] = useSearchParams();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ResetPasswordType>({
+    defaultValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<ResetPasswordType> = (formData) => {
+    const token = searchParams.get("token");
+    if (token) {
+      updatePassword(formData.newPassword, token);
+    }
+  };
+
+  function checkPassword(value: string, formData: ResetPasswordType) {
+    if (value === formData.newPassword) {
+      return true;
+    } else {
+      return "Passwords do not match";
+    }
+  }
+
   return (
     <>
       <div className="flex h-screen items-center justify-center bg-[#E8F0EF]">
-        <div className="mx-[20px] flex h-[530px] max-w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mx-[20px] flex h-[530px] max-w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]"
+        >
           <div>
             <img src="/img/logo-light-theme.svg" alt="" />
           </div>
@@ -19,8 +53,8 @@ function ResetPassword() {
               <label htmlFor="">New Password *</label>
               <input
                 type="password"
-                name="password"
-                id="password"
+                {...register("newPassword")}
+                autoComplete="off"
                 className="h-[45px] max-w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
             </div>
@@ -28,12 +62,20 @@ function ResetPassword() {
               <label htmlFor="">Confirm password *</label>
               <input
                 type="password"
-                name="password"
-                id="password"
+                {...register("confirmPassword", { validate: checkPassword })}
+                autoComplete="off"
                 className="h-[45px] max-w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
+              {errors && (
+                <p className="text-sm text-red-600">
+                  {errors.confirmPassword?.message}
+                </p>
+              )}
             </div>
-            <button className="h-[46px] max-w-[384px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] text-[16px]/[140%] text-white">
+            <button
+              type="submit"
+              className="h-[46px] max-w-[384px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] text-[16px]/[140%] text-white"
+            >
               Reset password
             </button>
           </div>
@@ -44,7 +86,7 @@ function ResetPassword() {
               </Link>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

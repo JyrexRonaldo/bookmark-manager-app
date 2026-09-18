@@ -63,17 +63,12 @@ export const LoggedInUserSchema = z.array(
 export const ResetPasswordSchema = z.object({ email: z.string() });
 
 export const NewPasswordSchema = z.object({
-  newPasswword: z.string(),
-  token: z.string(),
+  newPassword: z.string(),
 });
 
-// {
-//   id: '45b54536-6d49-489d-8e87-53b82faa6e05',
-//   fullName: 'Jyrex Ronaldo',
-//   email: 'ron@gmail.com',
-//   passwordHash: '$2b$10$8idUNulnyW5swCJXzkB4t.jBTAxgJmA3OtbSlxgVwVZp5JKt5UOJm',
-//   createdAt: 2026-09-13T18:56:38.189Z
-// }
+export const ResetTokenSchema = z.object({
+  token: z.string(),
+});
 
 export type NewBookmarkEntry = z.infer<typeof NewBookmarkEntrySchema>;
 

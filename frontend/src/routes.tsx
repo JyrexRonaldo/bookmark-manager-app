@@ -28,7 +28,7 @@ const routes = [
     element: <Signup />,
   },
   {
-    path: "/reset",
+    path: "/reset-password",
     element: <ResetPassword />,
   },
   {

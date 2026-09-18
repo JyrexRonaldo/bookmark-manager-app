@@ -36,6 +36,7 @@
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
+    "jose": "^6.2.12",
     "jsonwebtoken": "^9.0.3",
     "nodemailer": "^10.0.10",
     "passport": "^0.7.0",
