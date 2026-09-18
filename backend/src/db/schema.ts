@@ -53,11 +53,3 @@ export const usersTable = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const passwordResetTokenTable = pgTable(
-  "password_reset_token",
-  {
-    userId: uuid("user_id"),
-    token: varchar().notNull(),
-  },
-  (table) => [primaryKey({ columns: [table.userId, table.token] })],
-);

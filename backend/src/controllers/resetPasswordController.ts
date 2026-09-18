@@ -5,20 +5,13 @@ import {
   ResetTokenSchema,
 } from "../types.ts";
 import db from "../../config/drizzle.ts";
-import { usersTable, passwordResetTokenTable } from "../db/schema.ts";
+import { usersTable } from "../db/schema.ts";
 import { eq } from "drizzle-orm";
-// import jwt from "jsonwebtoken";
 import transporter from "../../config/mailtransport.ts";
 import nodemailer from "nodemailer";
-// import type {
-//   TokenExpiredError,
-//   JsonWebTokenError,
-//   NotBeforeError,
-// } from "jsonwebtoken";
 import * as jose from "jose";
 import bcrypt from "bcryptjs";
 
-// import { ZodError } from "zod";
 const PASSWORD_RESET_SECRET = new TextEncoder().encode(
   process.env.PASSWORD_RESET_KEY || "secretKey",
 );
@@ -26,22 +19,17 @@ const PASSWORD_RESET_SECRET = new TextEncoder().encode(
 const sendResetLink = async (req: Request, res: Response) => {
   const { email } = ResetPasswordSchema.parse(req.body);
 
-  const token = await db.transaction(async (tx) => {
-    const userId = [
-      ...(await tx
-        .select({ id: usersTable.id })
-        .from(usersTable)
-        .where(eq(usersTable.email, email))),
-    ][0].id;
-    const token = await new jose.SignJWT({ userId })
-      .setProtectedHeader({ alg: "HS256" })
-      .setExpirationTime("2h")
-      .sign(PASSWORD_RESET_SECRET);
-
-    await tx.insert(passwordResetTokenTable).values({ userId, token });
-    return token;
-  });
-  console.log(token);
+  const userId = [
+    ...(await db
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.email, email))),
+  ][0].id;
+  
+  const token = await new jose.SignJWT({ userId })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("2h")
+    .sign(PASSWORD_RESET_SECRET);
 
   const info = await transporter.sendMail({
     from: '"Test Sender" <test@example.com>',
@@ -80,34 +68,6 @@ const changePassword = async (req: Request, res: Response) => {
       console.log(error.code);
     }
   }
-  // try {
-  //   const decoded = jwt.verify(token, PASSWORD_RESET_KEY);
-  //   console.log(decoded);
-  // } catch (error) {
-  //   if (error instanceof TokenExpiredError) {
-  //     return {
-  //       valid: false,
-  //       error: "Token has expired",
-  //       code: "TOKEN_EXPIRED",
-  //     };
-  //   }
-  //   if (error instanceof JsonWebTokenError) {
-  //     return {
-  //       valid: false,
-  //       error: "Invalid token signature or structure",
-  //       code: "INVALID_TOKEN",
-  //     };
-  //   }
-  //   if (error instanceof NotBeforeError) {
-  //     return {
-  //       valid: false,
-  //       error: "Token is not active yet",
-  //       code: "TOKEN_NOT_ACTIVE",
-  //     };
-  //   }
-  //   return { valid: false, error: "Authentication failed", code: "AUTH_ERROR" };
-  // }
-
   res.end();
 };
 
