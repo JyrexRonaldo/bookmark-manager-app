@@ -5,7 +5,12 @@ import { signIn } from "../../services";
 
 function Signin() {
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<UserType>({
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<UserType>({
     defaultValues: {
       email: "",
       password: "",
@@ -13,25 +18,36 @@ function Signin() {
   });
 
   const onSubmit: SubmitHandler<UserType> = async (formData) => {
-    const userData = await signIn(formData);
-    console.log({ userData });
-    localStorage.setItem("email", userData.email);
-    localStorage.setItem("fullname", userData.fullname);
-    localStorage.setItem("userToken", userData.token);
-    localStorage.setItem("userId", userData.userId);
-    navigate("/");
+    try {
+      const userData = await signIn(formData);
+      localStorage.setItem("email", userData.email);
+      localStorage.setItem("fullname", userData.fullname);
+      localStorage.setItem("userToken", userData.token);
+      localStorage.setItem("userId", userData.userId);
+      navigate("/");
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "Invalid password") {
+          setError("password", { type: "manual", message: error.message });
+        } else {
+          setError("email", { type: "manual", message: error.message });
+        }
+      }
+    }
   };
 
   const onError = (error: FieldErrors) => {
     console.log(error);
   };
 
+  console.log({ errors });
+
   return (
     <>
       <div className="flex h-screen items-center justify-center bg-[#E8F0EF]">
         <form
           onSubmit={handleSubmit(onSubmit, onError)}
-          className="flex h-[543px] w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]"
+          className="flex min-h-[543px] w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]"
         >
           <div>
             <img src="/img/logo-light-theme.svg" alt="" />
@@ -55,6 +71,11 @@ function Signin() {
                 id="email"
                 className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
+              {errors.email && (
+                <p className="ml-[10px] text-xs text-red-600">
+                  {errors.email?.message}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-[6px]">
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
@@ -64,8 +85,14 @@ function Signin() {
                 type="password"
                 {...register("password", { required: "please enter password" })}
                 id="password"
+                autoComplete="off"
                 className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
+              {errors.password && (
+                <p className="ml-[10px] text-xs text-red-600">
+                  {errors.password?.message}
+                </p>
+              )}
             </div>
             <button className="h-[46px] w-[384px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] font-manrope text-[16px]/[140%] text-white">
               Log in
@@ -76,7 +103,10 @@ function Signin() {
               <p className="font-manrope text-[14px]/[150%] tracking-[1%]">
                 Forgot password?
               </p>
-              <Link to="/forget" className="font-manrope text-[14px]/[140%] font-semibold">
+              <Link
+                to="/forget"
+                className="font-manrope text-[14px]/[140%] font-semibold"
+              >
                 Reset it
               </Link>
             </div>

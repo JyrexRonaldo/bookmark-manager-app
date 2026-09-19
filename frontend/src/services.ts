@@ -141,11 +141,26 @@ async function signIn(userData: UserType) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
     });
+
+    if (response.status === 404) {
+      throw new Error("User not found");
+    }
+
+    if (!response.ok) {
+        const data = await response.json();
+        // console.log(data.message);
+        throw new Error(data.message);
+    }
+
+    console.log(response.ok);
+
     const data = await response.json();
     console.log(data);
     return data;
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
   }
 }
 

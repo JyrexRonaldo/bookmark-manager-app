@@ -14,47 +14,53 @@ const createUser = async (req: Request, _res: Response, next: NextFunction) => {
   next();
 };
 
-const signIn = async (req: Request, res: Response) => {
-  const { email, password } = UserSchema.parse(req.body);
+async function signIn(req: Request, res: Response, next: NextFunction) {
+  const result = UserSchema.safeParse(req.body);
+  if (!result.success) {
+    next(result.error);
+    return;
+  } else {
+    const { email, password } = result.data;
 
-  const [user] = [
-    ...(await db.select().from(usersTable).where(eq(usersTable.email, email))),
-  ];
+    const [user] = [
+      ...(await db
+        .select()
+        .from(usersTable)
+        .where(eq(usersTable.email, email))),
+    ];
 
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const match = await bcrypt.compare(password, user.passwordHash);
+
+    if (!match) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET_KEY || "secretKey",
+      { expiresIn: "14d" },
+    );
+
+    // console.log(req.body);
+    // console.log(".body");
+    //   let message = null;
+    // if (req.body.name) {
+    //   message = "Registration successful!, logging you in";
+    // } else {
+    //   message = "Welcome, logging you in";
+    // }
+    // console.log({ user });
+    return res.status(200).json({
+      token: `Bearer ${token}`,
+      userId: user.id,
+      email: user.email,
+      fullname: user.fullName,
+    });
   }
-
-  const match = await bcrypt.compare(password, user.passwordHash);
-
-  if (!match) {
-    return res.status(401).json({ message: "Invalid password" });
-  }
-
-  const token = jwt.sign(
-    { id: user.id, email: user.email },
-    process.env.JWT_SECRET_KEY || "secretKey",
-    { expiresIn: "14d" },
-  );
-
-  // console.log(req.body);
-  // console.log(".body");
-
-  //   let message = null;
-  // if (req.body.name) {
-  //   message = "Registration successful!, logging you in";
-  // } else {
-  //   message = "Welcome, logging you in";
-  // }
-
-  // console.log({ user });
-
-  return res.status(200).json({
-    token: `Bearer ${token}`,
-    userId: user.id,
-    email: user.email,
-    fullname: user.fullName,
-  });
-};
+}
 
 export default { createUser, signIn };

@@ -6,6 +6,7 @@ import type { Request, Response, NextFunction } from "express";
 import authRouter from "./routes/authRouter.ts";
 import passport from "../config/passport.ts";
 import resetPasswordRouter from "./routes/resetPasswordRouter.ts";
+import z from "zod";
 
 // const cors = require("cors");
 // import cors from "cors";
@@ -52,9 +53,13 @@ app.use("/reset-password", resetPasswordRouter);
 app.use("/auth", authRouter);
 app.use(passport.authenticate("jwt", { session: false }));
 app.use("/bookmark", bookmarkRouter);
-app.use((err: unknown, _req: Request, _res: Response, _next: NextFunction) => {
-  console.log(err);
-  // res.status(err.statusCode || 500).send(err.message);
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  if (err instanceof z.ZodError) {  
+    const message = err.issues[0].message;
+    res.status(500).send({message});
+  } else if (err instanceof Error) {
+    res.status(500).send(err.message);
+  }
 });
 
 app.listen(PORT, (error: unknown) => {
