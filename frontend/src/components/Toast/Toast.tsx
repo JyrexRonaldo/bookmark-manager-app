@@ -3,13 +3,15 @@ import { useEffect } from "react";
 import { useToastStatus, useToastStatusControls } from "../../store";
 
 function Toast({ message = "Supply text to display" }) {
-const toastStatus = useToastStatus();
+  const toastStatus = useToastStatus();
   const { setToastStatus } = useToastStatusControls();
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeId = setTimeout(() => {
       setToastStatus(false);
     }, 2000);
+
+    return () => clearTimeout(timeId);
   }, [toastStatus, setToastStatus]);
 
   function closeToastComponent() {
@@ -22,7 +24,7 @@ const toastStatus = useToastStatus();
         className={clsx(
           "fixed right-[-340px] flex h-[41px] max-w-[340px]",
           toastStatus && "translate-x-[-350px]",
-          "items-center gap-[8px] rounded-[8px] bg-white px-[12px] py-[10px] transition-transform duration-1000 ease-out",
+          "items-center gap-[8px] rounded-[8px] bg-white px-[12px] py-[10px] transition-transform duration-500 ease-out",
         )}
       >
         <img src="/img/icon-check.svg" alt="" />
