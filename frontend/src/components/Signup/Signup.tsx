@@ -5,7 +5,11 @@ import { Link, useNavigate } from "react-router";
 
 function Signup() {
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<NewUserType>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<NewUserType>({
     defaultValues: {
       fullName: "",
       email: "",
@@ -30,7 +34,7 @@ function Signup() {
     <>
       <div className="flex h-screen items-center justify-center bg-[#E8F0EF]">
         <form
-          className="flex h-[618px] w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]"
+          className="flex min-h-[618px] w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <div>
@@ -56,6 +60,11 @@ function Signup() {
                 id="full-name"
                 className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
+              {errors.fullName && (
+                <p className="ml-[10px] text-xs text-red-600">
+                  {errors.fullName?.message}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-[6px]">
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
@@ -63,10 +72,21 @@ function Signup() {
               </label>
               <input
                 type="email"
-                {...register("email", { required: "please enter email" })}
+                {...register("email", {
+                  required: "please enter email",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                    message: "Invalid address",
+                  },
+                })}
                 id="email"
                 className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
+              {errors.email && (
+                <p className="ml-[10px] text-xs text-red-600">
+                  {errors.email?.message}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-[6px]">
               <label htmlFor="" className="font-manrope text-[14px]/[140%]">
@@ -76,8 +96,14 @@ function Signup() {
                 type="password"
                 {...register("password", { required: "please enter password" })}
                 id="password"
+                autoComplete="off"
                 className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
+              {errors.password && (
+                <p className="ml-[10px] text-xs text-red-600">
+                  {errors.password?.message}
+                </p>
+              )}
             </div>
             <button
               type="submit"
