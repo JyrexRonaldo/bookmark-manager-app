@@ -32,7 +32,7 @@ function BookmarkCard({
   ));
 
   return (
-    <div className="flex max-h-[272px] flex-col justify-between rounded-[12px] bg-white">
+    <div className="flex min-h-[272px] flex-col justify-between rounded-[12px] bg-white">
       <div className="flex flex-col gap-[16px] p-[16px]">
         <div className="relative flex justify-between gap-[12px]">
           <img

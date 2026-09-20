@@ -97,8 +97,8 @@ function Main() {
 
   if (selectedTags.length !== 0) {
     displayedElements = displayedElements.filter((item) => {
-      const itemTags: string = item.props.tags;
-      return selectedTags.some((tag) => itemTags.includes(tag));
+      const itemTagsArray: string[] = item.props.tags.split(",");
+      return selectedTags.some((tag) => itemTagsArray.includes(tag));
     });
     selectedTags.forEach((tag) => {
       selectedTagsText += `${tag}, `;
