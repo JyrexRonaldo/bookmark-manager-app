@@ -2,8 +2,10 @@ import { Link, useSearchParams } from "react-router";
 import type { ResetPasswordType } from "../../types";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { updatePassword } from "../../services";
+import { useState } from "react";
 
 function ResetPassword() {
+  const [successMessage, setSuccessMessage] = useState("")
   const [searchParams] = useSearchParams();
 
   const {
@@ -21,6 +23,7 @@ function ResetPassword() {
     const token = searchParams.get("token");
     if (token) {
       updatePassword(formData.newPassword, token);
+      setSuccessMessage("Password changed!")
     }
   };
 
@@ -37,7 +40,7 @@ function ResetPassword() {
       <div className="flex h-screen items-center justify-center bg-[#E8F0EF]">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="mx-[20px] flex h-[530px] max-w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]"
+          className="mx-[20px] flex min-h-[530px] max-w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]"
         >
           <div>
             <img src="/img/logo-light-theme.svg" alt="" />
@@ -69,6 +72,11 @@ function ResetPassword() {
               {errors && (
                 <p className="text-sm text-red-600">
                   {errors.confirmPassword?.message}
+                </p>
+              )}
+              {successMessage && (
+                <p className="text-sm text-green-600">
+                  {successMessage}
                 </p>
               )}
             </div>

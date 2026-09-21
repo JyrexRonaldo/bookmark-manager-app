@@ -152,10 +152,7 @@ async function signIn(userData: UserType) {
         throw new Error(data.message);
     }
 
-    console.log(response.ok);
-
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     if (error instanceof Error) {

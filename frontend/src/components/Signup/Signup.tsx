@@ -34,7 +34,7 @@ function Signup() {
     <>
       <div className="flex h-screen items-center justify-center bg-[#E8F0EF]">
         <form
-          className="flex min-h-[618px] w-[448px] flex-col gap-[32px] rounded-[12px] bg-white px-[32px] py-[40px]"
+          className="mx-[20px] flex min-h-[618px] max-w-[448px] flex-col gap-[32px] justify-self-center rounded-[12px] bg-white px-[32px] py-[40px]"
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <div>
@@ -58,7 +58,7 @@ function Signup() {
                 type="text"
                 {...register("fullName", { required: "please enter fullname" })}
                 id="full-name"
-                className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
+                className="h-[45px] max-w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
               {errors.fullName && (
                 <p className="ml-[10px] text-xs text-red-600">
@@ -80,7 +80,7 @@ function Signup() {
                   },
                 })}
                 id="email"
-                className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
+                className="h-[45px] max-w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
               {errors.email && (
                 <p className="ml-[10px] text-xs text-red-600">
@@ -97,7 +97,7 @@ function Signup() {
                 {...register("password", { required: "please enter password" })}
                 id="password"
                 autoComplete="off"
-                className="h-[45px] w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
+                className="h-[45px] max-w-[384px] rounded-[8px] border border-[#899492] p-[12px]"
               />
               {errors.password && (
                 <p className="ml-[10px] text-xs text-red-600">
@@ -107,7 +107,7 @@ function Signup() {
             </div>
             <button
               type="submit"
-              className="h-[46px] w-[384px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] font-manrope text-[16px]/[140%] text-white"
+              className="h-[46px] max-w-[384px] rounded-[8px] bg-[#014745] px-[16px] py-[12px] font-manrope text-[16px]/[140%] text-white"
             >
               Create account
             </button>
