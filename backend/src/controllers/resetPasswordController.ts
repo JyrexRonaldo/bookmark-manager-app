@@ -7,46 +7,56 @@ import {
 import db from "../../config/drizzle.ts";
 import { usersTable } from "../db/schema.ts";
 import { eq } from "drizzle-orm";
-import transporter from "../../config/mailtransport.ts";
-import nodemailer from "nodemailer";
+// import transporter from "../../config/mailtransport.ts";
+// import nodemailer from "nodemailer";
 import * as jose from "jose";
 import bcrypt from "bcryptjs";
+import emailjs from "../../config/emailConfig.ts";
 
 const PASSWORD_RESET_SECRET = new TextEncoder().encode(
   process.env.PASSWORD_RESET_KEY || "secretKey",
 );
 
 const sendResetLink = async (req: Request, res: Response) => {
-  const { email } = ResetPasswordSchema.parse(req.body);
+  try {
+    const { email } = ResetPasswordSchema.parse(req.body);
+    let userId: string;
 
-  const userId = [
-    ...(await db
-      .select({ id: usersTable.id })
-      .from(usersTable)
-      .where(eq(usersTable.email, email))),
-  ][0].id;
-  
-  const token = await new jose.SignJWT({ userId })
-    .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("2h")
-    .sign(PASSWORD_RESET_SECRET);
+    const user = [
+      ...(await db
+        .select({ id: usersTable.id })
+        .from(usersTable)
+        .where(eq(usersTable.email, email))),
+    ][0];
 
-  const info = await transporter.sendMail({
-    from: '"Test Sender" <test@example.com>',
-    to: "recipient@example.com",
-    subject: `${process.env.HOME_DOMAIN}/reset-password?token=${token}`,
-    text: "This is a test email sent via Ethereal!",
-    html: "<p>This is a <b>test email</b> sent via Ethereal!</p>",
-  });
-
-  console.log("Message sent: %s", info.messageId);
-
-  // Get the Ethereal URL to preview this email
-  const previewUrl = nodemailer.getTestMessageUrl(info);
-  console.log("Preview URL: %s", previewUrl);
-  // Output: https://ethereal.email/message/...
-
-  res.end();
+    if (user) {
+      userId = user.id;
+      // console.log(userId);
+      const token = await new jose.SignJWT({ userId })
+        .setProtectedHeader({ alg: "HS256" })
+        .setExpirationTime("2h")
+        .sign(PASSWORD_RESET_SECRET);
+      const templateParams = {
+        name: "bookmark app",
+        message: `${process.env.HOME_DOMAIN}/reset-password?token=${token}`,
+        time: new Date(),
+        recipientEmail: email,
+      };
+      emailjs.send("bookmark_service", "bookmark_message", templateParams).then(
+        (response) => {
+          console.log("SUCCESS!", response.status, response.text);
+        },
+        (error) => {
+          console.log("FAILED...", error);
+        },
+      );
+      res.end();
+    } else {
+      res.status(404).send({message:"User not found"});
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const changePassword = async (req: Request, res: Response) => {

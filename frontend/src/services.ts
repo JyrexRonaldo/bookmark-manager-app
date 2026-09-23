@@ -168,7 +168,12 @@ async function resetPassword(email: string) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     });
+
+    
     const data = await response.json();
+    if (response.status === 404) {
+     console.log(data.message) 
+    }
     console.log(data);
     return data;
   } catch (error) {

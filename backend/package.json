@@ -31,6 +31,7 @@
     "typescript-eslint": "^8.59.2"
   },
   "dependencies": {
+    "@emailjs/nodejs": "^5.0.2",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -38,7 +39,6 @@
     "express": "^5.2.1",
     "jose": "^6.2.12",
     "jsonwebtoken": "^9.0.3",
-    "nodemailer": "^10.0.10",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.20.0",
