@@ -106,17 +106,13 @@ const editBookmark = async (req: Request, res: Response) => {
   }
 
   if (lastVisited !== undefined && id !== undefined) {
-    await db.transaction(async (tx) => {
-      await tx
-        .update(bookmarksTable)
-        .set({ lastVisited: lastVisited })
-        .where(eq(bookmarksTable.id, id));
-      await tx
-        .update(bookmarksTable)
-        .set({ visitCount: sql`${bookmarksTable.visitCount} + 1` })
-        .where(eq(bookmarksTable.id, id));
-    });
+    await db
+      .update(bookmarksTable)
+      .set({ lastVisited: lastVisited })
+      .where(eq(bookmarksTable.id, id));
   }
+
+  
 
   if (
     id !== undefined &&

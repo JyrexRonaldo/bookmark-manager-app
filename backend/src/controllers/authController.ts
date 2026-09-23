@@ -8,7 +8,6 @@ import jwt from "jsonwebtoken";
 
 const createUser = async (req: Request, _res: Response, next: NextFunction) => {
   const { email, password, fullName } = NewUserSchema.parse(req.body);
-  console.log({ email, password, fullName });
   const passwordHash = await bcrypt.hash(password, 10);
   await db.insert(usersTable).values({ email, passwordHash, fullName });
   next();

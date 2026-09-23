@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useForm, type SubmitHandler, type FieldErrors } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { resetPassword } from "../../services";
 import Toast from "../Toast/Toast";
 import { useToastStatusControls } from "../../store";
@@ -9,6 +9,7 @@ function ForgetPassword() {
   const {
     handleSubmit,
     register,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -16,12 +17,13 @@ function ForgetPassword() {
     },
   });
 
-  const onSubmit: SubmitHandler<{ resetEmail: string }> = (formData) => {
-    resetPassword(formData.resetEmail);
+  const onSubmit: SubmitHandler<{ resetEmail: string }> = async (formData) => {
+    const data = await resetPassword(formData.resetEmail);
+    if (data !== undefined) {
+      setError("resetEmail", { message: data.message });
+      return;
+    }
     setToastStatus(true);
-  };
-  const onError = (error: FieldErrors) => {
-    console.log(error);
   };
 
   return (
@@ -29,7 +31,7 @@ function ForgetPassword() {
       <div className="grid h-screen grid-flow-col grid-rows-[1fr_50px]">
         <div className="flex items-center justify-center bg-[#E8F0EF]">
           <form
-            onSubmit={handleSubmit(onSubmit, onError)}
+            onSubmit={handleSubmit(onSubmit)}
             className="mx-[20px] flex h-[443] max-w-[448px] flex-col gap-[32px] justify-self-center rounded-[12px] bg-white px-[32px] py-[40px]"
           >
             <div>

@@ -147,9 +147,9 @@ async function signIn(userData: UserType) {
     }
 
     if (!response.ok) {
-        const data = await response.json();
-        // console.log(data.message);
-        throw new Error(data.message);
+      const data = await response.json();
+      // console.log(data.message);
+      throw new Error(data.message);
     }
 
     const data = await response.json();
@@ -169,12 +169,7 @@ async function resetPassword(email: string) {
       body: JSON.stringify({ email }),
     });
 
-    
     const data = await response.json();
-    if (response.status === 404) {
-     console.log(data.message) 
-    }
-    console.log(data);
     return data;
   } catch (error) {
     console.log(error);

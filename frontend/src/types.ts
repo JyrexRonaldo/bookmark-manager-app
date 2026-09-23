@@ -7,7 +7,7 @@ export interface Bookmark {
     favicon: string;
     pinned: boolean;
     isArchived: boolean;
-    visitCount: number;
+    visitCount: number | null;
     createdAt: Date | string;
     lastVisited: string | null;
   };

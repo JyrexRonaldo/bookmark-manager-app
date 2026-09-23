@@ -1,5 +1,5 @@
-import SidebarComponent from "../SidebarComponent/SidebarComponent";
-import SidebarWrapper from "../SidebarWrapper/SidebarWrapper";
+import SidebarComponent from "../SideBarComponent/SideBarComponent";
+import SidebarWrapper from "../SideBarWrapper/SideBarWrapper";
 import { useMedia } from "react-use";
 import { useSidebarStatus } from "../../store";
 

@@ -133,10 +133,9 @@ const useBookmarkDataStore = create<useBookmarkDataStoreType>()((set) => ({
             bookmarksTable: {
               ...targetBookmark.bookmarksTable,
               lastVisited: new Date().toISOString(),
-              visitCount: ++targetBookmark.bookmarksTable.visitCount,
             },
           };
-          return { allBookmarkData: [...newBookmarkList, updatedBookmark] };
+          return { allBookmarkData : [...newBookmarkList, updatedBookmark]}
         } else {
           return { allBookmarkData: state.allBookmarkData };
         }

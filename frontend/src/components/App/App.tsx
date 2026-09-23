@@ -1,7 +1,7 @@
 import Main from "../Main/Main";
 import NavBar from "../NavBar/NavBar";
 import BookmarkForm from "../BookmarkForm/BookmarkForm";
-import Sidebar from "../Sidebar/Sidebar";
+import Sidebar from "../SideBar/SideBar.tsx";
 import { useBookmarkFormStatus } from "../../store";
 import { useEffect } from "react";
 import { useTheme } from "../../store";
